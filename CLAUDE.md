@@ -49,6 +49,13 @@ src/
 
 `@/*` → `src/*` (tsconfig.app.json, vite.config.ts에 설정됨)
 
+## 배포
+
+- **호스팅**: Cloudflare Pages
+- **프로덕션 URL**: https://hr2.minu.best
+- **Pages URL**: https://hr-decision-support.pages.dev
+- **설정 파일**: `wrangler.toml` (커스텀 도메인은 대시보드에서 수동 설정)
+
 ## 문서
 
 - `01_Project_Charter_O-AOD_HR_Decision_PoC.docx` - 프로젝트 헌장
@@ -56,3 +63,28 @@ src/
 - `03_Data_Requirements_Spec.docx` - 데이터 요구사항 명세
 - `04_Evaluation_Plan.docx` - 평가 계획
 - `05_PRD_Integrated_v1_2.docx` - 통합 PRD v1.2
+
+## Cline Memory Bank
+
+Cline VS Code 익스텐션을 위한 Memory Bank 파일이 `memory-bank/` 디렉토리에 존재한다.
+Cline 전용 규칙은 `.clinerules` 파일을 참조.
+
+### Memory Bank 스킬 (Claude Code ↔ Cline 연동)
+
+Claude Code와 Cline 간 프로젝트 컨텍스트를 공유하기 위한 스킬:
+
+| 스킬 | 용도 |
+|------|------|
+| `/session-start [작업내용]` | 세션 시작 시 Memory Bank에서 컨텍스트 복원 |
+| `/session-end [메모]` | 세션 종료 시 변경사항을 Memory Bank에 반영 |
+
+**워크플로우**:
+```
+Claude Code: /session-start 오늘은 Tour UI 구현
+  → (Memory Bank 읽기 → 컨텍스트 복원)
+  → 작업 수행
+Claude Code: /session-end Tour 완료, Error Boundary 남음
+  → (Memory Bank 업데이트)
+Cline: "follow your custom instructions"
+  → (업데이트된 Memory Bank로 이어받기)
+```
