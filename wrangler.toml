@@ -1,3 +1,6 @@
 name = "hr-decision-support"
 compatibility_date = "2024-12-01"
 pages_build_output_dir = "dist"
+
+# Custom domain: hr2.minu.best
+# DNS CNAME: hr2 -> hr-decision-support.pages.dev
