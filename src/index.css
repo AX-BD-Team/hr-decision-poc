@@ -4,8 +4,94 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-    Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Command Center dot-grid background */
+.cmd-grid-bg {
+  background-image: radial-gradient(circle, rgba(170, 180, 197, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Glassmorphism panel */
+.glass-panel {
+  background: rgba(17, 26, 46, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(170, 180, 197, 0.15);
+}
+
+/* Zone card with left accent border */
+.zone-card {
+  border-left: 3px solid var(--zone-accent, #4F8CFF);
+}
+
+/* Scan-line overlay for Zone 3 (graph) */
+.scan-line-overlay {
+  position: relative;
+  overflow: visible;
+}
+.scan-line-overlay::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(6, 182, 212, 0.4),
+    transparent
+  );
+  animation: scan-line 4s linear infinite;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* JetBrains Mono utility */
+.data-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(11, 18, 32, 0.5);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(170, 180, 197, 0.2);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(170, 180, 197, 0.35);
+}
+
+/* ReactFlow dark theme overrides */
+.react-flow__background {
+  background-color: rgba(11, 18, 32, 0.5) !important;
+}
+.react-flow__controls {
+  background: rgba(17, 26, 46, 0.8) !important;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(170, 180, 197, 0.2) !important;
+  border-radius: 8px !important;
+}
+.react-flow__controls-button {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(170, 180, 197, 0.1) !important;
+  color: #AAB4C5 !important;
+  fill: #AAB4C5 !important;
+}
+.react-flow__controls-button:hover {
+  background: rgba(79, 140, 255, 0.15) !important;
+}
+.react-flow__controls-button svg {
+  fill: #AAB4C5 !important;
 }
