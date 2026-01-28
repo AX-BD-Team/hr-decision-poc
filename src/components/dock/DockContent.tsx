@@ -24,7 +24,7 @@ function AssumptionsTab() {
         <div key={asm.id} className="flex items-start gap-3 rounded-lg bg-appBg/50 p-3">
           <span
             className={clsx(
-              'rounded px-1.5 py-0.5 text-[10px] font-medium',
+              'rounded px-1.5 py-0.5 text-[11px] font-medium',
               asm.category === 'data' && 'bg-cyan-500/20 text-cyan-400',
               asm.category === 'logic' && 'bg-purple-500/20 text-purple-400',
               asm.category === 'scope' && 'bg-amber-500/20 text-amber-400'
@@ -212,7 +212,9 @@ function ReportTab() {
                     <span
                       className={clsx(
                         'text-xs',
-                        metric.change.startsWith('-') ? 'text-emerald-400' : 'text-alertRed'
+                        metric.changeIsPositive !== undefined
+                          ? metric.changeIsPositive ? 'text-emerald-400' : 'text-alertRed'
+                          : metric.change.startsWith('-') ? 'text-emerald-400' : 'text-alertRed'
                       )}
                     >
                       {metric.change}

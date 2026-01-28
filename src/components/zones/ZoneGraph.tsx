@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import {
   ReactFlow,
   Background,
@@ -66,7 +66,7 @@ export function ZoneGraph() {
         source: edge.source,
         target: edge.target,
         label: edge.type.replace('_', ' '),
-        labelStyle: { fontSize: '10px', fill: '#AAB4C5' },
+        labelStyle: { fontSize: '11px', fill: '#AAB4C5' },
         style: {
           stroke: edgeColors[edge.type] || '#666',
           strokeWidth: edge.weight ? edge.weight * 3 : 2,
@@ -80,8 +80,12 @@ export function ZoneGraph() {
     [data.edges]
   );
 
-  const [nodes, , onNodesChange] = useNodesState(initialNodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, , onEdgesChange] = useEdgesState(initialEdges);
+
+  useEffect(() => {
+    setNodes(initialNodes);
+  }, [initialNodes, setNodes]);
 
   const onNodeClick = useCallback(
     (_: React.MouseEvent, node: Node) => {

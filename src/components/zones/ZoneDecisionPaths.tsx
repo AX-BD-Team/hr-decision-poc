@@ -89,8 +89,10 @@ export function ZoneDecisionPaths() {
                     {metric.change && (
                       <span
                         className={clsx(
-                          'text-[10px]',
-                          metric.change.startsWith('-') ? 'text-emerald-400' : 'text-alertRed'
+                          'text-[11px]',
+                          metric.changeIsPositive !== undefined
+                            ? metric.changeIsPositive ? 'text-emerald-400' : 'text-alertRed'
+                            : metric.change.startsWith('-') ? 'text-emerald-400' : 'text-alertRed'
                         )}
                       >
                         {metric.change}
@@ -107,7 +109,7 @@ export function ZoneDecisionPaths() {
               {path.highlights.map((h, idx) => (
                 <span
                   key={idx}
-                  className="rounded bg-neutralGray/20 px-1.5 py-0.5 text-[10px] text-textSub"
+                  className="rounded bg-neutralGray/20 px-1.5 py-0.5 text-[11px] text-textSub"
                 >
                   {h}
                 </span>

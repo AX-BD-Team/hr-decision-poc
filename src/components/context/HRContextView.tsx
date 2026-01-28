@@ -36,7 +36,7 @@ export function HRContextView() {
       <div className="border-b border-neutralGray/20 px-4 py-3">
         <h3 className="text-sm font-semibold text-contextGreen">HR Context Reference</h3>
         <p className="text-xs text-textSub">{contextView.scope}</p>
-        <p className="mt-1 text-[10px] text-textSub">※ 평가/보상 목적이 아닌 의사결정 맥락 참조용</p>
+        <p className="mt-1 text-[11px] text-textSub">※ 평가/보상 목적이 아닌 의사결정 맥락 참조용</p>
       </div>
 
       {/* KPI Cards */}
@@ -62,7 +62,13 @@ export function HRContextView() {
                   <span
                     className={clsx(
                       'text-xs',
-                      kpi.change.startsWith('+') ? 'text-emerald-400' : 'text-alertRed'
+                      (() => {
+                        const isPositiveChange = kpi.change.startsWith('+');
+                        const isGood = kpi.higherIsBetter !== undefined
+                          ? kpi.higherIsBetter ? isPositiveChange : !isPositiveChange
+                          : isPositiveChange;
+                        return isGood ? 'text-emerald-400' : 'text-alertRed';
+                      })()
                     )}
                   >
                     {kpi.change}
@@ -82,10 +88,10 @@ export function HRContextView() {
         </h4>
         <div className="relative h-[160px] rounded-lg bg-appBg/50 p-2">
           {/* 축 라벨 */}
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 -rotate-90 text-[10px] text-textSub">
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 -rotate-90 text-[11px] text-textSub">
             Dependency
           </div>
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-[10px] text-textSub">
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-[11px] text-textSub">
             Utilization
           </div>
 
@@ -95,14 +101,18 @@ export function HRContextView() {
 
           {/* 사분면 라벨 */}
           <div className="absolute left-8 top-3 text-[9px] text-textSub">높은 의존도</div>
-          <div className="absolute right-3 top-3 text-[9px] text-alertRed">🔴 위험 구간</div>
+          <div className="absolute right-3 top-3 flex items-center gap-1 text-[9px] text-alertRed">
+            <span className="inline-block h-2 w-2 rounded-full bg-alertRed" />
+            위험 구간
+          </div>
           <div className="absolute left-8 bottom-8 text-[9px] text-textSub">안정</div>
           <div className="absolute right-3 bottom-8 text-[9px] text-amber-400">주의</div>
 
           {/* 데이터 포인트 */}
           {contextView.utilizationMap.map((point: UtilizationPoint) => {
-            const x = 30 + (point.utilization / 1.5) * 180; // 0~1.5 범위를 픽셀로 변환
-            const y = 140 - point.dependency * 120; // 0~1 범위를 픽셀로 변환 (y는 반전)
+            // 퍼센트 기반 포지셔닝 (축 라벨 영역 고려: left 15%~95%, top 5%~80%)
+            const xPct = 15 + (point.utilization / 1.5) * 80; // 0~1.5 → 15%~95%
+            const yPct = 80 - point.dependency * 75; // 0~1 → 80%~5% (y 반전)
             const isSelected = selectedEntityId === point.entityId;
             const isDanger = point.utilization > 1 && point.dependency > 0.7;
 
@@ -111,14 +121,14 @@ export function HRContextView() {
                 key={point.id}
                 onClick={() => selectEntity(point.entityId || null)}
                 className={clsx(
-                  'absolute flex h-6 w-6 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full text-[10px] font-bold transition-all',
+                  'absolute flex h-6 w-6 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full text-[11px] font-bold transition-all',
                   isSelected
                     ? 'bg-decisionBlue text-white ring-2 ring-white'
                     : isDanger
                     ? 'bg-alertRed text-white'
                     : 'bg-contextGreen/80 text-white hover:bg-contextGreen'
                 )}
-                style={{ left: x, top: y }}
+                style={{ left: `${xPct}%`, top: `${yPct}%` }}
                 title={`${point.name}: 의존도 ${(point.dependency * 100).toFixed(0)}%, 가동률 ${(point.utilization * 100).toFixed(0)}%`}
               >
                 {point.name.charAt(0)}

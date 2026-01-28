@@ -276,7 +276,7 @@
       "keyMetrics": [
         { "name": "예상 비용", "value": "180M", "label": "ESTIMATE" },
         { "name": "소요 기간", "value": "2.5~3개월", "label": "ESTIMATE" },
-        { "name": "가동률 개선", "value": "120% → 85%", "change": "-35%p", "label": "SYNTH" }
+        { "name": "가동률 개선", "value": "120% → 85%", "change": "-35%p", "changeIsPositive": true, "label": "SYNTH" }
       ],
       "highlights": ["장기적 역량 확보", "온보딩 기간 필요", "채용 실패 리스크"]
     },
@@ -290,7 +290,7 @@
       "keyMetrics": [
         { "name": "예상 비용", "value": "0원", "label": "REAL" },
         { "name": "소요 기간", "value": "2주", "label": "ESTIMATE" },
-        { "name": "가동률 개선", "value": "120% → 90%", "change": "-30%p", "label": "SYNTH" }
+        { "name": "가동률 개선", "value": "120% → 90%", "change": "-30%p", "changeIsPositive": true, "label": "SYNTH" }
       ],
       "highlights": ["빠른 투입 가능", "기존 조직 공백", "역량 검증 필요"]
     },
@@ -304,7 +304,7 @@
       "keyMetrics": [
         { "name": "예상 비용", "value": "30M", "label": "ESTIMATE" },
         { "name": "소요 기간", "value": "6개월", "label": "ESTIMATE" },
-        { "name": "가동률 개선", "value": "120% → 100%", "change": "-20%p", "label": "SYNTH" }
+        { "name": "가동률 개선", "value": "120% → 100%", "change": "-20%p", "changeIsPositive": true, "label": "SYNTH" }
       ],
       "highlights": ["조직 역량 내재화", "장기 소요", "Q2 대응 불가"]
     }
@@ -315,9 +315,9 @@
       "scope": "개발팀 전체",
       "kpis": [
         { "id": "kpi-1", "name": "Headcount", "value": 12, "unit": "명", "label": "REAL" },
-        { "id": "kpi-2", "name": "평균 가동률", "value": 94, "unit": "%", "change": "+5%", "label": "REAL" },
+        { "id": "kpi-2", "name": "평균 가동률", "value": 94, "unit": "%", "change": "+5%", "higherIsBetter": false, "label": "REAL" },
         { "id": "kpi-3", "name": "평균 근속", "value": 38, "unit": "개월", "label": "REAL" },
-        { "id": "kpi-4", "name": "역할 충족률", "value": 75, "unit": "%", "change": "-10%", "label": "ESTIMATE" }
+        { "id": "kpi-4", "name": "역할 충족률", "value": 75, "unit": "%", "change": "-10%", "higherIsBetter": true, "label": "ESTIMATE" }
       ],
       "utilizationMap": [
         { "id": "um-1", "name": "김A", "dependency": 0.9, "utilization": 1.2, "label": "REAL", "entityId": "person-a" },

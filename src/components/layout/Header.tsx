@@ -1,4 +1,5 @@
-import { Play, RotateCcw, Download } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Play, RotateCcw, Download, HelpCircle, Info } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { clsx } from 'clsx';
 
@@ -10,7 +11,19 @@ const steps = [
 ];
 
 export function Header() {
-  const { data, activeStep, setActiveStep, startTour, reset, isTourActive } = useStore();
+  const { data, activeStep, setActiveStep, reset } = useStore();
+  const [showTourNotice, setShowTourNotice] = useState(false);
+
+  useEffect(() => {
+    if (showTourNotice) {
+      const timer = setTimeout(() => setShowTourNotice(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showTourNotice]);
+
+  const handleStartDemo = () => {
+    setShowTourNotice(true);
+  };
 
   const handleExport = () => {
     const reportData = {
@@ -77,20 +90,26 @@ export function Header() {
 
         {/* 우측: 액션 버튼 */}
         <div className="flex items-center gap-2">
-          <button
-            onClick={startTour}
-            disabled={isTourActive}
-            className={clsx(
-              'flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all',
-              isTourActive
-                ? 'cursor-not-allowed bg-neutralGray/20 text-neutralGray'
-                : 'bg-decisionBlue text-white hover:bg-decisionBlue/80'
+          <div className="relative">
+            <button
+              onClick={handleStartDemo}
+              className="flex items-center gap-2 rounded-lg bg-decisionBlue px-4 py-2 text-sm font-medium text-white transition-all hover:bg-decisionBlue/80"
+              data-tour="start-demo"
+            >
+              <Play className="h-4 w-4" />
+              Start Demo
+            </button>
+            {showTourNotice && (
+              <div className="absolute right-0 top-full z-50 mt-2 w-64 rounded-lg border border-neutralGray/30 bg-panelBg p-3 shadow-lg">
+                <div className="flex items-start gap-2">
+                  <Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-decisionBlue" />
+                  <p className="text-xs text-textSub">
+                    Guided Tour는 준비 중입니다. Step Navigator를 사용하여 각 단계를 탐색해 주세요.
+                  </p>
+                </div>
+              </div>
             )}
-            data-tour="start-demo"
-          >
-            <Play className="h-4 w-4" />
-            Start Demo
-          </button>
+          </div>
           <button
             onClick={reset}
             className="flex items-center gap-2 rounded-lg border border-neutralGray/30 px-3 py-2 text-sm text-textSub transition-all hover:bg-appBg hover:text-textMain"
@@ -108,8 +127,16 @@ export function Header() {
         </div>
       </div>
 
+      {/* 핵심 질문 */}
+      {data.meta.keyQuestion && (
+        <div className="mt-3 flex items-center gap-2 rounded bg-decisionBlue/10 px-3 py-2">
+          <HelpCircle className="h-4 w-4 flex-shrink-0 text-decisionBlue" />
+          <span className="text-sm text-textMain">{data.meta.keyQuestion}</span>
+        </div>
+      )}
+
       {/* 데이터 라벨 범례 */}
-      <div className="mt-3 flex items-center gap-4 text-xs" data-tour="data-labels">
+      <div className="mt-2 flex items-center gap-4 text-xs" data-tour="data-labels">
         <span className="text-textSub">데이터 라벨:</span>
         <span className="rounded bg-emerald-500/20 px-2 py-0.5 text-emerald-400">REAL</span>
         <span className="rounded bg-amber-500/20 px-2 py-0.5 text-amber-400">ESTIMATE</span>

@@ -86,6 +86,7 @@ export interface DecisionPath {
     name: string;
     value: string;
     change?: string;
+    changeIsPositive?: boolean;
     label: DataLabel;
   }[];
   highlights: string[];
@@ -98,6 +99,7 @@ export interface HRKpi {
   value: string | number;
   unit?: string;
   change?: string;
+  higherIsBetter?: boolean;
   label: DataLabel;
 }
 

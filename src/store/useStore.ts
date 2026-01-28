@@ -39,7 +39,7 @@ const initialState = {
   selectedEntityId: null,
   selectedPathId: null,
   dockTab: 'evidence' as DockTab,
-  isDockExpanded: true,
+  isDockExpanded: false,
   isTourActive: false,
   tourStep: 0,
 };

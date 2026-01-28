@@ -19,7 +19,7 @@ export function DataLabelBadge({ label, size = 'sm' }: DataLabelBadgeProps) {
       className={clsx(
         'rounded font-medium',
         labelStyles[label],
-        size === 'sm' ? 'px-1.5 py-0.5 text-[10px]' : 'px-2 py-1 text-xs'
+        size === 'sm' ? 'px-1.5 py-0.5 text-[11px]' : 'px-2 py-1 text-xs'
       )}
     >
       {label}
