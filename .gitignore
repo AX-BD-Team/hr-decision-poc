@@ -30,3 +30,11 @@ dist-ssr
 .env
 .env.local
 .env.*.local
+
+# Claude Code
+.claude/
+.snapshots/
+
+# Cline
+.clinerules
+memory-bank/
