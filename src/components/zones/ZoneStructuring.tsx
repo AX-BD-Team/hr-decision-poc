@@ -41,24 +41,26 @@ export function ZoneStructuring() {
         <span className="text-xs text-textSub">구조화/분석</span>
       </div>
 
-      <div className="flex gap-2 overflow-x-auto pb-2">
-        {data.analysisPatterns.map((pattern: AnalysisPattern) => {
-          const Icon = iconMap[pattern.type] || GitBranch;
-          return (
-            <div
-              key={pattern.id}
-              className="zone-card flex min-w-[180px] flex-col rounded-lg bg-appBg/50 p-3 hover:bg-appBg/80 transition-all"
-              style={{ '--zone-accent': '#8B5CF6' } as React.CSSProperties}
-            >
+      <div className="scroll-fade-x relative">
+        <div className="flex gap-2 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth">
+          {data.analysisPatterns.map((pattern: AnalysisPattern) => {
+            const Icon = iconMap[pattern.type] || GitBranch;
+            return (
+              <div
+                key={pattern.id}
+                className="zone-card flex min-w-[180px] flex-col rounded-lg bg-surface-1 p-3 hover:bg-surface-3 hover:shadow-elevation-2 transition-all snap-start"
+                style={{ '--zone-accent': '#8B5CF6', '--zone-accent-rgb': '139,92,246' } as React.CSSProperties}
+              >
               <div className="mb-2 flex items-center gap-2">
                 <Icon className="h-4 w-4 text-zoneStruct" />
                 <DataLabelBadge label={pattern.label} />
               </div>
               <h4 className="text-sm font-medium text-textMain">{pattern.name}</h4>
               <p className="mt-1 text-xs text-textSub">{pattern.description}</p>
-            </div>
-          );
-        })}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

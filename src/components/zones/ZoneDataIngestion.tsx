@@ -47,8 +47,8 @@ export function ZoneDataIngestion() {
           return (
             <div
               key={ds.id}
-              className="zone-card flex items-center justify-between rounded-lg bg-appBg/50 p-3 hover:bg-appBg/80 transition-all group"
-              style={{ '--zone-accent': '#3B82F6' } as React.CSSProperties}
+              className="zone-card flex items-center justify-between rounded-lg bg-surface-1 p-3 hover:bg-surface-3 hover:shadow-elevation-2 transition-all group"
+              style={{ '--zone-accent': '#3B82F6', '--zone-accent-rgb': '59,130,246' } as React.CSSProperties}
             >
               <div className="flex items-center gap-3">
                 <Icon className="h-4 w-4 text-zoneIngest" />
@@ -62,9 +62,12 @@ export function ZoneDataIngestion() {
               </div>
               <div className="text-right">
                 <div className="text-sm font-mono font-medium text-textMain">{ds.coverage}%</div>
-                <div className="mt-1 h-1 w-16 rounded-full bg-neutralGray/20 overflow-hidden">
+                <div className="mt-1 h-1.5 w-16 rounded-full bg-neutralGray/20 overflow-hidden">
                   <div
-                    className="h-full rounded-full bg-zoneIngest transition-all"
+                    className={clsx(
+                      'h-full rounded-full transition-all coverage-bar',
+                      ds.coverage >= 80 && 'high'
+                    )}
                     style={{ width: `${ds.coverage}%` }}
                   />
                 </div>

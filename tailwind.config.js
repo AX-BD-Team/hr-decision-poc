@@ -24,6 +24,18 @@ export default {
         zoneStruct: '#8B5CF6',
         zoneGraph: '#06B6D4',
         zonePath: '#F59E0B',
+        // Surface elevation scale
+        surface: {
+          0: '#0B1220',
+          1: '#0F1829',
+          2: '#111A2E',
+          3: '#162034',
+          4: '#1A2640',
+        },
+      },
+      transitionTimingFunction: {
+        'smooth': 'cubic-bezier(0.4, 0, 0.2, 1)',
+        'ease-out-expo': 'cubic-bezier(0.19, 1, 0.22, 1)',
       },
       keyframes: {
         'fade-in': {
@@ -46,6 +58,10 @@ export default {
           '0%': { transform: 'translateY(-100%)' },
           '100%': { transform: 'translateY(100%)' },
         },
+        'shimmer': {
+          '0%': { backgroundPosition: '200% 0' },
+          '100%': { backgroundPosition: '-200% 0' },
+        },
       },
       animation: {
         'fade-in': 'fade-in 0.4s ease-out both',
@@ -58,12 +74,20 @@ export default {
         'stagger-2': 'fade-in-up 0.5s ease-out 0.2s both',
         'stagger-3': 'fade-in-up 0.5s ease-out 0.3s both',
         'stagger-4': 'fade-in-up 0.5s ease-out 0.4s both',
+        'shimmer': 'shimmer 8s linear infinite',
       },
       boxShadow: {
         'glow-blue': '0 0 20px rgba(59, 130, 246, 0.3)',
         'glow-violet': '0 0 20px rgba(139, 92, 246, 0.3)',
         'glow-cyan': '0 0 20px rgba(6, 182, 212, 0.3)',
         'glow-amber': '0 0 20px rgba(245, 158, 11, 0.3)',
+        // Elevation shadows
+        'elevation-1': '0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3)',
+        'elevation-2': '0 4px 6px rgba(0,0,0,0.4), 0 2px 4px rgba(0,0,0,0.3)',
+        'elevation-3': '0 10px 15px rgba(0,0,0,0.4), 0 4px 6px rgba(0,0,0,0.3)',
+        // Inner glow shadows
+        'inner-glow-blue': 'inset 0 0 20px rgba(59,130,246,0.1)',
+        'inner-glow-amber': 'inset 0 0 20px rgba(245,158,11,0.1)',
       },
     },
   },

@@ -1,10 +1,10 @@
-import { ChevronUp, ChevronDown, FileText, Shield, AlertTriangle, GitBranch, ClipboardList } from 'lucide-react';
+import { ChevronUp, FileText, Shield, AlertTriangle, GitBranch, ClipboardList } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { clsx } from 'clsx';
-import type { DockTab } from '../../types';
+import type { RecordTab } from '../../types';
 import { DockContent } from './DockContent';
 
-const tabs: { id: DockTab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
+const tabs: { id: RecordTab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { id: 'assumptions', label: '가정', icon: FileText },
   { id: 'evidence', label: '근거', icon: Shield },
   { id: 'risks', label: '리스크', icon: AlertTriangle },
@@ -13,12 +13,12 @@ const tabs: { id: DockTab; label: string; icon: React.ComponentType<{ className?
 ];
 
 export function Dock() {
-  const { dockTab, setDockTab, isDockExpanded, toggleDock } = useStore();
+  const { recordTab, setRecordTab, isDockExpanded, toggleDock } = useStore();
 
   return (
     <div
       className={clsx(
-        'border-t border-neutralGray/20 bg-panelBg/80 backdrop-blur-md transition-all',
+        'border-t border-neutralGray/20 bg-panelBg/80 backdrop-blur-md transition-all duration-300 ease-out-expo',
         isDockExpanded ? 'h-[280px]' : 'h-[48px]'
       )}
       data-tour="dock"
@@ -31,29 +31,34 @@ export function Dock() {
             return (
               <button
                 key={tab.id}
-                onClick={() => setDockTab(tab.id)}
+                onClick={() => setRecordTab(tab.id)}
                 className={clsx(
-                  'flex items-center gap-1.5 rounded-t-lg px-3 py-3 text-sm transition-all',
-                  dockTab === tab.id
-                    ? 'border-b-2 border-decisionBlue bg-decisionBlue/10 text-decisionBlue'
-                    : 'text-textSub hover:bg-appBg/50 hover:text-textMain'
+                  'relative flex items-center gap-1.5 px-3 py-3 text-sm transition-all focus-ring rounded',
+                  recordTab === tab.id
+                    ? 'text-decisionBlue'
+                    : 'text-textSub hover:bg-appBg/30 hover:text-textMain'
                 )}
               >
                 <Icon className="h-4 w-4" />
-                <span>{tab.label}</span>
+                <span className="font-medium">{tab.label}</span>
+                {/* Active indicator bar */}
+                {recordTab === tab.id && (
+                  <span className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-decisionBlue" />
+                )}
               </button>
             );
           })}
         </div>
         <button
           onClick={toggleDock}
-          className="rounded p-1.5 text-textSub transition-all hover:bg-appBg hover:text-textMain"
+          className="rounded p-1.5 text-textSub transition-all hover:bg-appBg hover:text-textMain focus-ring"
         >
-          {isDockExpanded ? (
-            <ChevronDown className="h-4 w-4" />
-          ) : (
-            <ChevronUp className="h-4 w-4" />
-          )}
+          <ChevronUp
+            className={clsx(
+              'h-4 w-4 transition-transform duration-300 ease-out-expo',
+              isDockExpanded && 'rotate-180'
+            )}
+          />
         </button>
       </div>
 

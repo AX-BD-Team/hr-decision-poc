@@ -16,22 +16,22 @@ function App() {
       <main className="flex flex-1 gap-4 overflow-hidden p-4">
         {/* Left: Workflow Zones */}
         <div className="flex flex-1 flex-col gap-3 overflow-hidden">
-          <div className="flex-1 min-h-0 animate-stagger-1">
+          <div className="flex-[0.8] min-h-0 animate-stagger-1">
             <ZoneDataIngestion />
           </div>
-          <div className="min-h-0 animate-stagger-2">
+          <div className="h-[120px] shrink-0 min-h-0 animate-stagger-2">
             <ZoneStructuring />
           </div>
-          <div className="flex-[3] min-h-0 animate-stagger-3">
+          <div className="flex-[3.5] min-h-0 animate-stagger-3">
             <ZoneGraph />
           </div>
-          <div className="flex-1 min-h-0 animate-stagger-4">
+          <div className="flex-[1.2] min-h-0 animate-stagger-4">
             <ZoneDecisionPaths />
           </div>
         </div>
 
         {/* Right: HR Context View */}
-        <aside className="w-[320px] flex-shrink-0 animate-slide-in-right">
+        <aside className="w-[280px] lg:w-[320px] xl:w-[360px] flex-shrink-0 animate-slide-in-right">
           <HRContextView />
         </aside>
       </main>

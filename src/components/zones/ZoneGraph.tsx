@@ -124,7 +124,7 @@ export function ZoneGraph() {
         <span className="text-xs text-textSub">관계 그래프</span>
       </div>
 
-      <div className="flex-1 min-h-0">
+      <div className="flex-1 min-h-0 relative">
         <ReactFlow
           nodes={nodes}
           edges={edges}
@@ -143,19 +143,19 @@ export function ZoneGraph() {
             }}
           />
         </ReactFlow>
-      </div>
 
-      {/* 범례 */}
-      <div className="flex flex-wrap gap-3 border-t border-neutralGray/20 px-4 py-2">
-        {Object.entries(nodeColors).map(([type, color]) => (
-          <div key={type} className="flex items-center gap-1">
-            <span
-              className="h-3 w-3 rounded"
-              style={{ backgroundColor: color }}
-            />
-            <span className="text-xs text-textSub font-mono uppercase">{type}</span>
-          </div>
-        ))}
+        {/* Floating Legend Overlay */}
+        <div className="absolute bottom-3 right-3 flex flex-wrap gap-2 rounded-lg bg-surface-2/90 backdrop-blur-sm px-3 py-2 border border-neutralGray/20 shadow-elevation-2 max-w-[280px]">
+          {Object.entries(nodeColors).map(([type, color]) => (
+            <div key={type} className="flex items-center gap-1">
+              <span
+                className="h-2.5 w-2.5 rounded"
+                style={{ backgroundColor: color }}
+              />
+              <span className="text-[10px] text-textSub font-mono uppercase">{type}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

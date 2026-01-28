@@ -17,15 +17,23 @@ body {
 
 /* Glassmorphism panel */
 .glass-panel {
-  background: rgba(17, 26, 46, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: linear-gradient(135deg, rgba(17,26,46,0.75), rgba(17,26,46,0.65));
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
   border: 1px solid rgba(170, 180, 197, 0.15);
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.03);
 }
 
 /* Zone card with left accent border */
 .zone-card {
+  position: relative;
   border-left: 3px solid var(--zone-accent, #4F8CFF);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.zone-card:hover {
+  border-left-width: 4px;
+  transform: translateX(2px);
+  box-shadow: -4px 0 16px -4px rgba(var(--zone-accent-rgb, 79,140,255), 0.25);
 }
 
 /* Scan-line overlay for Zone 3 (graph) */
@@ -94,4 +102,50 @@ body {
 }
 .react-flow__controls-button svg {
   fill: #AAB4C5 !important;
+}
+
+/* ReactFlow controls position adjustment */
+.react-flow__controls {
+  top: 12px !important;
+  right: 12px !important;
+  left: auto !important;
+  bottom: auto !important;
+}
+
+/* Focus ring utility */
+.focus-ring:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(79,140,255,0.5), 0 0 0 4px rgba(79,140,255,0.2);
+}
+
+/* Scroll fade gradients for horizontal scroll containers */
+.scroll-fade-x {
+  position: relative;
+}
+.scroll-fade-x::before,
+.scroll-fade-x::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 24px;
+  pointer-events: none;
+  z-index: 1;
+}
+.scroll-fade-x::before {
+  left: 0;
+  background: linear-gradient(to right, rgba(11,18,32,0.8), transparent);
+}
+.scroll-fade-x::after {
+  right: 0;
+  background: linear-gradient(to left, rgba(11,18,32,0.8), transparent);
+}
+
+/* Coverage bar gradient */
+.coverage-bar {
+  background: linear-gradient(90deg, #3B82F6, #60A5FA);
+}
+.coverage-bar.high {
+  background: linear-gradient(90deg, #3B82F6, #60A5FA);
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
 }

@@ -117,71 +117,73 @@ function AlternativesTab() {
   return (
     <div>
       <p className="mb-3 text-xs text-textSub">의사결정 대안 비교</p>
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="border-b border-neutralGray/20 text-left text-xs text-textSub">
-            <th className="pb-2 pr-4 font-mono uppercase tracking-wider">대안</th>
-            <th className="pb-2 pr-4 font-mono uppercase tracking-wider">비용</th>
-            <th className="pb-2 pr-4 font-mono uppercase tracking-wider">기간</th>
-            <th className="pb-2 pr-4 font-mono uppercase tracking-wider">리스크</th>
-            <th className="pb-2 font-mono uppercase tracking-wider">효과</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.decisionPaths.map((path: DecisionPath) => {
-            const costMetric = path.keyMetrics.find((m) => m.name === '예상 비용');
-            const timeMetric = path.keyMetrics.find((m) => m.name === '소요 기간');
+      <div className="rounded-lg border border-neutralGray/20 overflow-hidden">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="bg-surface-1 text-left text-[11px] text-textSub">
+              <th className="px-4 py-2.5 font-mono font-semibold uppercase tracking-wider">대안</th>
+              <th className="px-4 py-2.5 font-mono font-semibold uppercase tracking-wider">비용</th>
+              <th className="px-4 py-2.5 font-mono font-semibold uppercase tracking-wider">기간</th>
+              <th className="px-4 py-2.5 font-mono font-semibold uppercase tracking-wider">리스크</th>
+              <th className="px-4 py-2.5 font-mono font-semibold uppercase tracking-wider">효과</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-neutralGray/10">
+            {data.decisionPaths.map((path: DecisionPath) => {
+              const costMetric = path.keyMetrics.find((m) => m.name === '예상 비용');
+              const timeMetric = path.keyMetrics.find((m) => m.name === '소요 기간');
 
-            return (
-              <tr
-                key={path.id}
-                onClick={() => selectPath(selectedPathId === path.id ? null : path.id)}
-                className={clsx(
-                  'cursor-pointer border-b border-neutralGray/10 transition-all',
-                  selectedPathId === path.id
-                    ? 'bg-decisionBlue/10'
-                    : 'hover:bg-appBg/50'
-                )}
-              >
-                <td className="py-3 pr-4">
-                  <div className="font-medium text-textMain">{path.name}</div>
-                  <div className="text-xs text-textSub">{path.summary}</div>
-                </td>
-                <td className="py-3 pr-4 font-mono text-textMain">
-                  {costMetric?.value || '-'}
-                </td>
-                <td className="py-3 pr-4 font-mono text-textMain">
-                  {timeMetric?.value || '-'}
-                </td>
-                <td className="py-3 pr-4">
-                  <span
-                    className={clsx(
-                      'rounded px-1.5 py-0.5 text-xs font-medium font-mono',
-                      path.riskLevel === 'high' && 'bg-alertRed/20 text-alertRed',
-                      path.riskLevel === 'medium' && 'bg-amber-500/20 text-amber-400',
-                      path.riskLevel === 'low' && 'bg-emerald-500/20 text-emerald-400'
-                    )}
-                  >
-                    {path.riskLevel.toUpperCase()}
-                  </span>
-                </td>
-                <td className="py-3">
-                  <span
-                    className={clsx(
-                      'rounded px-1.5 py-0.5 text-xs font-medium font-mono',
-                      path.effectLevel === 'high' && 'bg-emerald-500/20 text-emerald-400',
-                      path.effectLevel === 'medium' && 'bg-amber-500/20 text-amber-400',
-                      path.effectLevel === 'low' && 'bg-neutralGray/20 text-textSub'
-                    )}
-                  >
-                    {path.effectLevel.toUpperCase()}
-                  </span>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+              return (
+                <tr
+                  key={path.id}
+                  onClick={() => selectPath(selectedPathId === path.id ? null : path.id)}
+                  className={clsx(
+                    'cursor-pointer transition-all',
+                    selectedPathId === path.id
+                      ? 'bg-decisionBlue/10'
+                      : 'hover:bg-surface-3'
+                  )}
+                >
+                  <td className="px-4 py-3">
+                    <div className="font-medium text-textMain">{path.name}</div>
+                    <div className="text-xs text-textSub">{path.summary}</div>
+                  </td>
+                  <td className="px-4 py-3 font-mono text-textMain">
+                    {costMetric?.value || '-'}
+                  </td>
+                  <td className="px-4 py-3 font-mono text-textMain">
+                    {timeMetric?.value || '-'}
+                  </td>
+                  <td className="px-4 py-3">
+                    <span
+                      className={clsx(
+                        'rounded px-1.5 py-0.5 text-xs font-medium font-mono',
+                        path.riskLevel === 'high' && 'bg-alertRed/20 text-alertRed',
+                        path.riskLevel === 'medium' && 'bg-amber-500/20 text-amber-400',
+                        path.riskLevel === 'low' && 'bg-emerald-500/20 text-emerald-400'
+                      )}
+                    >
+                      {path.riskLevel.toUpperCase()}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <span
+                      className={clsx(
+                        'rounded px-1.5 py-0.5 text-xs font-medium font-mono',
+                        path.effectLevel === 'high' && 'bg-emerald-500/20 text-emerald-400',
+                        path.effectLevel === 'medium' && 'bg-amber-500/20 text-amber-400',
+                        path.effectLevel === 'low' && 'bg-neutralGray/20 text-textSub'
+                      )}
+                    >
+                      {path.effectLevel.toUpperCase()}
+                    </span>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
@@ -251,9 +253,9 @@ function ReportTab() {
 }
 
 export function DockContent() {
-  const { dockTab } = useStore();
+  const { recordTab } = useStore();
 
-  switch (dockTab) {
+  switch (recordTab) {
     case 'assumptions':
       return <AssumptionsTab />;
     case 'evidence':
