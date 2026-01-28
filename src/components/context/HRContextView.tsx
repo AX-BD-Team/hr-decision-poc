@@ -29,7 +29,7 @@ export function HRContextView() {
 
   return (
     <div
-      className="flex h-full flex-col rounded-xl border border-neutralGray/20 bg-panelBg"
+      className="glass-panel flex h-full flex-col rounded-xl"
       data-tour="hr-context"
     >
       {/* 헤더 */}
@@ -46,22 +46,22 @@ export function HRContextView() {
           return (
             <div
               key={kpi.id}
-              className="rounded-lg bg-appBg/50 p-3"
+              className="rounded-lg bg-appBg/50 p-3 hover:bg-appBg/80 transition-all cursor-default"
             >
               <div className="mb-1 flex items-center justify-between">
                 <Icon className="h-4 w-4 text-contextGreen" />
                 <DataLabelBadge label={kpi.label} />
               </div>
-              <div className="text-lg font-bold text-textMain">
+              <div className="text-lg font-bold font-mono text-textMain">
                 {kpi.value}
-                {kpi.unit && <span className="ml-0.5 text-xs font-normal text-textSub">{kpi.unit}</span>}
+                {kpi.unit && <span className="ml-0.5 text-xs font-normal font-sans text-textSub">{kpi.unit}</span>}
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-xs text-textSub">{kpi.name}</span>
                 {kpi.change && (
                   <span
                     className={clsx(
-                      'text-xs',
+                      'text-xs font-mono',
                       (() => {
                         const isPositiveChange = kpi.change.startsWith('+');
                         const isGood = kpi.higherIsBetter !== undefined
@@ -87,11 +87,14 @@ export function HRContextView() {
           <span className="ml-1 font-normal text-textSub">(Dependency × Utilization)</span>
         </h4>
         <div className="relative h-[160px] rounded-lg bg-appBg/50 p-2">
+          {/* 위험 구간 tint (top-right quadrant) */}
+          <div className="absolute right-2 top-2 w-[45%] h-[45%] rounded bg-alertRed/5" />
+
           {/* 축 라벨 */}
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 -rotate-90 text-[11px] text-textSub">
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 -rotate-90 text-[11px] text-textSub font-mono">
             Dependency
           </div>
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-[11px] text-textSub">
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-[11px] text-textSub font-mono">
             Utilization
           </div>
 
@@ -102,7 +105,7 @@ export function HRContextView() {
           {/* 사분면 라벨 */}
           <div className="absolute left-8 top-3 text-[9px] text-textSub">높은 의존도</div>
           <div className="absolute right-3 top-3 flex items-center gap-1 text-[9px] text-alertRed">
-            <span className="inline-block h-2 w-2 rounded-full bg-alertRed" />
+            <span className="inline-block h-2 w-2 rounded-full bg-alertRed animate-glow-pulse" />
             위험 구간
           </div>
           <div className="absolute left-8 bottom-8 text-[9px] text-textSub">안정</div>
@@ -121,7 +124,7 @@ export function HRContextView() {
                 key={point.id}
                 onClick={() => selectEntity(point.entityId || null)}
                 className={clsx(
-                  'absolute flex h-6 w-6 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full text-[11px] font-bold transition-all',
+                  'absolute flex h-6 w-6 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full text-[11px] font-bold transition-all hover:scale-125',
                   isSelected
                     ? 'bg-decisionBlue text-white ring-2 ring-white'
                     : isDanger

@@ -41,21 +41,28 @@ export function ZoneGraph() {
 
   const initialNodes: Node[] = useMemo(
     () =>
-      data.entities.map((entity: Entity) => ({
-        id: entity.id,
-        position: entity.position || { x: 0, y: 0 },
-        data: { label: entity.name, entity },
-        style: {
-          background: nodeColors[entity.type] || '#666',
-          color: '#fff',
-          border: selectedEntityId === entity.id ? '3px solid #fff' : 'none',
-          borderRadius: '8px',
-          padding: '8px 12px',
-          fontSize: '12px',
-          fontWeight: 500,
-          boxShadow: selectedEntityId === entity.id ? '0 0 20px rgba(79, 140, 255, 0.5)' : 'none',
-        },
-      })),
+      data.entities.map((entity: Entity) => {
+        const baseColor = nodeColors[entity.type] || '#666';
+        const isSelected = selectedEntityId === entity.id;
+        return {
+          id: entity.id,
+          position: entity.position || { x: 0, y: 0 },
+          data: { label: entity.name, entity },
+          style: {
+            background: `linear-gradient(135deg, ${baseColor}, ${baseColor}CC)`,
+            color: '#fff',
+            border: isSelected ? '2px solid #fff' : `1px solid ${baseColor}66`,
+            borderRadius: '8px',
+            padding: '8px 12px',
+            fontSize: '12px',
+            fontWeight: 500,
+            fontFamily: '"Pretendard", sans-serif',
+            boxShadow: isSelected
+              ? `0 0 24px ${baseColor}80`
+              : `0 0 12px ${baseColor}30`,
+          },
+        };
+      }),
     [data.entities, selectedEntityId]
   );
 
@@ -66,7 +73,7 @@ export function ZoneGraph() {
         source: edge.source,
         target: edge.target,
         label: edge.type.replace('_', ' '),
-        labelStyle: { fontSize: '11px', fill: '#AAB4C5' },
+        labelStyle: { fontSize: '11px', fill: '#AAB4C5', fontFamily: '"JetBrains Mono", monospace' },
         style: {
           stroke: edgeColors[edge.type] || '#666',
           strokeWidth: edge.weight ? edge.weight * 3 : 2,
@@ -97,9 +104,9 @@ export function ZoneGraph() {
   return (
     <div
       className={clsx(
-        'flex flex-[2] min-h-0 flex-col rounded-xl border transition-all',
+        'scan-line-overlay flex h-full min-h-0 flex-col rounded-xl border transition-all',
         isActive
-          ? 'border-decisionBlue/50 bg-decisionBlue/5'
+          ? 'border-zoneGraph/50 bg-zoneGraph/5 shadow-glow-cyan'
           : 'border-neutralGray/20 bg-panelBg/50'
       )}
       data-tour="zone-3"
@@ -108,7 +115,7 @@ export function ZoneGraph() {
         <span
           className={clsx(
             'flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold',
-            isActive ? 'bg-decisionBlue text-white' : 'bg-neutralGray/30 text-textSub'
+            isActive ? 'bg-zoneGraph text-white' : 'bg-neutralGray/30 text-textSub'
           )}
         >
           3
@@ -146,7 +153,7 @@ export function ZoneGraph() {
               className="h-3 w-3 rounded"
               style={{ backgroundColor: color }}
             />
-            <span className="text-xs text-textSub">{type}</span>
+            <span className="text-xs text-textSub font-mono uppercase">{type}</span>
           </div>
         ))}
       </div>

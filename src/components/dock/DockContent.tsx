@@ -21,10 +21,10 @@ function AssumptionsTab() {
         분석에 사용된 가정 {selectedPathId && `(${selectedPathId} 관련)`}
       </p>
       {filtered.map((asm: Assumption) => (
-        <div key={asm.id} className="flex items-start gap-3 rounded-lg bg-appBg/50 p-3">
+        <div key={asm.id} className="flex items-start gap-3 rounded-lg border border-neutralGray/10 bg-appBg/50 p-3">
           <span
             className={clsx(
-              'rounded px-1.5 py-0.5 text-[11px] font-medium',
+              'rounded px-1.5 py-0.5 text-[11px] font-medium font-mono uppercase',
               asm.category === 'data' && 'bg-cyan-500/20 text-cyan-400',
               asm.category === 'logic' && 'bg-purple-500/20 text-purple-400',
               asm.category === 'scope' && 'bg-amber-500/20 text-amber-400'
@@ -52,7 +52,7 @@ function EvidenceTab() {
         의사결정 근거 자료 {selectedPathId && `(${selectedPathId} 관련)`}
       </p>
       {filtered.map((evd: Evidence) => (
-        <div key={evd.id} className="flex items-start gap-3 rounded-lg bg-appBg/50 p-3">
+        <div key={evd.id} className="flex items-start gap-3 rounded-lg border border-neutralGray/10 bg-appBg/50 p-3">
           <DataLabelBadge label={evd.label} />
           <div className="flex-1">
             <p className="text-sm text-textMain">{evd.text}</p>
@@ -96,7 +96,7 @@ function RisksTab() {
           <div className="mb-2 flex items-center gap-2">
             <span
               className={clsx(
-                'text-xs font-bold',
+                'text-xs font-bold font-mono',
                 severityTextColors[risk.severity]
               )}
             >
@@ -120,11 +120,11 @@ function AlternativesTab() {
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-neutralGray/20 text-left text-xs text-textSub">
-            <th className="pb-2 pr-4">대안</th>
-            <th className="pb-2 pr-4">비용</th>
-            <th className="pb-2 pr-4">기간</th>
-            <th className="pb-2 pr-4">리스크</th>
-            <th className="pb-2">효과</th>
+            <th className="pb-2 pr-4 font-mono uppercase tracking-wider">대안</th>
+            <th className="pb-2 pr-4 font-mono uppercase tracking-wider">비용</th>
+            <th className="pb-2 pr-4 font-mono uppercase tracking-wider">기간</th>
+            <th className="pb-2 pr-4 font-mono uppercase tracking-wider">리스크</th>
+            <th className="pb-2 font-mono uppercase tracking-wider">효과</th>
           </tr>
         </thead>
         <tbody>
@@ -147,16 +147,16 @@ function AlternativesTab() {
                   <div className="font-medium text-textMain">{path.name}</div>
                   <div className="text-xs text-textSub">{path.summary}</div>
                 </td>
-                <td className="py-3 pr-4 text-textMain">
+                <td className="py-3 pr-4 font-mono text-textMain">
                   {costMetric?.value || '-'}
                 </td>
-                <td className="py-3 pr-4 text-textMain">
+                <td className="py-3 pr-4 font-mono text-textMain">
                   {timeMetric?.value || '-'}
                 </td>
                 <td className="py-3 pr-4">
                   <span
                     className={clsx(
-                      'rounded px-1.5 py-0.5 text-xs font-medium',
+                      'rounded px-1.5 py-0.5 text-xs font-medium font-mono',
                       path.riskLevel === 'high' && 'bg-alertRed/20 text-alertRed',
                       path.riskLevel === 'medium' && 'bg-amber-500/20 text-amber-400',
                       path.riskLevel === 'low' && 'bg-emerald-500/20 text-emerald-400'
@@ -168,7 +168,7 @@ function AlternativesTab() {
                 <td className="py-3">
                   <span
                     className={clsx(
-                      'rounded px-1.5 py-0.5 text-xs font-medium',
+                      'rounded px-1.5 py-0.5 text-xs font-medium font-mono',
                       path.effectLevel === 'high' && 'bg-emerald-500/20 text-emerald-400',
                       path.effectLevel === 'medium' && 'bg-amber-500/20 text-amber-400',
                       path.effectLevel === 'low' && 'bg-neutralGray/20 text-textSub'
@@ -198,7 +198,10 @@ function ReportTab() {
       </div>
 
       {selectedPath ? (
-        <div className="rounded-lg border border-neutralGray/20 bg-appBg/50 p-4">
+        <div className="relative rounded-lg border border-decisionBlue/30 bg-appBg/50 p-4 overflow-hidden">
+          {/* Top gradient line */}
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-decisionBlue/60 to-transparent" />
+
           <h5 className="mb-2 text-lg font-bold text-decisionBlue">{selectedPath.name}</h5>
           <p className="mb-4 text-sm text-textMain">{selectedPath.description}</p>
 
@@ -207,11 +210,11 @@ function ReportTab() {
               <div key={idx} className="rounded bg-panelBg p-2">
                 <div className="text-xs text-textSub">{metric.name}</div>
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-bold text-textMain">{metric.value}</span>
+                  <span className="text-sm font-bold font-mono text-textMain">{metric.value}</span>
                   {metric.change && (
                     <span
                       className={clsx(
-                        'text-xs',
+                        'text-xs font-mono',
                         metric.changeIsPositive !== undefined
                           ? metric.changeIsPositive ? 'text-emerald-400' : 'text-alertRed'
                           : metric.change.startsWith('-') ? 'text-emerald-400' : 'text-alertRed'
@@ -226,7 +229,7 @@ function ReportTab() {
           </div>
 
           <div>
-            <h6 className="mb-2 text-xs font-semibold text-textSub">핵심 포인트</h6>
+            <h6 className="mb-2 text-xs font-semibold text-textSub font-mono uppercase tracking-wider">핵심 포인트</h6>
             <ul className="space-y-1">
               {selectedPath.highlights.map((h, idx) => (
                 <li key={idx} className="text-sm text-textMain">

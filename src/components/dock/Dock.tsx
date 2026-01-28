@@ -18,7 +18,7 @@ export function Dock() {
   return (
     <div
       className={clsx(
-        'border-t border-neutralGray/20 bg-panelBg transition-all',
+        'border-t border-neutralGray/20 bg-panelBg/80 backdrop-blur-md transition-all',
         isDockExpanded ? 'h-[280px]' : 'h-[48px]'
       )}
       data-tour="dock"
@@ -33,10 +33,10 @@ export function Dock() {
                 key={tab.id}
                 onClick={() => setDockTab(tab.id)}
                 className={clsx(
-                  'flex items-center gap-1.5 px-3 py-3 text-sm transition-all',
+                  'flex items-center gap-1.5 rounded-t-lg px-3 py-3 text-sm transition-all',
                   dockTab === tab.id
-                    ? 'border-b-2 border-decisionBlue text-decisionBlue'
-                    : 'text-textSub hover:text-textMain'
+                    ? 'border-b-2 border-decisionBlue bg-decisionBlue/10 text-decisionBlue'
+                    : 'text-textSub hover:bg-appBg/50 hover:text-textMain'
                 )}
               >
                 <Icon className="h-4 w-4" />
@@ -59,7 +59,7 @@ export function Dock() {
 
       {/* Content */}
       {isDockExpanded && (
-        <div className="h-[calc(100%-48px)] overflow-y-auto p-4">
+        <div className="h-[calc(100%-48px)] overflow-y-auto p-4 animate-fade-in">
           <DockContent />
         </div>
       )}

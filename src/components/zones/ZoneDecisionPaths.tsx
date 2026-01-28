@@ -10,6 +10,12 @@ const riskColors = {
   low: 'text-emerald-400',
 };
 
+const riskDotColors = {
+  high: 'bg-alertRed',
+  medium: 'bg-amber-400',
+  low: 'bg-emerald-400',
+};
+
 const effectColors = {
   high: 'text-emerald-400',
   medium: 'text-amber-400',
@@ -25,7 +31,7 @@ export function ZoneDecisionPaths() {
       className={clsx(
         'flex flex-1 min-h-0 flex-col rounded-xl border p-4 transition-all',
         isActive
-          ? 'border-decisionBlue/50 bg-decisionBlue/5'
+          ? 'border-zonePath/50 bg-zonePath/5 shadow-glow-amber'
           : 'border-neutralGray/20 bg-panelBg/50'
       )}
       data-tour="zone-4"
@@ -34,7 +40,7 @@ export function ZoneDecisionPaths() {
         <span
           className={clsx(
             'flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold',
-            isActive ? 'bg-decisionBlue text-white' : 'bg-neutralGray/30 text-textSub'
+            isActive ? 'bg-zonePath text-white' : 'bg-neutralGray/30 text-textSub'
           )}
         >
           4
@@ -51,21 +57,22 @@ export function ZoneDecisionPaths() {
             className={clsx(
               'rounded-lg border p-4 text-left transition-all',
               selectedPathId === path.id
-                ? 'border-decisionBlue bg-decisionBlue/10'
-                : 'border-neutralGray/20 bg-appBg/50 hover:border-neutralGray/40'
+                ? 'border-zonePath bg-zonePath/10 shadow-glow-amber'
+                : 'border-neutralGray/20 bg-appBg/50 hover:border-neutralGray/40 hover:bg-appBg/80'
             )}
           >
             <div className="mb-2 flex items-center justify-between">
               <h4 className="text-sm font-semibold text-textMain">{path.name}</h4>
               {selectedPathId === path.id && (
-                <CheckCircle className="h-4 w-4 text-decisionBlue" />
+                <CheckCircle className="h-4 w-4 text-zonePath" />
               )}
             </div>
             <p className="mb-3 text-xs text-textSub">{path.summary}</p>
 
-            {/* 리스크/효과 표시 */}
+            {/* 리스크/효과 표시 with dot indicator */}
             <div className="mb-3 flex items-center gap-4 text-xs">
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1.5">
+                <span className={clsx('h-2 w-2 rounded-full', riskDotColors[path.riskLevel], path.riskLevel === 'high' && 'animate-glow-pulse')} />
                 <AlertTriangle className={clsx('h-3 w-3', riskColors[path.riskLevel])} />
                 <span className={riskColors[path.riskLevel]}>
                   리스크 {path.riskLevel.toUpperCase()}
@@ -85,11 +92,11 @@ export function ZoneDecisionPaths() {
                 <div key={idx} className="flex items-center justify-between text-xs">
                   <span className="text-textSub">{metric.name}</span>
                   <div className="flex items-center gap-1.5">
-                    <span className="font-medium text-textMain">{metric.value}</span>
+                    <span className="font-mono font-medium text-textMain">{metric.value}</span>
                     {metric.change && (
                       <span
                         className={clsx(
-                          'text-[11px]',
+                          'text-[11px] font-mono',
                           metric.changeIsPositive !== undefined
                             ? metric.changeIsPositive ? 'text-emerald-400' : 'text-alertRed'
                             : metric.change.startsWith('-') ? 'text-emerald-400' : 'text-alertRed'

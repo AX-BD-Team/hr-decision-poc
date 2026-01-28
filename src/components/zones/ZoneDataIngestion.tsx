@@ -22,16 +22,17 @@ export function ZoneDataIngestion() {
       className={clsx(
         'flex flex-1 min-h-0 flex-col rounded-xl border p-4 transition-all',
         isActive
-          ? 'border-decisionBlue/50 bg-decisionBlue/5'
+          ? 'border-zoneIngest/50 bg-zoneIngest/5 shadow-glow-blue'
           : 'border-neutralGray/20 bg-panelBg/50'
       )}
+      style={{ '--zone-accent': '#3B82F6' } as React.CSSProperties}
       data-tour="zone-1"
     >
       <div className="mb-3 flex shrink-0 items-center gap-2">
         <span
           className={clsx(
             'flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold',
-            isActive ? 'bg-decisionBlue text-white' : 'bg-neutralGray/30 text-textSub'
+            isActive ? 'bg-zoneIngest text-white' : 'bg-neutralGray/30 text-textSub'
           )}
         >
           1
@@ -46,10 +47,11 @@ export function ZoneDataIngestion() {
           return (
             <div
               key={ds.id}
-              className="flex items-center justify-between rounded-lg bg-appBg/50 p-3"
+              className="zone-card flex items-center justify-between rounded-lg bg-appBg/50 p-3 hover:bg-appBg/80 transition-all group"
+              style={{ '--zone-accent': '#3B82F6' } as React.CSSProperties}
             >
               <div className="flex items-center gap-3">
-                <Icon className="h-4 w-4 text-textSub" />
+                <Icon className="h-4 w-4 text-zoneIngest" />
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-medium text-textMain">{ds.name}</span>
@@ -59,8 +61,13 @@ export function ZoneDataIngestion() {
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-sm font-medium text-textMain">{ds.coverage}%</div>
-                <div className="text-xs text-textSub">커버리지</div>
+                <div className="text-sm font-mono font-medium text-textMain">{ds.coverage}%</div>
+                <div className="mt-1 h-1 w-16 rounded-full bg-neutralGray/20 overflow-hidden">
+                  <div
+                    className="h-full rounded-full bg-zoneIngest transition-all"
+                    style={{ width: `${ds.coverage}%` }}
+                  />
+                </div>
               </div>
             </div>
           );

@@ -18,18 +18,21 @@ export function ZoneStructuring() {
   return (
     <div
       className={clsx(
-        'flex min-h-0 flex-col rounded-xl border p-4 transition-all',
+        'relative flex min-h-0 flex-col rounded-xl border p-4 transition-all',
         isActive
-          ? 'border-decisionBlue/50 bg-decisionBlue/5'
+          ? 'border-zoneStruct/50 bg-zoneStruct/5 shadow-glow-violet'
           : 'border-neutralGray/20 bg-panelBg/50'
       )}
       data-tour="zone-2"
     >
+      {/* Top gradient strip */}
+      <div className="absolute top-0 left-0 right-0 h-[2px] rounded-t-xl bg-gradient-to-r from-transparent via-zoneStruct/60 to-transparent" />
+
       <div className="mb-3 flex shrink-0 items-center gap-2">
         <span
           className={clsx(
             'flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold',
-            isActive ? 'bg-decisionBlue text-white' : 'bg-neutralGray/30 text-textSub'
+            isActive ? 'bg-zoneStruct text-white' : 'bg-neutralGray/30 text-textSub'
           )}
         >
           2
@@ -44,10 +47,11 @@ export function ZoneStructuring() {
           return (
             <div
               key={pattern.id}
-              className="flex min-w-[180px] flex-col rounded-lg bg-appBg/50 p-3"
+              className="zone-card flex min-w-[180px] flex-col rounded-lg bg-appBg/50 p-3 hover:bg-appBg/80 transition-all"
+              style={{ '--zone-accent': '#8B5CF6' } as React.CSSProperties}
             >
               <div className="mb-2 flex items-center gap-2">
-                <Icon className="h-4 w-4 text-decisionBlue" />
+                <Icon className="h-4 w-4 text-zoneStruct" />
                 <DataLabelBadge label={pattern.label} />
               </div>
               <h4 className="text-sm font-medium text-textMain">{pattern.name}</h4>
