@@ -1,0 +1,151 @@
+import { useCallback, useMemo } from 'react';
+import {
+  ReactFlow,
+  Background,
+  Controls,
+  useNodesState,
+  useEdgesState,
+  type Node,
+  type Edge as FlowEdge,
+  MarkerType,
+} from '@xyflow/react';
+import '@xyflow/react/dist/style.css';
+import { useStore } from '../../store/useStore';
+import { clsx } from 'clsx';
+import type { Entity, Edge, EntityType } from '../../types';
+
+const nodeColors: Record<EntityType, string> = {
+  org: '#4F8CFF',
+  role: '#10B981',
+  person: '#F59E0B',
+  project: '#8B5CF6',
+  task: '#6366F1',
+  risk: '#FF4D4F',
+  cost: '#EC4899',
+};
+
+const edgeColors: Record<string, string> = {
+  depends_on: '#F59E0B',
+  covers: '#10B981',
+  assigned_to: '#4F8CFF',
+  risk_of: '#FF4D4F',
+  cost_supports: '#EC4899',
+  bottleneck: '#FF4D4F',
+  overlap: '#8B5CF6',
+  belongs_to: '#6366F1',
+};
+
+export function ZoneGraph() {
+  const { data, activeStep, selectedEntityId, selectEntity } = useStore();
+  const isActive = activeStep === 3;
+
+  const initialNodes: Node[] = useMemo(
+    () =>
+      data.entities.map((entity: Entity) => ({
+        id: entity.id,
+        position: entity.position || { x: 0, y: 0 },
+        data: { label: entity.name, entity },
+        style: {
+          background: nodeColors[entity.type] || '#666',
+          color: '#fff',
+          border: selectedEntityId === entity.id ? '3px solid #fff' : 'none',
+          borderRadius: '8px',
+          padding: '8px 12px',
+          fontSize: '12px',
+          fontWeight: 500,
+          boxShadow: selectedEntityId === entity.id ? '0 0 20px rgba(79, 140, 255, 0.5)' : 'none',
+        },
+      })),
+    [data.entities, selectedEntityId]
+  );
+
+  const initialEdges: FlowEdge[] = useMemo(
+    () =>
+      data.edges.map((edge: Edge) => ({
+        id: edge.id,
+        source: edge.source,
+        target: edge.target,
+        label: edge.type.replace('_', ' '),
+        labelStyle: { fontSize: '10px', fill: '#AAB4C5' },
+        style: {
+          stroke: edgeColors[edge.type] || '#666',
+          strokeWidth: edge.weight ? edge.weight * 3 : 2,
+        },
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+          color: edgeColors[edge.type] || '#666',
+        },
+        animated: edge.type === 'risk_of' || edge.type === 'bottleneck',
+      })),
+    [data.edges]
+  );
+
+  const [nodes, , onNodesChange] = useNodesState(initialNodes);
+  const [edges, , onEdgesChange] = useEdgesState(initialEdges);
+
+  const onNodeClick = useCallback(
+    (_: React.MouseEvent, node: Node) => {
+      selectEntity(selectedEntityId === node.id ? null : node.id);
+    },
+    [selectEntity, selectedEntityId]
+  );
+
+  return (
+    <div
+      className={clsx(
+        'rounded-xl border transition-all',
+        isActive
+          ? 'border-decisionBlue/50 bg-decisionBlue/5'
+          : 'border-neutralGray/20 bg-panelBg/50'
+      )}
+      data-tour="zone-3"
+    >
+      <div className="flex items-center gap-2 border-b border-neutralGray/20 px-4 py-3">
+        <span
+          className={clsx(
+            'flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold',
+            isActive ? 'bg-decisionBlue text-white' : 'bg-neutralGray/30 text-textSub'
+          )}
+        >
+          3
+        </span>
+        <h3 className="text-sm font-semibold text-textMain">Ontology Relationship Core</h3>
+        <span className="text-xs text-textSub">관계 그래프</span>
+      </div>
+
+      <div className="h-[300px]">
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onNodeClick={onNodeClick}
+          fitView
+          proOptions={{ hideAttribution: true }}
+        >
+          <Background color="#1a2744" gap={20} />
+          <Controls
+            style={{
+              background: '#111A2E',
+              borderRadius: '8px',
+              border: '1px solid rgba(170, 180, 197, 0.2)',
+            }}
+          />
+        </ReactFlow>
+      </div>
+
+      {/* 범례 */}
+      <div className="flex flex-wrap gap-3 border-t border-neutralGray/20 px-4 py-2">
+        {Object.entries(nodeColors).map(([type, color]) => (
+          <div key={type} className="flex items-center gap-1">
+            <span
+              className="h-3 w-3 rounded"
+              style={{ backgroundColor: color }}
+            />
+            <span className="text-xs text-textSub">{type}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
