@@ -20,14 +20,14 @@ export function ZoneDataIngestion() {
   return (
     <div
       className={clsx(
-        'rounded-xl border p-4 transition-all',
+        'flex flex-1 min-h-0 flex-col rounded-xl border p-4 transition-all',
         isActive
           ? 'border-decisionBlue/50 bg-decisionBlue/5'
           : 'border-neutralGray/20 bg-panelBg/50'
       )}
       data-tour="zone-1"
     >
-      <div className="mb-3 flex items-center gap-2">
+      <div className="mb-3 flex shrink-0 items-center gap-2">
         <span
           className={clsx(
             'flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold',
@@ -40,7 +40,7 @@ export function ZoneDataIngestion() {
         <span className="text-xs text-textSub">데이터 수집</span>
       </div>
 
-      <div className="grid gap-2">
+      <div className="flex-1 overflow-y-auto grid gap-2">
         {data.dataSources.map((ds: DataSource) => {
           const Icon = iconMap[ds.type] || Database;
           return (

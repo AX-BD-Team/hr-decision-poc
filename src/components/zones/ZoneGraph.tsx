@@ -93,7 +93,7 @@ export function ZoneGraph() {
   return (
     <div
       className={clsx(
-        'rounded-xl border transition-all',
+        'flex flex-[2] min-h-0 flex-col rounded-xl border transition-all',
         isActive
           ? 'border-decisionBlue/50 bg-decisionBlue/5'
           : 'border-neutralGray/20 bg-panelBg/50'
@@ -113,7 +113,7 @@ export function ZoneGraph() {
         <span className="text-xs text-textSub">관계 그래프</span>
       </div>
 
-      <div className="h-[300px]">
+      <div className="flex-1 min-h-0">
         <ReactFlow
           nodes={nodes}
           edges={edges}

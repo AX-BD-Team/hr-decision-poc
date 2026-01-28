@@ -15,7 +15,7 @@ function App() {
       {/* Main Content */}
       <main className="flex flex-1 gap-4 overflow-hidden p-4">
         {/* Left: Workflow Zones */}
-        <div className="flex flex-1 flex-col gap-4 overflow-y-auto">
+        <div className="flex flex-1 flex-col gap-3 overflow-hidden">
           <ZoneDataIngestion />
           <ZoneStructuring />
           <ZoneGraph />

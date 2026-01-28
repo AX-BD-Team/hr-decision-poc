@@ -18,14 +18,14 @@ export function ZoneStructuring() {
   return (
     <div
       className={clsx(
-        'rounded-xl border p-4 transition-all',
+        'flex min-h-0 flex-col rounded-xl border p-4 transition-all',
         isActive
           ? 'border-decisionBlue/50 bg-decisionBlue/5'
           : 'border-neutralGray/20 bg-panelBg/50'
       )}
       data-tour="zone-2"
     >
-      <div className="mb-3 flex items-center gap-2">
+      <div className="mb-3 flex shrink-0 items-center gap-2">
         <span
           className={clsx(
             'flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold',
