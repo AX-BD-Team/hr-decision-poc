@@ -3,7 +3,7 @@ import { useStore } from '../../store/useStore';
 import { clsx } from 'clsx';
 import type { AnalysisPattern } from '../../types';
 import { DataLabelBadge } from '../common/DataLabelBadge';
-import { SkeletonZone } from '../common/SkeletonZone';
+import { LoadingZone2Structuring } from '../loading/LoadingZone2Structuring';
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   gap_analysis: GitBranch,
@@ -16,7 +16,7 @@ export function ZoneStructuring({ variant = 'zone' }: { variant?: 'zone' | 'dock
   const { data, activeStep, loadingPhase } = useStore();
   const showSkeleton = loadingPhase >= 1 && loadingPhase < 3;
 
-  if (showSkeleton) return <SkeletonZone variant="default" processingLabel="분석 패턴 구조화 중..." />;
+  if (showSkeleton) return <LoadingZone2Structuring />;
   const isActive = activeStep === 2;
   const justRevealed = loadingPhase >= 3 && loadingPhase <= 5;
 

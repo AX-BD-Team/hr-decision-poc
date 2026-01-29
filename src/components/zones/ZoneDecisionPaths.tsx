@@ -3,7 +3,7 @@ import { useStore } from '../../store/useStore';
 import { clsx } from 'clsx';
 import type { DecisionPath } from '../../types';
 import { DataLabelBadge } from '../common/DataLabelBadge';
-import { SkeletonZone } from '../common/SkeletonZone';
+import { LoadingZone4Paths } from '../loading/LoadingZone4Paths';
 
 const riskDotColors = {
   high: 'bg-severity-high',
@@ -27,7 +27,7 @@ export function ZoneDecisionPaths({ variant = 'zone' }: { variant?: 'zone' | 'do
   const { data, activeStep, selectedPathId, selectPath, loadingPhase } = useStore();
   const showSkeleton = loadingPhase >= 1 && loadingPhase < 5;
 
-  if (showSkeleton) return <SkeletonZone variant="paths" processingLabel="의사결정 경로 도출 중..." />;
+  if (showSkeleton) return <LoadingZone4Paths />;
   const isActive = activeStep === 4;
   const justRevealed = loadingPhase === 5;
 

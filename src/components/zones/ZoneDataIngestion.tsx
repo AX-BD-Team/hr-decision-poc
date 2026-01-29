@@ -3,7 +3,7 @@ import { useStore } from '../../store/useStore';
 import { clsx } from 'clsx';
 import type { DataSource } from '../../types';
 import { DataLabelBadge } from '../common/DataLabelBadge';
-import { SkeletonZone } from '../common/SkeletonZone';
+import { LoadingZone1Ingestion } from '../loading/LoadingZone1Ingestion';
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   hr_master: Users,
@@ -18,7 +18,7 @@ export function ZoneDataIngestion() {
   const { data, activeStep, loadingPhase } = useStore();
   const showSkeleton = loadingPhase === 1;
 
-  if (showSkeleton) return <SkeletonZone variant="default" processingLabel="데이터 소스 수집 중..." />;
+  if (showSkeleton) return <LoadingZone1Ingestion />;
   const isActive = activeStep === 1;
   const justRevealed = loadingPhase >= 2 && loadingPhase <= 5;
 

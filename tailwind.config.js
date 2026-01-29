@@ -103,6 +103,56 @@ export default {
           '0%': { backgroundPosition: '200% 0' },
           '100%': { backgroundPosition: '-200% 0' },
         },
+        // Zone 1: Ingestion
+        'ingest-item-in': {
+          '0%': { opacity: '0', transform: 'translateX(-20px)' },
+          '100%': { opacity: '1', transform: 'translateX(0)' },
+        },
+        'ingest-scan': {
+          '0%': { width: '0%' },
+          '100%': { width: '100%' },
+        },
+        // Zone 2: Structuring
+        'struct-analyze': {
+          '0%': { opacity: '0', filter: 'blur(4px)', transform: 'scale(0.92)' },
+          '100%': { opacity: '1', filter: 'blur(0)', transform: 'scale(1)' },
+        },
+        'struct-beam': {
+          '0%': { top: '0%', opacity: '0.8' },
+          '50%': { opacity: '1' },
+          '100%': { top: '100%', opacity: '0.8' },
+        },
+        'struct-glow': {
+          '0%': { boxShadow: '0 0 0 0 rgba(139,92,246,0)' },
+          '30%': { boxShadow: '0 0 12px 2px rgba(139,92,246,0.5)' },
+          '100%': { boxShadow: '0 0 0 0 rgba(139,92,246,0)' },
+        },
+        // Zone 3: Graph
+        'graph-node-pop': {
+          '0%': { transform: 'scale(0)', opacity: '0' },
+          '70%': { transform: 'scale(1.2)', opacity: '1' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+        'graph-pulse-ring': {
+          '0%': { transform: 'scale(1)', opacity: '0.6' },
+          '100%': { transform: 'scale(2.5)', opacity: '0' },
+        },
+        // Zone 4: Decision Paths
+        'path-card-snap': {
+          '0%': { opacity: '0', transform: 'translateY(-30px) scale(0.9)' },
+          '60%': { opacity: '1', transform: 'translateY(4px) scale(1.02)' },
+          '80%': { transform: 'translateY(-2px) scale(1)' },
+          '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
+        },
+        'path-landing-flash': {
+          '0%': { opacity: '0' },
+          '30%': { opacity: '0.6' },
+          '100%': { opacity: '0' },
+        },
+        'path-ready-pulse': {
+          '0%, 100%': { boxShadow: '0 0 0 0 rgba(245,158,11,0)' },
+          '50%': { boxShadow: '0 0 16px 4px rgba(245,158,11,0.35)' },
+        },
       },
       animation: {
         'fade-in': 'fade-in 0.4s ease-out both',
@@ -117,6 +167,17 @@ export default {
         'stagger-4': 'fade-in-up 0.5s ease-out 0.4s both',
         'shimmer': 'shimmer 8s linear infinite',
         'phase-reveal': 'fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both',
+        // Zone loading animations
+        'ingest-item': 'ingest-item-in 0.35s ease-out both',
+        'ingest-scan': 'ingest-scan 0.4s ease-out both',
+        'struct-analyze': 'struct-analyze 0.5s ease-out both',
+        'struct-beam': 'struct-beam 1.2s ease-in-out infinite',
+        'struct-glow': 'struct-glow 0.8s ease-out both',
+        'graph-node-pop': 'graph-node-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both',
+        'graph-pulse-ring': 'graph-pulse-ring 0.6s ease-out both',
+        'path-card-snap': 'path-card-snap 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both',
+        'path-landing-flash': 'path-landing-flash 0.5s ease-out both',
+        'path-ready-pulse': 'path-ready-pulse 1s ease-in-out 2',
       },
       boxShadow: {
         'glow-blue': '0 0 20px rgba(59, 130, 246, 0.3)',

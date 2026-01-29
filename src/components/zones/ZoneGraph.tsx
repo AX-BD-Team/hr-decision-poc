@@ -15,7 +15,7 @@ import { clsx } from 'clsx';
 import type { Entity, Edge } from '../../types';
 import { RotateCcw } from 'lucide-react';
 import { ENTITY_COLORS, EDGE_COLORS, PANEL_BG } from '../../constants/tokens';
-import { SkeletonZone } from '../common/SkeletonZone';
+import { LoadingZone3Graph } from '../loading/LoadingZone3Graph';
 import { EntityNode } from '../graph/EntityNode';
 import { layoutGraph } from '../../utils/layoutGraph';
 
@@ -117,7 +117,7 @@ export function ZoneGraph() {
     [selectEntity, selectedEntityId]
   );
 
-  if (showSkeleton) return <SkeletonZone variant="graph" processingLabel="온톨로지 그래프 생성 중..." />;
+  if (showSkeleton) return <LoadingZone3Graph />;
 
   return (
     <div
