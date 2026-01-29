@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { DemoData, AppMode, DockSection, RecordTab, PageId } from '../types';
+import type { DemoData, AppMode, DockSection, RecordTab, PageId, Theme } from '../types';
 import { scenarioDataById } from '../data/scenarios';
 
 interface AppState {
@@ -22,6 +22,9 @@ interface AppState {
   isDockExpanded: boolean;
   dockHeight: number;
 
+  // Theme
+  theme: Theme;
+
   // HR Context Sidebar
   isContextSidebarOpen: boolean;
 
@@ -42,11 +45,24 @@ interface AppState {
   setDockHeight: (height: number) => void;
   toggleDock: () => void;
   toggleContextSidebar: () => void;
+  toggleTheme: () => void;
   startTour: () => void;
   nextTourStep: () => void;
   prevTourStep: () => void;
   endTour: () => void;
   reset: () => void;
+}
+
+function getInitialTheme(): Theme {
+  if (typeof window === 'undefined') return 'dark';
+  const stored = localStorage.getItem('theme');
+  if (stored === 'light' || stored === 'dark') return stored;
+  return 'dark';
+}
+
+function applyTheme(theme: Theme) {
+  document.documentElement.dataset.theme = theme;
+  localStorage.setItem('theme', theme);
 }
 
 const initialState = {
@@ -63,6 +79,7 @@ const initialState = {
   recordTab: 'evidence' as RecordTab,
   isDockExpanded: false,
   dockHeight: 300,
+  theme: getInitialTheme(),
   isContextSidebarOpen: false,
   isTourActive: false,
   tourStep: 0,

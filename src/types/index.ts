@@ -180,6 +180,9 @@ export interface TourStep {
 // App Mode
 export type AppMode = 'OVERVIEW' | 'GUIDED_DEMO' | 'DRILLDOWN';
 
+// Theme
+export type Theme = 'dark' | 'light';
+
 // Bottom Dock (primary)
 export type DockSection = 'paths' | 'record' | 'structuring' | 'context';
 
