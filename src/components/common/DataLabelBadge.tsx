@@ -1,5 +1,6 @@
 import { clsx } from 'clsx';
 import type { DataLabel } from '../../types';
+import { useT } from '../../i18n';
 
 interface DataLabelBadgeProps {
   label: DataLabel;
@@ -13,17 +14,11 @@ const labelStyles: Record<DataLabel, string> = {
   SYNTH: 'bg-label-synth/20 text-label-synth hover:shadow-[0_0_8px_rgba(6,182,212,0.3)]',
 };
 
-const labelAriaMap: Record<DataLabel, string> = {
-  REAL: '실제 데이터',
-  ESTIMATE: '추정 데이터',
-  MOCK: '모의 데이터',
-  SYNTH: '합성 데이터',
-};
-
 export function DataLabelBadge({ label, size = 'sm' }: DataLabelBadgeProps) {
+  const t = useT();
   return (
     <span
-      aria-label={labelAriaMap[label]}
+      aria-label={t(`dataLabel.${label}`)}
       className={clsx(
         'rounded font-mono font-medium uppercase transition-all',
         labelStyles[label],

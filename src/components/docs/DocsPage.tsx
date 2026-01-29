@@ -3,13 +3,16 @@ import { FileText } from 'lucide-react';
 import { clsx } from 'clsx';
 import { docsMeta } from '../../data/docs-meta';
 import { DocCard } from './DocCard';
+import { useT } from '../../i18n';
 
-const categories = ['전체', ...Array.from(new Set(docsMeta.map((d) => d.category)))];
+const ALL_KEY = '__all__';
+const categoryKeys = [ALL_KEY, ...Array.from(new Set(docsMeta.map((d) => d.category)))];
 
 export function DocsPage() {
-  const [activeCategory, setActiveCategory] = useState('전체');
+  const t = useT();
+  const [activeCategory, setActiveCategory] = useState(ALL_KEY);
 
-  const filtered = activeCategory === '전체'
+  const filtered = activeCategory === ALL_KEY
     ? docsMeta
     : docsMeta.filter((d) => d.category === activeCategory);
 
@@ -19,14 +22,14 @@ export function DocsPage() {
       <div className="flex items-center gap-3">
         <FileText className="h-6 w-6 text-decisionBlue" aria-hidden="true" />
         <div>
-          <h1 className="text-lg font-semibold text-textMain">프로젝트 문서</h1>
-          <p className="text-xs text-textSub">기획서, 데이터 명세, 평가 계획 등 프로젝트 산출물을 열람할 수 있습니다.</p>
+          <h1 className="text-lg font-semibold text-textMain">{t('docs.title')}</h1>
+          <p className="text-xs text-textSub">{t('docs.subtitle')}</p>
         </div>
       </div>
 
       {/* 카테고리 필터 */}
       <div className="flex items-center gap-2 flex-wrap">
-        {categories.map((cat) => (
+        {categoryKeys.map((cat) => (
           <button
             key={cat}
             onClick={() => setActiveCategory(cat)}
@@ -37,7 +40,7 @@ export function DocsPage() {
                 : 'glass-panel text-textSub hover:text-textMain hover:bg-appBg/50'
             )}
           >
-            {cat}
+            {cat === ALL_KEY ? t('common.all') : cat}
           </button>
         ))}
       </div>
@@ -51,7 +54,7 @@ export function DocsPage() {
 
       {filtered.length === 0 && (
         <div className="text-center py-12 text-textSub text-sm">
-          해당 카테고리에 문서가 없습니다.
+          {t('docs.noDocs')}
         </div>
       )}
     </div>

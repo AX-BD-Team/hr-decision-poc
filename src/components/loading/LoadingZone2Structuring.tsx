@@ -1,14 +1,16 @@
+import { useT } from '../../i18n';
+
 const CARD_COUNT = 4;
 const STAGGER_MS = 250;
 
-const cardLabels = ['갭 분석', '의존 관계', '병목 탐지', '비용 영향'];
-
 export function LoadingZone2Structuring() {
+  const t = useT();
+  const cardLabels = [t('loading.cardLabels.gapAnalysis'), t('loading.cardLabels.dependency'), t('loading.cardLabels.bottleneck'), t('loading.cardLabels.costImpact')];
   return (
     <div
       className="relative flex min-h-0 flex-col rounded-xl border border-zoneStruct/30 bg-panelBg/50 p-4 overflow-hidden"
       aria-busy="true"
-      aria-label="분석 패턴 구조화 중"
+      aria-label={t('loading.analyzingAria')}
     >
       {/* Sweeping analysis beam */}
       <div className="struct-beam-line animate-struct-beam" />
@@ -58,7 +60,7 @@ export function LoadingZone2Structuring() {
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-zoneStruct opacity-75" />
           <span className="relative inline-flex h-2 w-2 rounded-full bg-zoneStruct" />
         </span>
-        <span className="text-xs text-textSub animate-pulse">분석 패턴 구조화 중...</span>
+        <span className="text-xs text-textSub animate-pulse">{t('loading.analyzing')}</span>
       </div>
     </div>
   );

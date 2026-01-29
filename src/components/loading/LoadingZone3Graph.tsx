@@ -1,4 +1,5 @@
 import { ENTITY_COLORS } from '../../constants/tokens';
+import { useT } from '../../i18n';
 
 const NODE_STAGGER_MS = 150;
 const EDGE_START_MS = 600;
@@ -21,11 +22,12 @@ const edgeDefs: [number, number][] = [
 ];
 
 export function LoadingZone3Graph() {
+  const t = useT();
   return (
     <div
       className="flex h-full min-h-[300px] flex-col rounded-xl border border-zoneGraph/30 bg-panelBg/50"
       aria-busy="true"
-      aria-label="온톨로지 그래프 생성 중"
+      aria-label={t('loading.buildingAria')}
     >
       {/* Header bar */}
       <div className="flex items-center gap-2 border-b border-neutralGray/20 px-4 py-3">
@@ -116,7 +118,7 @@ export function LoadingZone3Graph() {
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-zoneGraph opacity-75" />
           <span className="relative inline-flex h-2 w-2 rounded-full bg-zoneGraph" />
         </span>
-        <span className="text-xs text-textSub animate-pulse">온톨로지 관계 생성 중...</span>
+        <span className="text-xs text-textSub animate-pulse">{t('loading.building')}</span>
       </div>
     </div>
   );

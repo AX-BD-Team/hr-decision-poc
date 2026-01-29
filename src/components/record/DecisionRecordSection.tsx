@@ -11,6 +11,7 @@ import {
 import { clsx } from 'clsx';
 import { useStore } from '../../store/useStore';
 import { DockContent } from '../dock/DockContent';
+import { useT } from '../../i18n';
 
 const recordTabs = [
   { id: 'evidence' as const, label: 'Evidence', icon: Shield },
@@ -21,6 +22,7 @@ const recordTabs = [
 ];
 
 export function DecisionRecordSection() {
+  const t = useT();
   const { recordTab, setRecordTab, reset, data, selectedPathId, loadingPhase } = useStore();
 
   if (loadingPhase >= 1 && loadingPhase < 5) return null;
@@ -49,31 +51,31 @@ export function DecisionRecordSection() {
           <div class="metrics">${selectedPath.keyMetrics.map((m) =>
             `<div class="metric"><span class="metric-label">${esc(m.name)}</span><span class="metric-value">${esc(m.value)}${m.change ? ` <small style="color:${m.changeIsPositive ? '#34D399' : '#FF4D4F'}">${esc(m.change)}</small>` : ''}</span></div>`
           ).join('')}</div>
-          <h3>핵심 포인트</h3>
+          <h3>${esc(t('record.keyPoints'))}</h3>
           <ul>${selectedPath.highlights.map((h) => `<li>${esc(h)}</li>`).join('')}</ul>
         </section>`
-      : '<p class="muted">선택된 경로 없음</p>';
+      : `<p class="muted">${esc(t('record.noPathSelected'))}</p>`;
 
     const evidenceHtml = relatedEvidence.length > 0
-      ? `<section class="card"><h2>관련 근거 (${relatedEvidence.length})</h2>${relatedEvidence.map((e) =>
-          `<div class="item"><span class="badge">${esc(e.label)}</span><p>${esc(e.text)}</p><small>출처: ${esc(e.source)}</small></div>`
+      ? `<section class="card"><h2>${esc(t('record.relatedEvidence'))} (${relatedEvidence.length})</h2>${relatedEvidence.map((e) =>
+          `<div class="item"><span class="badge">${esc(e.label)}</span><p>${esc(e.text)}</p><small>${esc(t('record.source'))}: ${esc(e.source)}</small></div>`
         ).join('')}</section>`
       : '';
 
     const assumptionsHtml = relatedAssumptions.length > 0
-      ? `<section class="card"><h2>관련 가정 (${relatedAssumptions.length})</h2>${relatedAssumptions.map((a) =>
+      ? `<section class="card"><h2>${esc(t('record.relatedAssumptions'))} (${relatedAssumptions.length})</h2>${relatedAssumptions.map((a) =>
           `<div class="item"><span class="badge cat-${a.category}">${esc(a.category.toUpperCase())}</span><p>${esc(a.text)}</p></div>`
         ).join('')}</section>`
       : '';
 
     const risksHtml = relatedRisks.length > 0
-      ? `<section class="card"><h2>관련 리스크 (${relatedRisks.length})</h2>${relatedRisks.map((r) =>
+      ? `<section class="card"><h2>${esc(t('record.relatedRisks'))} (${relatedRisks.length})</h2>${relatedRisks.map((r) =>
           `<div class="item risk-${r.severity}"><span class="badge" style="color:${severityColor[r.severity]}">${esc(r.severity.toUpperCase())}</span><p>${esc(r.text)}</p></div>`
         ).join('')}</section>`
       : '';
 
-    const comparisonHtml = `<section class="card"><h2>대안 비교</h2>
-      <table><thead><tr><th>대안</th><th>비용</th><th>기간</th><th>리스크</th><th>효과</th></tr></thead>
+    const comparisonHtml = `<section class="card"><h2>${esc(t('record.alternativesComparison'))}</h2>
+      <table><thead><tr><th>${esc(t('record.alternative'))}</th><th>${esc(t('record.cost'))}</th><th>${esc(t('record.duration'))}</th><th>${esc(t('record.risks'))}</th><th>${esc(t('record.effect'))}</th></tr></thead>
       <tbody>${data.decisionPaths.map((p) => {
         const cost = p.keyMetrics.find((m) => m.name === '예상 비용');
         const time = p.keyMetrics.find((m) => m.name === '소요 기간');
@@ -142,7 +144,7 @@ export function DecisionRecordSection() {
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <h3 className="text-sm font-semibold text-textMain">Explainability & Decision Record</h3>
-          <p className="text-xs text-textSub">의사결정 기록 / 가정 검증 / 참고자료</p>
+          <p className="text-xs text-textSub">{t('record.recordSubtitle')}</p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">

@@ -12,27 +12,29 @@ import {
 import { useStore } from '../../store/useStore';
 import { clsx } from 'clsx';
 import { DOCK_COLLAPSED_HEIGHT, DOCK_MIN_HEIGHT, DOCK_MAX_HEIGHT } from '../../constants/layout';
+import { useT } from '../../i18n';
 import { DockContent } from './DockContent';
 import { ZoneDecisionPaths } from '../zones/ZoneDecisionPaths';
 import { ZoneStructuring } from '../zones/ZoneStructuring';
 import { HRContextView } from '../context/HRContextView';
 
-const sections = [
-  { id: 'paths' as const, label: '대안 카드', icon: GitBranch },
-  { id: 'record' as const, label: '결정 레코드', icon: FileText },
-  { id: 'structuring' as const, label: '구조화', icon: Layers3 },
-  { id: 'context' as const, label: 'HR 컨텍스트', icon: Users },
+const sectionDefs = [
+  { id: 'paths' as const, tKey: 'dock.paths', icon: GitBranch },
+  { id: 'record' as const, tKey: 'dock.record', icon: FileText },
+  { id: 'structuring' as const, tKey: 'dock.structuring', icon: Layers3 },
+  { id: 'context' as const, tKey: 'dock.context', icon: Users },
 ];
 
-const recordTabs = [
-  { id: 'evidence' as const, label: '근거', icon: Shield },
-  { id: 'assumptions' as const, label: '가정', icon: FileText },
-  { id: 'risks' as const, label: '리스크', icon: AlertTriangle },
-  { id: 'alternatives' as const, label: '대안비교', icon: GitBranch },
-  { id: 'report' as const, label: 'Record', icon: ClipboardList },
+const recordTabDefs = [
+  { id: 'evidence' as const, tKey: 'record.evidence', icon: Shield },
+  { id: 'assumptions' as const, tKey: 'record.assumptions', icon: FileText },
+  { id: 'risks' as const, tKey: 'record.risks', icon: AlertTriangle },
+  { id: 'alternatives' as const, tKey: 'record.alternatives', icon: GitBranch },
+  { id: 'report' as const, tKey: 'record.report', icon: ClipboardList },
 ];
 
 export function Dock() {
+  const t = useT();
   const {
     dockSection,
     setDockSection,
@@ -91,7 +93,7 @@ export function Dock() {
         aria-valuenow={dockHeight}
         aria-valuemin={DOCK_MIN_HEIGHT}
         aria-valuemax={DOCK_MAX_HEIGHT}
-        aria-label="독 높이 조절"
+        aria-label={t('a11y.dockResizeAria')}
         onKeyDown={(e) => {
           if (e.key === 'ArrowUp') {
             e.preventDefault();
@@ -107,8 +109,8 @@ export function Dock() {
       </div>
 
       <div className="flex items-center justify-between border-b border-neutralGray/20 px-4">
-        <div className="flex items-center gap-1 overflow-x-auto" role="tablist" aria-label="독 섹션">
-          {sections.map((tab) => {
+        <div className="flex items-center gap-1 overflow-x-auto" role="tablist" aria-label={t('a11y.dockSectionAria')}>
+          {sectionDefs.map((tab) => {
             const Icon = tab.icon;
             const active = dockSection === tab.id;
             return (
@@ -128,7 +130,7 @@ export function Dock() {
                 )}
               >
                 <Icon className="h-4 w-4" aria-hidden="true" />
-                <span className="font-medium hidden sm:inline">{tab.label}</span>
+                <span className="font-medium hidden sm:inline">{t(tab.tKey)}</span>
                 {active && <span className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-decisionBlue" />}
               </button>
             );
@@ -171,8 +173,8 @@ export function Dock() {
           {dockSection === 'record' && (
             <div className="flex h-full flex-col overflow-hidden animate-fade-in">
               <div className="flex items-center justify-between border-b border-neutralGray/20 px-4">
-                <div className="flex items-center gap-1 overflow-x-auto" role="tablist" aria-label="결정 레코드 탭">
-                  {recordTabs.map((tab) => {
+                <div className="flex items-center gap-1 overflow-x-auto" role="tablist" aria-label={t('a11y.recordTabAria')}>
+                  {recordTabDefs.map((tab) => {
                     const Icon = tab.icon;
                     const active = recordTab === tab.id;
                     return (
@@ -189,7 +191,7 @@ export function Dock() {
                         )}
                       >
                         <Icon className="h-4 w-4" aria-hidden="true" />
-                        <span className="font-medium hidden sm:inline">{tab.label}</span>
+                        <span className="font-medium hidden sm:inline">{t(tab.tKey)}</span>
                         {active && <span className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-contextGreen" />}
                       </button>
                     );

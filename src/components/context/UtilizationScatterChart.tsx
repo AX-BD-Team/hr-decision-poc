@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import type { UtilizationPoint } from '../../types';
 import { CHART_COLORS } from '../../constants/tokens';
+import { useT } from '../../i18n';
 
 interface UtilizationScatterChartProps {
   data: UtilizationPoint[];
@@ -34,6 +35,7 @@ const X_TICKS = [0, 25, 50, 75, 100, 125, 150];
 const Y_TICKS = [0, 25, 50, 75, 100];
 
 export function UtilizationScatterChart({ data, selectedEntityId, onSelectEntity }: UtilizationScatterChartProps) {
+  const t = useT();
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   const points = useMemo(
@@ -55,7 +57,7 @@ export function UtilizationScatterChart({ data, selectedEntityId, onSelectEntity
   const riskH = scaleY(HIGH_DEP_Y) - riskY;
 
   return (
-    <div role="img" aria-label="인력 가동률 및 의존도 산점도" className="h-full w-full">
+    <div role="img" aria-label={t('a11y.scatterAria')} className="h-full w-full">
       <svg viewBox={`0 0 ${VB_W} ${VB_H}`} className="h-full w-full" preserveAspectRatio="xMidYMid meet">
         {/* Risk zone highlight */}
         <rect x={riskX} y={riskY} width={riskW} height={riskH} fill={CHART_COLORS.alert} opacity={0.06} rx={4} />
@@ -91,7 +93,7 @@ export function UtilizationScatterChart({ data, selectedEntityId, onSelectEntity
           stroke={CHART_COLORS.alert} strokeDasharray="4 3" strokeWidth={1}
         />
         <text x={scaleX(OVERLOAD_X) + 3} y={MARGIN.top + 10} fill={CHART_COLORS.alert} fontSize={8} fontFamily="monospace">
-          과부하
+          {t('context.overload')}
         </text>
         <line
           x1={MARGIN.left} y1={scaleY(HIGH_DEP_Y)}
@@ -99,7 +101,7 @@ export function UtilizationScatterChart({ data, selectedEntityId, onSelectEntity
           stroke={CHART_COLORS.warning} strokeDasharray="4 3" strokeWidth={1}
         />
         <text x={MARGIN.left + PLOT_W - 28} y={scaleY(HIGH_DEP_Y) - 4} fill={CHART_COLORS.warning} fontSize={8} fontFamily="monospace">
-          고의존
+          {t('context.highDependency')}
         </text>
 
         {/* Axes */}
@@ -184,10 +186,10 @@ export function UtilizationScatterChart({ data, selectedEntityId, onSelectEntity
                 {hoveredPoint.name}
               </text>
               <text x={tx + 8} y={ty + 27} fill={CHART_COLORS.textSub} fontSize={8} fontFamily="monospace">
-                가동률: {(hoveredPoint.utilization * 100).toFixed(0)}%
+                {t('context.utilizationLabel')}: {(hoveredPoint.utilization * 100).toFixed(0)}%
               </text>
               <text x={tx + 8} y={ty + 39} fill={CHART_COLORS.textSub} fontSize={8} fontFamily="monospace">
-                의존도: {(hoveredPoint.dependency * 100).toFixed(0)}%
+                {t('context.dependencyLabel')}: {(hoveredPoint.dependency * 100).toFixed(0)}%
               </text>
             </g>
           );

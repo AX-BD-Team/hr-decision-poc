@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
+import { useT } from '../../i18n';
 
 const ROW_COUNT = 4;
 const STAGGER_MS = 100;
 
-const rowLabels = ['HR 마스터', '근태/TMS', '성과평가', '비용 데이터'];
-
 export function LoadingZone1Ingestion() {
+  const t = useT();
+  const rowLabels = [t('loading.rowLabels.hrMaster'), t('loading.rowLabels.tms'), t('loading.rowLabels.evaluation'), t('loading.rowLabels.costData')];
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -25,7 +26,7 @@ export function LoadingZone1Ingestion() {
     <div
       className="flex flex-1 min-h-0 flex-col rounded-xl border border-zoneIngest/30 bg-panelBg/50 p-4"
       aria-busy="true"
-      aria-label="데이터 소스 수집 중"
+      aria-label={t('loading.scanningAria')}
     >
       {/* Progress bar */}
       <div className="mb-3 h-[2px] w-full rounded-full bg-neutralGray/20 overflow-hidden">
@@ -69,7 +70,7 @@ export function LoadingZone1Ingestion() {
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-zoneIngest opacity-75" />
           <span className="relative inline-flex h-2 w-2 rounded-full bg-zoneIngest" />
         </span>
-        <span className="text-xs text-textSub animate-pulse">데이터 소스 수집 중...</span>
+        <span className="text-xs text-textSub animate-pulse">{t('loading.scanning')}</span>
       </div>
     </div>
   );

@@ -7,8 +7,10 @@ import type {
   RiskSignal,
   DecisionPath,
 } from '../../types';
+import { useT } from '../../i18n';
 
 function AssumptionsTab() {
+  const t = useT();
   const { data, selectedPathId } = useStore();
 
   const filtered = selectedPathId
@@ -18,7 +20,7 @@ function AssumptionsTab() {
   return (
     <div className="space-y-2">
       <p className="mb-3 text-xs text-textSub">
-        분석에 사용된 가정 {selectedPathId && `(${selectedPathId} 관련)`}
+        {t('record.assumptionsDesc')} {selectedPathId && `(${selectedPathId} ${t('record.related')})`}
       </p>
       {filtered.map((asm: Assumption) => (
         <div key={asm.id} className="flex items-start gap-3 rounded-lg border border-neutralGray/10 bg-appBg/50 p-3">
@@ -40,6 +42,7 @@ function AssumptionsTab() {
 }
 
 function EvidenceTab() {
+  const t = useT();
   const { data, selectedPathId } = useStore();
 
   const filtered = selectedPathId
@@ -49,14 +52,14 @@ function EvidenceTab() {
   return (
     <div className="space-y-2">
       <p className="mb-3 text-xs text-textSub">
-        의사결정 근거 자료 {selectedPathId && `(${selectedPathId} 관련)`}
+        {t('record.evidenceDesc')} {selectedPathId && `(${selectedPathId} ${t('record.related')})`}
       </p>
       {filtered.map((evd: Evidence) => (
         <div key={evd.id} className="flex items-start gap-3 rounded-lg border border-neutralGray/10 bg-appBg/50 p-3">
           <DataLabelBadge label={evd.label} />
           <div className="flex-1">
             <p className="text-sm text-textMain">{evd.text}</p>
-            <p className="mt-1 text-xs text-textSub">출처: {evd.source}</p>
+            <p className="mt-1 text-xs text-textSub">{t('record.source')}: {evd.source}</p>
           </div>
         </div>
       ))}
@@ -65,6 +68,7 @@ function EvidenceTab() {
 }
 
 function RisksTab() {
+  const t = useT();
   const { data, selectedPathId } = useStore();
 
   const filtered = selectedPathId
@@ -86,7 +90,7 @@ function RisksTab() {
   return (
     <div className="space-y-2">
       <p className="mb-3 text-xs text-textSub">
-        리스크 신호 {selectedPathId && `(${selectedPathId} 관련)`}
+        {t('record.risksDesc')} {selectedPathId && `(${selectedPathId} ${t('record.related')})`}
       </p>
       {filtered.map((risk: RiskSignal) => (
         <div
@@ -112,20 +116,21 @@ function RisksTab() {
 }
 
 function AlternativesTab() {
+  const t = useT();
   const { data, selectedPathId, selectPath } = useStore();
 
   return (
     <div>
-      <p className="mb-3 text-xs text-textSub">의사결정 대안 비교</p>
+      <p className="mb-3 text-xs text-textSub">{t('record.alternativesDesc')}</p>
       <div className="rounded-lg border border-neutralGray/20 overflow-hidden">
         <table className="w-full text-sm">
           <thead>
             <tr className="bg-surface-1 text-left text-tiny text-textSub">
-              <th className="px-4 py-2.5 font-mono font-semibold uppercase tracking-wider">대안</th>
-              <th className="px-4 py-2.5 font-mono font-semibold uppercase tracking-wider">비용</th>
-              <th className="px-4 py-2.5 font-mono font-semibold uppercase tracking-wider">기간</th>
-              <th className="px-4 py-2.5 font-mono font-semibold uppercase tracking-wider">리스크</th>
-              <th className="px-4 py-2.5 font-mono font-semibold uppercase tracking-wider">효과</th>
+              <th className="px-4 py-2.5 font-mono font-semibold uppercase tracking-wider">{t('record.alternative')}</th>
+              <th className="px-4 py-2.5 font-mono font-semibold uppercase tracking-wider">{t('record.cost')}</th>
+              <th className="px-4 py-2.5 font-mono font-semibold uppercase tracking-wider">{t('record.duration')}</th>
+              <th className="px-4 py-2.5 font-mono font-semibold uppercase tracking-wider">{t('record.risks')}</th>
+              <th className="px-4 py-2.5 font-mono font-semibold uppercase tracking-wider">{t('record.effect')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-neutralGray/10">
@@ -189,6 +194,7 @@ function AlternativesTab() {
 }
 
 function ReportTab() {
+  const t = useT();
   const { data, selectedPathId } = useStore();
   const selectedPath = data.decisionPaths.find((p: DecisionPath) => p.id === selectedPathId);
 
@@ -212,7 +218,7 @@ function ReportTab() {
     <div className="space-y-4">
       <div>
         <h4 className="text-sm font-semibold text-textMain">Decision Record Preview</h4>
-        <p className="text-xs text-textSub">선택된 의사결정 경로의 종합 보고서</p>
+        <p className="text-xs text-textSub">{t('record.reportSummary')}</p>
       </div>
 
       {selectedPath ? (
@@ -247,7 +253,7 @@ function ReportTab() {
             </div>
 
             <div>
-              <h6 className="mb-2 text-xs font-semibold text-textSub font-mono uppercase tracking-wider">핵심 포인트</h6>
+              <h6 className="mb-2 text-xs font-semibold text-textSub font-mono uppercase tracking-wider">{t('record.keyPoints')}</h6>
               <ul className="space-y-1">
                 {selectedPath.highlights.map((h, idx) => (
                   <li key={idx} className="text-sm text-textMain">• {h}</li>
@@ -259,14 +265,14 @@ function ReportTab() {
           {/* Related Evidence */}
           {relatedEvidence.length > 0 && (
             <div className="rounded-lg border border-neutralGray/20 bg-appBg/30 p-4">
-              <h6 className="mb-3 text-xs font-semibold text-textSub font-mono uppercase tracking-wider">관련 근거 ({relatedEvidence.length})</h6>
+              <h6 className="mb-3 text-xs font-semibold text-textSub font-mono uppercase tracking-wider">{t('record.relatedEvidence')} ({relatedEvidence.length})</h6>
               <div className="space-y-2">
                 {relatedEvidence.map((evd: Evidence) => (
                   <div key={evd.id} className="flex items-start gap-3 rounded-lg border border-neutralGray/10 bg-appBg/50 p-3">
                     <DataLabelBadge label={evd.label} />
                     <div className="flex-1">
                       <p className="text-sm text-textMain">{evd.text}</p>
-                      <p className="mt-1 text-xs text-textSub">출처: {evd.source}</p>
+                      <p className="mt-1 text-xs text-textSub">{t('record.source')}: {evd.source}</p>
                     </div>
                   </div>
                 ))}
@@ -277,7 +283,7 @@ function ReportTab() {
           {/* Related Assumptions */}
           {relatedAssumptions.length > 0 && (
             <div className="rounded-lg border border-neutralGray/20 bg-appBg/30 p-4">
-              <h6 className="mb-3 text-xs font-semibold text-textSub font-mono uppercase tracking-wider">관련 가정 ({relatedAssumptions.length})</h6>
+              <h6 className="mb-3 text-xs font-semibold text-textSub font-mono uppercase tracking-wider">{t('record.relatedAssumptions')} ({relatedAssumptions.length})</h6>
               <div className="space-y-2">
                 {relatedAssumptions.map((asm: Assumption) => (
                   <div key={asm.id} className="flex items-start gap-3 rounded-lg border border-neutralGray/10 bg-appBg/50 p-3">
@@ -301,7 +307,7 @@ function ReportTab() {
           {/* Related Risks */}
           {relatedRisks.length > 0 && (
             <div className="rounded-lg border border-neutralGray/20 bg-appBg/30 p-4">
-              <h6 className="mb-3 text-xs font-semibold text-textSub font-mono uppercase tracking-wider">관련 리스크 ({relatedRisks.length})</h6>
+              <h6 className="mb-3 text-xs font-semibold text-textSub font-mono uppercase tracking-wider">{t('record.relatedRisks')} ({relatedRisks.length})</h6>
               <div className="space-y-2">
                 {relatedRisks.map((risk: RiskSignal) => (
                   <div key={risk.id} className={clsx('rounded-lg border p-3', severityStyles[risk.severity])}>
@@ -318,16 +324,16 @@ function ReportTab() {
 
           {/* Alternatives Comparison Table */}
           <div className="rounded-lg border border-neutralGray/20 bg-appBg/30 p-4">
-            <h6 className="mb-3 text-xs font-semibold text-textSub font-mono uppercase tracking-wider">대안 비교</h6>
+            <h6 className="mb-3 text-xs font-semibold text-textSub font-mono uppercase tracking-wider">{t('record.alternativesComparison')}</h6>
             <div className="rounded-lg border border-neutralGray/20 overflow-hidden">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="bg-surface-1 text-left text-tiny text-textSub">
-                    <th className="px-3 py-2 font-mono font-semibold uppercase tracking-wider">대안</th>
-                    <th className="px-3 py-2 font-mono font-semibold uppercase tracking-wider">비용</th>
-                    <th className="px-3 py-2 font-mono font-semibold uppercase tracking-wider">기간</th>
-                    <th className="px-3 py-2 font-mono font-semibold uppercase tracking-wider">리스크</th>
-                    <th className="px-3 py-2 font-mono font-semibold uppercase tracking-wider">효과</th>
+                    <th className="px-3 py-2 font-mono font-semibold uppercase tracking-wider">{t('record.alternative')}</th>
+                    <th className="px-3 py-2 font-mono font-semibold uppercase tracking-wider">{t('record.cost')}</th>
+                    <th className="px-3 py-2 font-mono font-semibold uppercase tracking-wider">{t('record.duration')}</th>
+                    <th className="px-3 py-2 font-mono font-semibold uppercase tracking-wider">{t('record.risks')}</th>
+                    <th className="px-3 py-2 font-mono font-semibold uppercase tracking-wider">{t('record.effect')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-neutralGray/10">
@@ -340,7 +346,7 @@ function ReportTab() {
                         <td className="px-3 py-2">
                           <span className={clsx('font-medium', isCurrent ? 'text-decisionBlue' : 'text-textMain')}>
                             {path.name}
-                            {isCurrent && <span className="ml-1 text-tiny text-decisionBlue/70">(선택됨)</span>}
+                            {isCurrent && <span className="ml-1 text-tiny text-decisionBlue/70">({t('record.selected')})</span>}
                           </span>
                         </td>
                         <td className="px-3 py-2 font-mono text-textMain">{costMetric?.value || '-'}</td>
@@ -376,7 +382,7 @@ function ReportTab() {
       ) : (
         <div className="rounded-lg border border-dashed border-neutralGray/30 p-8 text-center">
           <p className="text-sm text-textSub">
-            Decision Paths 영역에서 대안을 선택하면 종합 보고서가 표시됩니다.
+            {t('record.selectPathPrompt')}
           </p>
         </div>
       )}

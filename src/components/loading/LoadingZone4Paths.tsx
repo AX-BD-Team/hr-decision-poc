@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
+import { useT } from '../../i18n';
 
 const CARD_COUNT = 3;
 const STAGGER_MS = 700;
 
-const cardLabels = ['경로 A: 내부 재배치', '경로 B: 외부 채용', '경로 C: 하이브리드'];
-
 export function LoadingZone4Paths() {
+  const t = useT();
+  const cardLabels = [t('loading.pathLabels.pathA'), t('loading.pathLabels.pathB'), t('loading.pathLabels.pathC')];
   const [progress, setProgress] = useState(0);
   const [landed, setLanded] = useState(0);
   const [allDone, setAllDone] = useState(false);
@@ -36,7 +37,7 @@ export function LoadingZone4Paths() {
     <div
       className="flex flex-1 min-h-0 flex-col rounded-xl border border-zonePath/30 bg-panelBg/50 p-4"
       aria-busy="true"
-      aria-label="의사결정 경로 도출 중"
+      aria-label={t('loading.generatingAria')}
     >
       {/* Amber progress bar */}
       <div className="mb-3 h-[2px] w-full rounded-full bg-neutralGray/20 overflow-hidden">
@@ -55,7 +56,7 @@ export function LoadingZone4Paths() {
           <h3 className="text-sm font-semibold text-textMain/50">Decision Paths</h3>
         </div>
         <span className="text-xs font-mono text-zonePath/70">
-          도출 중... {Math.min(landed, CARD_COUNT)}/{CARD_COUNT}
+          {t('loading.generatingProgress')} {Math.min(landed, CARD_COUNT)}/{CARD_COUNT}
         </span>
       </div>
 
@@ -91,7 +92,7 @@ export function LoadingZone4Paths() {
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-zonePath opacity-75" />
           <span className="relative inline-flex h-2 w-2 rounded-full bg-zonePath" />
         </span>
-        <span className="text-xs text-textSub animate-pulse">의사결정 경로 도출 중...</span>
+        <span className="text-xs text-textSub animate-pulse">{t('loading.generating')}</span>
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import { Download, FileText, BookOpen, Database, ClipboardCheck, Rocket } from 'lucide-react';
 import { clsx } from 'clsx';
 import type { DocMeta } from '../../types';
+import { useT } from '../../i18n';
 
 const categoryConfig: Record<string, { color: string; icon: typeof FileText }> = {
   기획: { color: 'text-zoneStruct bg-zoneStruct/15 border-zoneStruct/30', icon: BookOpen },
@@ -14,6 +15,7 @@ interface DocCardProps {
 }
 
 export function DocCard({ doc }: DocCardProps) {
+  const t = useT();
   const cfg = categoryConfig[doc.category] ?? { color: 'text-textSub bg-surface-1 border-neutralGray/30', icon: FileText };
   const Icon = cfg.icon;
 
@@ -33,15 +35,15 @@ export function DocCard({ doc }: DocCardProps) {
       <p className="text-xs text-textSub leading-relaxed flex-1">{doc.description}</p>
 
       <div className="flex items-center justify-between pt-2 border-t border-neutralGray/10">
-        <span className="text-micro text-textSub">수정일: {doc.lastUpdated}</span>
+        <span className="text-micro text-textSub">{t('docs.lastUpdated')}: {doc.lastUpdated}</span>
         <a
           href={`/docs/${doc.filename}`}
           download
           className="flex items-center gap-1.5 rounded-lg bg-decisionBlue/10 border border-decisionBlue/20 px-3 py-1.5 text-xs font-medium text-decisionBlue hover:bg-decisionBlue/20 transition-all"
-          aria-label={`${doc.title} 다운로드`}
+          aria-label={`${doc.title} ${t('docs.downloadAria')}`}
         >
           <Download className="h-3.5 w-3.5" aria-hidden="true" />
-          다운로드
+          {t('docs.download')}
         </a>
       </div>
     </div>

@@ -9,6 +9,7 @@ import { LoadingZone3Graph } from './components/loading/LoadingZone3Graph';
 import { useStore } from './store/useStore';
 import { clsx } from 'clsx';
 import { scenarioDataById } from './data/scenarios';
+import { useT } from './i18n';
 
 const ZoneGraph = lazy(() =>
   import('./components/zones/ZoneGraph').then(m => ({ default: m.ZoneGraph }))
@@ -27,6 +28,7 @@ const DocsPage = lazy(() =>
 );
 
 function App() {
+  const t = useT();
   const activePage = useStore((s) => s.activePage);
   const isContextSidebarOpen = useStore((s) => s.isContextSidebarOpen);
   const scenarioId = useStore((s) => s.scenarioId);
@@ -36,7 +38,7 @@ function App() {
   useEffect(() => {
     const name = scenarioDataById[scenarioId]?.meta.name;
     if (name && announcementRef.current) {
-      announcementRef.current.textContent = `시나리오 ${scenarioId.toUpperCase()}(${name})로 전환되었습니다`;
+      announcementRef.current.textContent = `${t('common.scenario')} ${scenarioId.toUpperCase()}(${name})`;
     }
   }, [scenarioId]);
 
@@ -46,7 +48,7 @@ function App() {
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:rounded-lg focus:bg-decisionBlue focus:px-4 focus:py-2 focus:text-white focus:shadow-lg"
       >
-        본문으로 건너뛰기
+        {t('a11y.skipToContent')}
       </a>
       <div ref={announcementRef} aria-live="polite" className="sr-only" />
       <Header />
@@ -69,13 +71,13 @@ function App() {
           >
             <div className="grid grid-cols-1 gap-2 sm:gap-4 pt-4 lg:grid-cols-[360px_1fr]">
               <section id="section-ingestion" className="min-h-0 overflow-hidden animate-stagger-1 scroll-mt-32">
-                <ErrorBoundary fallbackTitle="데이터 수집 영역 오류">
+                <ErrorBoundary fallbackTitle="Data Ingestion Error">
                   <ZoneDataIngestion />
                 </ErrorBoundary>
               </section>
 
               <section id="section-graph" className="min-h-[280px] lg:min-h-0 overflow-hidden animate-stagger-2 scroll-mt-32">
-                <ErrorBoundary fallbackTitle="온톨로지 그래프 영역 오류">
+                <ErrorBoundary fallbackTitle="Ontology Graph Error">
                   <Suspense fallback={<LoadingZone3Graph />}>
                     <ZoneGraph />
                   </Suspense>
@@ -85,19 +87,19 @@ function App() {
 
             <div className="mt-2 sm:mt-4 grid grid-cols-1 gap-2 sm:gap-4 lg:grid-cols-[360px_1fr]">
               <section id="section-structuring" className="min-h-0 overflow-hidden scroll-mt-32 h-full">
-                <ErrorBoundary fallbackTitle="분석 패턴 영역 오류">
+                <ErrorBoundary fallbackTitle="Analysis Pattern Error">
                   <ZoneStructuring />
                 </ErrorBoundary>
               </section>
               <section id="section-paths" className="min-h-0 overflow-hidden scroll-mt-32">
-                <ErrorBoundary fallbackTitle="의사결정 경로 영역 오류">
+                <ErrorBoundary fallbackTitle="Decision Paths Error">
                   <ZoneDecisionPaths />
                 </ErrorBoundary>
               </section>
             </div>
 
             <section id="section-record" className="mt-2 sm:mt-4 scroll-mt-32">
-              <ErrorBoundary fallbackTitle="의사결정 기록 영역 오류">
+              <ErrorBoundary fallbackTitle="Decision Record Error">
                 <DecisionRecordSection />
               </ErrorBoundary>
             </section>
@@ -111,8 +113,8 @@ function App() {
             )}
           >
             {isContextSidebarOpen && (
-              <ErrorBoundary fallbackTitle="HR Context 오류">
-                <Suspense fallback={<div className="p-4 text-textSub text-sm">불러오는 중...</div>}>
+              <ErrorBoundary fallbackTitle="HR Context Error">
+                <Suspense fallback={<div className="p-4 text-textSub text-sm">Loading...</div>}>
                   <HRContextView variant="panel" />
                 </Suspense>
               </ErrorBoundary>
@@ -123,7 +125,7 @@ function App() {
 
       {activePage === 'dashboard' && (
         <main id="main-content" className="mx-auto w-full max-w-[1440px] px-2 sm:px-4 pb-10 pt-4 safe-area-bottom">
-          <Suspense fallback={<div className="p-8 text-textSub text-sm">불러오는 중...</div>}>
+          <Suspense fallback={<div className="p-8 text-textSub text-sm">Loading...</div>}>
             <DashboardPage />
           </Suspense>
         </main>
@@ -131,7 +133,7 @@ function App() {
 
       {activePage === 'docs' && (
         <main id="main-content" className="mx-auto w-full max-w-[1440px] px-2 sm:px-4 pb-10 pt-4 safe-area-bottom">
-          <Suspense fallback={<div className="p-8 text-textSub text-sm">불러오는 중...</div>}>
+          <Suspense fallback={<div className="p-8 text-textSub text-sm">Loading...</div>}>
             <DocsPage />
           </Suspense>
         </main>

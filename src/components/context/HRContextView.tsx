@@ -4,6 +4,7 @@ import { DataLabelBadge } from '../common/DataLabelBadge';
 import { UtilizationScatterChart } from './UtilizationScatterChart';
 import { clsx } from 'clsx';
 import type { HRKpi, ContextInsight } from '../../types';
+import { useT } from '../../i18n';
 
 const kpiIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   Headcount: Users,
@@ -25,6 +26,7 @@ const severityColors = {
 };
 
 export function HRContextView({ variant = 'panel' }: { variant?: 'panel' | 'dock' }) {
+  const t = useT();
   const { data, selectedEntityId, selectEntity } = useStore();
   const contextView = data.hrContextViews[0]; // 현재는 기본 뷰만 사용
 
@@ -40,7 +42,7 @@ export function HRContextView({ variant = 'panel' }: { variant?: 'panel' | 'dock
       <div className="border-b border-neutralGray/20 px-4 py-3">
         <h3 className="text-sm font-semibold text-contextGreen">HR Context Reference</h3>
         <p className="text-xs text-textSub">{contextView.scope}</p>
-        <p className="mt-1 text-tiny text-textSub">※ 평가/보상 목적이 아닌 의사결정 맥락 참조용</p>
+        <p className="mt-1 text-tiny text-textSub">{t('context.disclaimer')}</p>
       </div>
 
       {/* KPI Cards */}

@@ -5,6 +5,7 @@ import { useStore } from '../../store/useStore';
 import { tourSteps } from '../../data/tourSteps';
 import { clsx } from 'clsx';
 import type { RecordTab } from '../../types';
+import { useT } from '../../i18n';
 
 interface TooltipPos {
   top: number;
@@ -42,6 +43,8 @@ function getTooltipPosition(rect: DOMRect): TooltipPos {
 }
 
 export function TourOverlay() {
+  const t = useT();
+  const locale = useStore((s) => s.locale);
   const {
     isTourActive,
     tourStep,
@@ -191,12 +194,12 @@ export function TourOverlay() {
           {/* Header */}
           <div className="flex items-center justify-between border-b border-neutralGray/20 px-4 py-3">
             <div>
-              <h3 id="tour-title" className="text-sm font-semibold text-textMain">{currentStep.titleKo}</h3>
-              <span className="text-micro font-mono uppercase tracking-wider text-textSub">{currentStep.titleEn}</span>
+              <h3 id="tour-title" className="text-sm font-semibold text-textMain">{locale === 'ko' ? currentStep.titleKo : currentStep.titleEn}</h3>
+              <span className="text-micro font-mono uppercase tracking-wider text-textSub">{locale === 'ko' ? currentStep.titleEn : currentStep.titleKo}</span>
             </div>
             <button
               onClick={endTour}
-              aria-label="투어 닫기"
+              aria-label={t('tour.closeTour')}
               className="rounded-lg p-1 text-textSub transition-colors hover:bg-appBg hover:text-textMain"
             >
               <X className="h-4 w-4" />
@@ -205,7 +208,7 @@ export function TourOverlay() {
 
           {/* Content */}
           <div className="px-4 py-3">
-            <p className="text-sm text-textSub leading-relaxed">{currentStep.contentKo}</p>
+            <p className="text-sm text-textSub leading-relaxed">{locale === 'ko' ? currentStep.contentKo : (currentStep.contentEn ?? currentStep.contentKo)}</p>
           </div>
 
           {/* Footer: nav + progress */}
@@ -231,7 +234,7 @@ export function TourOverlay() {
               <button
                 onClick={prevTourStep}
                 disabled={isFirst}
-                aria-label="이전 단계"
+                aria-label={t('tour.prevStep')}
                 className={clsx(
                   'rounded-lg p-1.5 transition-colors',
                   isFirst ? 'text-neutralGray/30' : 'text-textSub hover:bg-appBg hover:text-textMain'
@@ -243,12 +246,12 @@ export function TourOverlay() {
                 onClick={isLast ? endTour : nextTourStep}
                 className="rounded-lg bg-decisionBlue px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-decisionBlue/80"
               >
-                {isLast ? '완료' : '다음'}
+                {isLast ? t('tour.done') : t('tour.next')}
               </button>
               <button
                 onClick={nextTourStep}
                 disabled={isLast}
-                aria-label="다음 단계"
+                aria-label={t('tour.nextStep')}
                 className={clsx(
                   'rounded-lg p-1.5 transition-colors',
                   isLast ? 'text-neutralGray/30' : 'text-textSub hover:bg-appBg hover:text-textMain'
