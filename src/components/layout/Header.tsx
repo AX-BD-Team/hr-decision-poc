@@ -274,7 +274,10 @@ export function Header() {
               {data.meta.badge && (
                 <span className={clsx(
                   'rounded-full px-2 py-0.5 text-micro font-mono font-bold uppercase tracking-wider',
-                  data.meta.badge === 'Phase-2' ? 'bg-zoneStruct/20 text-zoneStruct' : 'bg-contextGreen/20 text-contextGreen'
+                  data.meta.badge === 'Phase-2' ? 'bg-zoneStruct/20 text-zoneStruct'
+                    : data.meta.badge === 'TO' ? 'bg-zoneIngest/20 text-zoneIngest'
+                    : data.meta.badge === 'R&R' ? 'bg-zonePath/20 text-zonePath'
+                    : 'bg-contextGreen/20 text-contextGreen'
                 )}>
                   {data.meta.badge}
                 </span>

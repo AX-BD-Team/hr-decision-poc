@@ -1,92 +1,94 @@
 {
   "resourceAllocation": {
     "kpis": [
-      { "id": "ra-1", "name": "전체 인원", "value": 1502, "unit": "명", "change": "+3.2%", "changeIsPositive": true },
-      { "id": "ra-2", "name": "신TM 대상", "value": 658, "unit": "명", "change": "+12명", "changeIsPositive": true },
-      { "id": "ra-3", "name": "프로젝트 투입률", "value": "52.6%", "change": "-2.1%p", "changeIsPositive": false },
-      { "id": "ra-4", "name": "평균 가동률", "value": "78.3%", "change": "+1.5%p", "changeIsPositive": true }
+      { "id": "ra-1", "name": "전체 인원", "value": 723, "unit": "명", "change": "+2.1%", "changeIsPositive": true },
+      { "id": "ra-2", "name": "신TM 대상", "value": 187, "unit": "명", "change": "+8명", "changeIsPositive": true },
+      { "id": "ra-3", "name": "프로젝트 투입률", "value": "81.4%", "change": "+1.8%p", "changeIsPositive": true },
+      { "id": "ra-4", "name": "평균 가동률", "value": "86.7%", "change": "+2.3%p", "changeIsPositive": true }
     ],
     "headcount": {
-      "total": 1502,
-      "newTMTarget": 658,
-      "projectUtilRate": 52.6,
-      "avgTenure": 8.2,
+      "total": 723,
+      "newTMTarget": 187,
+      "projectUtilRate": 81.4,
+      "avgTenure": 8.6,
       "avgSkillLevel": "L3_Mid"
     },
     "projectStatus": [
-      { "status": "진행중", "count": 42, "color": "#4F8CFF" },
-      { "status": "완료", "count": 18, "color": "#34D399" },
-      { "status": "지연", "count": 7, "color": "#FF4D4F" },
-      { "status": "대기", "count": 12, "color": "#FBBF24" },
-      { "status": "중단", "count": 3, "color": "#6B7280" }
+      { "status": "진행중", "count": 22, "color": "#4F8CFF" },
+      { "status": "완료", "count": 8, "color": "#34D399" },
+      { "status": "지연", "count": 3, "color": "#FF4D4F" },
+      { "status": "대기", "count": 4, "color": "#FBBF24" },
+      { "status": "중단", "count": 1, "color": "#6B7280" }
     ],
     "skillTreemap": [
-      { "name": "Java/Spring", "value": 320, "color": "#4F8CFF" },
-      { "name": "Python/ML", "value": 185, "color": "#8B5CF6" },
-      { "name": "React/TS", "value": 142, "color": "#06B6D4" },
-      { "name": "Cloud/Infra", "value": 198, "color": "#F59E0B" },
-      { "name": "Data Eng.", "value": 156, "color": "#10B981" },
-      { "name": "PM/PO", "value": 95, "color": "#EF4444" },
-      { "name": "QA/Test", "value": 88, "color": "#EC4899" },
-      { "name": "UI/UX", "value": 72, "color": "#F97316" },
-      { "name": "Security", "value": 65, "color": "#14B8A6" },
-      { "name": "DBA", "value": 48, "color": "#A855F7" }
+      { "name": "Java/Spring", "value": 168, "color": "#4F8CFF" },
+      { "name": "Cloud/Infra", "value": 112, "color": "#F59E0B" },
+      { "name": "Python/Data", "value": 65, "color": "#8B5CF6" },
+      { "name": "React/TS", "value": 52, "color": "#06B6D4" },
+      { "name": "PM/PL", "value": 48, "color": "#EF4444" },
+      { "name": "DevOps", "value": 38, "color": "#10B981" },
+      { "name": "DB/DBA", "value": 35, "color": "#A855F7" },
+      { "name": "보안", "value": 28, "color": "#14B8A6" },
+      { "name": "QA", "value": 24, "color": "#EC4899" },
+      { "name": "통신시스템", "value": 22, "color": "#F97316" },
+      { "name": "UI/UX", "value": 18, "color": "#FB923C" },
+      { "name": "기타", "value": 113, "color": "#6B7280" }
     ]
   },
   "talentInfo": {
     "kpis": [
-      { "id": "ti-1", "name": "전체 인원", "value": 4619, "unit": "명", "change": "+1.8%", "changeIsPositive": true },
-      { "id": "ti-2", "name": "평균 근속", "value": "14.4", "unit": "년", "change": "+0.3", "changeIsPositive": true },
-      { "id": "ti-3", "name": "평균 역량수준", "value": "L3_Low", "change": "→L3_Mid", "changeIsPositive": true },
-      { "id": "ti-4", "name": "핵심인재 비율", "value": "12.8%", "change": "+0.5%p", "changeIsPositive": true }
+      { "id": "ti-1", "name": "전체 인원", "value": 723, "unit": "명", "change": "+2.1%", "changeIsPositive": true },
+      { "id": "ti-2", "name": "평균 근속", "value": "8.6", "unit": "년", "change": "+0.4", "changeIsPositive": true },
+      { "id": "ti-3", "name": "평균 역량수준", "value": "L3_Mid", "change": "→L3_High", "changeIsPositive": true },
+      { "id": "ti-4", "name": "핵심인재 비율", "value": "9.5%", "change": "+0.3%p", "changeIsPositive": true }
     ],
     "talentTable": [
-      { "id": "t-01", "name": "김민수", "rank": "수석", "role": "아키텍트", "skillLevel": "L5_Expert", "evalGrade": "S", "department": "디지털혁신실" },
-      { "id": "t-02", "name": "이지영", "rank": "책임", "role": "PM", "skillLevel": "L4_High", "evalGrade": "A", "department": "AI연구소" },
-      { "id": "t-03", "name": "박성호", "rank": "수석", "role": "데이터사이언티스트", "skillLevel": "L5_Expert", "evalGrade": "S", "department": "빅데이터센터" },
-      { "id": "t-04", "name": "최은정", "rank": "책임", "role": "풀스택개발", "skillLevel": "L4_High", "evalGrade": "A", "department": "플랫폼개발팀" },
-      { "id": "t-05", "name": "정태영", "rank": "수석", "role": "클라우드엔지니어", "skillLevel": "L4_High", "evalGrade": "A", "department": "인프라운영팀" },
-      { "id": "t-06", "name": "한소연", "rank": "책임", "role": "UX디자이너", "skillLevel": "L4_High", "evalGrade": "S", "department": "CX디자인팀" },
-      { "id": "t-07", "name": "오승민", "rank": "선임", "role": "백엔드개발", "skillLevel": "L3_Mid", "evalGrade": "A", "department": "커머스개발팀" },
+      { "id": "t-01", "name": "김민수", "rank": "수석", "role": "아키텍트", "skillLevel": "L5_Expert", "evalGrade": "S", "department": "SI사업본부" },
+      { "id": "t-02", "name": "이지영", "rank": "책임", "role": "PM", "skillLevel": "L4_High", "evalGrade": "A", "department": "SI사업본부" },
+      { "id": "t-03", "name": "박성호", "rank": "수석", "role": "데이터사이언티스트", "skillLevel": "L5_Expert", "evalGrade": "S", "department": "데이터사업팀" },
+      { "id": "t-04", "name": "최은정", "rank": "책임", "role": "풀스택개발", "skillLevel": "L4_High", "evalGrade": "A", "department": "SI사업본부" },
+      { "id": "t-05", "name": "정태영", "rank": "수석", "role": "클라우드엔지니어", "skillLevel": "L4_High", "evalGrade": "A", "department": "클라우드사업부" },
+      { "id": "t-06", "name": "한소연", "rank": "책임", "role": "UX디자이너", "skillLevel": "L4_High", "evalGrade": "S", "department": "DX컨설팅팀" },
+      { "id": "t-07", "name": "오승민", "rank": "선임", "role": "백엔드개발", "skillLevel": "L3_Mid", "evalGrade": "A", "department": "SI사업본부" },
       { "id": "t-08", "name": "임지현", "rank": "책임", "role": "보안엔지니어", "skillLevel": "L4_High", "evalGrade": "A", "department": "보안관제팀" },
-      { "id": "t-09", "name": "송재혁", "rank": "수석", "role": "DBA", "skillLevel": "L5_Expert", "evalGrade": "S", "department": "데이터관리팀" },
-      { "id": "t-10", "name": "유하나", "rank": "선임", "role": "프론트엔드개발", "skillLevel": "L3_Mid", "evalGrade": "B+", "department": "웹서비스팀" },
-      { "id": "t-11", "name": "강동원", "rank": "책임", "role": "ML엔지니어", "skillLevel": "L4_High", "evalGrade": "A", "department": "AI연구소" },
+      { "id": "t-09", "name": "송재혁", "rank": "수석", "role": "DBA", "skillLevel": "L5_Expert", "evalGrade": "S", "department": "인프라운영팀" },
+      { "id": "t-10", "name": "유하나", "rank": "선임", "role": "프론트엔드개발", "skillLevel": "L3_Mid", "evalGrade": "B+", "department": "SI사업본부" },
+      { "id": "t-11", "name": "강동원", "rank": "책임", "role": "ML엔지니어", "skillLevel": "L4_High", "evalGrade": "A", "department": "데이터사업팀" },
       { "id": "t-12", "name": "배수진", "rank": "선임", "role": "QA엔지니어", "skillLevel": "L3_Mid", "evalGrade": "A", "department": "품질관리팀" },
-      { "id": "t-13", "name": "조현우", "rank": "책임", "role": "DevOps", "skillLevel": "L4_High", "evalGrade": "S", "department": "인프라운영팀" },
-      { "id": "t-14", "name": "윤서영", "rank": "선임", "role": "데이터엔지니어", "skillLevel": "L3_High", "evalGrade": "A", "department": "빅데이터센터" },
-      { "id": "t-15", "name": "신동현", "rank": "수석", "role": "솔루션아키텍트", "skillLevel": "L5_Expert", "evalGrade": "S", "department": "기술전략팀" },
-      { "id": "t-16", "name": "문가영", "rank": "책임", "role": "PO", "skillLevel": "L4_High", "evalGrade": "A", "department": "서비스기획팀" },
-      { "id": "t-17", "name": "황준혁", "rank": "선임", "role": "모바일개발", "skillLevel": "L3_Mid", "evalGrade": "B+", "department": "모바일개발팀" },
-      { "id": "t-18", "name": "노은비", "rank": "책임", "role": "데이터분석가", "skillLevel": "L4_High", "evalGrade": "A", "department": "전략기획팀" },
+      { "id": "t-13", "name": "조현우", "rank": "책임", "role": "DevOps", "skillLevel": "L4_High", "evalGrade": "S", "department": "클라우드사업부" },
+      { "id": "t-14", "name": "윤서영", "rank": "선임", "role": "데이터엔지니어", "skillLevel": "L3_High", "evalGrade": "A", "department": "데이터사업팀" },
+      { "id": "t-15", "name": "신동현", "rank": "수석", "role": "솔루션아키텍트", "skillLevel": "L5_Expert", "evalGrade": "S", "department": "기술전략실" },
+      { "id": "t-16", "name": "문가영", "rank": "책임", "role": "PL", "skillLevel": "L4_High", "evalGrade": "A", "department": "DX컨설팅팀" },
+      { "id": "t-17", "name": "황준혁", "rank": "선임", "role": "클라우드엔지니어", "skillLevel": "L3_Mid", "evalGrade": "B+", "department": "클라우드사업부" },
+      { "id": "t-18", "name": "노은비", "rank": "책임", "role": "데이터분석가", "skillLevel": "L4_High", "evalGrade": "A", "department": "경영지원실" },
       { "id": "t-19", "name": "서준영", "rank": "선임", "role": "네트워크엔지니어", "skillLevel": "L3_High", "evalGrade": "A", "department": "인프라운영팀" },
-      { "id": "t-20", "name": "권미래", "rank": "책임", "role": "Scrum Master", "skillLevel": "L4_High", "evalGrade": "S", "department": "애자일CoE" }
+      { "id": "t-20", "name": "권미래", "rank": "책임", "role": "교육기획", "skillLevel": "L4_High", "evalGrade": "S", "department": "교육사업팀" }
     ],
     "skillTreemap": [
-      { "name": "소프트웨어개발", "value": 1280, "color": "#4F8CFF" },
-      { "name": "인프라/클라우드", "value": 720, "color": "#F59E0B" },
-      { "name": "데이터/AI", "value": 580, "color": "#8B5CF6" },
-      { "name": "기획/관리", "value": 450, "color": "#10B981" },
-      { "name": "보안", "value": 320, "color": "#EF4444" },
-      { "name": "디자인", "value": 280, "color": "#EC4899" },
-      { "name": "QA/테스트", "value": 350, "color": "#06B6D4" },
-      { "name": "기타", "value": 639, "color": "#6B7280" }
+      { "name": "소프트웨어개발", "value": 245, "color": "#4F8CFF" },
+      { "name": "인프라/클라우드", "value": 148, "color": "#F59E0B" },
+      { "name": "데이터/AI", "value": 72, "color": "#8B5CF6" },
+      { "name": "PM/PL/컨설팅", "value": 68, "color": "#10B981" },
+      { "name": "보안", "value": 42, "color": "#EF4444" },
+      { "name": "QA/테스트", "value": 38, "color": "#06B6D4" },
+      { "name": "디자인", "value": 22, "color": "#EC4899" },
+      { "name": "경영지원/기타", "value": 88, "color": "#6B7280" }
     ]
   },
   "workforceForecast": {
     "monthly": [
-      { "month": "2025-01", "in": 45, "out": 22, "forecast": 1525, "surplus": 12, "totalHeadcount": 1502, "pipeline": 8 },
-      { "month": "2025-02", "in": 38, "out": 30, "forecast": 1533, "surplus": 5, "totalHeadcount": 1510, "pipeline": 12 },
-      { "month": "2025-03", "in": 52, "out": 18, "forecast": 1567, "surplus": -8, "totalHeadcount": 1544, "pipeline": 15 },
-      { "month": "2025-04", "in": 35, "out": 25, "forecast": 1577, "surplus": 3, "totalHeadcount": 1554, "pipeline": 10 },
-      { "month": "2025-05", "in": 28, "out": 35, "forecast": 1570, "surplus": -15, "totalHeadcount": 1547, "pipeline": 18 },
-      { "month": "2025-06", "in": 42, "out": 20, "forecast": 1592, "surplus": 8, "totalHeadcount": 1569, "pipeline": 14 },
-      { "month": "2025-07", "in": 55, "out": 15, "forecast": 1632, "surplus": 20, "totalHeadcount": 1609, "pipeline": 6 },
-      { "month": "2025-08", "in": 30, "out": 28, "forecast": 1634, "surplus": -5, "totalHeadcount": 1611, "pipeline": 22 },
-      { "month": "2025-09", "in": 48, "out": 22, "forecast": 1660, "surplus": 10, "totalHeadcount": 1637, "pipeline": 16 },
-      { "month": "2025-10", "in": 25, "out": 32, "forecast": 1653, "surplus": -18, "totalHeadcount": 1630, "pipeline": 25 },
-      { "month": "2025-11", "in": 40, "out": 18, "forecast": 1675, "surplus": 5, "totalHeadcount": 1652, "pipeline": 12 },
-      { "month": "2025-12", "in": 20, "out": 38, "forecast": 1657, "surplus": -22, "totalHeadcount": 1634, "pipeline": 30 }
+      { "month": "2025-01", "in": 8, "out": 5, "forecast": 718, "surplus": 2, "totalHeadcount": 713, "pipeline": 4 },
+      { "month": "2025-02", "in": 6, "out": 4, "forecast": 720, "surplus": 1, "totalHeadcount": 715, "pipeline": 5 },
+      { "month": "2025-03", "in": 12, "out": 3, "forecast": 729, "surplus": -3, "totalHeadcount": 724, "pipeline": 7 },
+      { "month": "2025-04", "in": 7, "out": 6, "forecast": 730, "surplus": 1, "totalHeadcount": 725, "pipeline": 4 },
+      { "month": "2025-05", "in": 5, "out": 8, "forecast": 727, "surplus": -4, "totalHeadcount": 722, "pipeline": 6 },
+      { "month": "2025-06", "in": 9, "out": 4, "forecast": 732, "surplus": 3, "totalHeadcount": 727, "pipeline": 5 },
+      { "month": "2025-07", "in": 11, "out": 3, "forecast": 740, "surplus": 5, "totalHeadcount": 735, "pipeline": 3 },
+      { "month": "2025-08", "in": 6, "out": 7, "forecast": 739, "surplus": -2, "totalHeadcount": 734, "pipeline": 8 },
+      { "month": "2025-09", "in": 10, "out": 5, "forecast": 744, "surplus": 3, "totalHeadcount": 739, "pipeline": 6 },
+      { "month": "2025-10", "in": 4, "out": 9, "forecast": 739, "surplus": -5, "totalHeadcount": 734, "pipeline": 7 },
+      { "month": "2025-11", "in": 8, "out": 4, "forecast": 743, "surplus": 2, "totalHeadcount": 738, "pipeline": 4 },
+      { "month": "2025-12", "in": 3, "out": 10, "forecast": 736, "surplus": -4, "totalHeadcount": 731, "pipeline": 8 }
     ]
   }
 }

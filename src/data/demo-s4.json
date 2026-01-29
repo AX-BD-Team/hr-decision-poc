@@ -129,7 +129,13 @@
         {"id": "kpi-3", "name": "교육 이수율", "value": 68, "unit": "%", "label": "ESTIMATE"},
         {"id": "kpi-4", "name": "현장 적용률", "value": 32, "unit": "%", "change": "-15%", "higherIsBetter": true, "label": "ESTIMATE"}
       ],
-      "utilizationMap": [],
+      "utilizationMap": [
+        {"id": "um4-1", "name": "디지털 전환 역량", "dependency": 0.9, "utilization": 0.35, "label": "MOCK", "entityId": "cap-digital"},
+        {"id": "um4-2", "name": "리더십 역량", "dependency": 0.7, "utilization": 0.55, "label": "MOCK", "entityId": "cap-leadership"},
+        {"id": "um4-3", "name": "도메인 전문성", "dependency": 0.5, "utilization": 0.85, "label": "REAL", "entityId": "cap-domain"},
+        {"id": "um4-4", "name": "내부 강사/코치", "dependency": 0.6, "utilization": 0.30, "label": "ESTIMATE", "entityId": "role-trainer"},
+        {"id": "um4-5", "name": "외부 전문가 풀", "dependency": 0.4, "utilization": 0.20, "label": "MOCK", "entityId": "person-mentor"}
+      ],
       "insights": [
         {"id": "ins-1", "text": "디지털 전환 역량 갭 45% — 핵심 개발 영역", "severity": "critical", "label": "MOCK"},
         {"id": "ins-2", "text": "기존 교육 프로그램 현장 적용률 32%로 저조", "severity": "warning", "label": "ESTIMATE"},

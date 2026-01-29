@@ -2,6 +2,7 @@
   "meta": {
     "id": "s1",
     "name": "TO 추가 요청",
+    "badge": "TO",
     "description": "신규 인력 충원 요청에 대한 구조적 분석과 대안 탐색",
     "keyQuestion": "정말 인력이 부족한가, 아니면 현재 구조와 배치가 문제인가?",
     "decisionCriteria": [

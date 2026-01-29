@@ -2,6 +2,7 @@
   "meta": {
     "id": "s2",
     "name": "상시 조직 변경 / R&R",
+    "badge": "R&R",
     "description": "조직 구조 변경과 역할·책임 재정의 간의 최적 대안 탐색",
     "keyQuestion": "조직을 바꾸는 게 맞나, 아니면 역할과 책임을 바꾸는 게 맞나?",
     "decisionCriteria": [

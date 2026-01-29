@@ -168,7 +168,7 @@ export interface ScenarioMeta {
   name: string;
   description: string;
   keyQuestion: string;
-  badge?: 'Phase-2' | 'HRD';
+  badge?: 'TO' | 'R&R' | 'Phase-2' | 'HRD';
   decisionCriteria?: DecisionCriterion[];
 }
 
