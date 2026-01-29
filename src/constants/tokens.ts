@@ -24,25 +24,25 @@ export const EDGE_COLORS: Record<string, string> = {
 };
 
 /** Panel background for inline styles */
-export const PANEL_BG = '#111A2E';
+export const PANEL_BG = 'var(--color-panel-bg)';
 
-/** Chart / SVG inline style colors (for contexts where Tailwind classes cannot be used) */
+/** Chart / SVG inline style colors — theme-aware via CSS variables */
 export const CHART_COLORS = {
   success: '#34D399',
   alert: '#FF4D4F',
   warning: '#FBBF24',
   blue: '#4F8CFF',
-  textSub: '#AAB4C5',
-  textMain: '#E6EAF2',
-  panelBg: '#111A2E',
-  reactFlowBg: '#1a2744',
-  white: '#FFFFFF',
-  gridLine: 'rgba(170,180,197,0.08)',
-  axis: 'rgba(170,180,197,0.2)',
-  tick: 'rgba(170,180,197,0.3)',
-  tooltipBg: 'rgba(17,26,46,0.95)',
-  tooltipBorder: 'rgba(170,180,197,0.2)',
-  tooltipBorderBlue: 'rgba(79,140,255,0.3)',
-  whiteAlpha70: 'rgba(255,255,255,0.7)',
-  gridDark: '#334155',
+  textSub: 'var(--chart-text-sub)',
+  textMain: 'var(--chart-text-main)',
+  panelBg: 'var(--chart-panel-bg)',
+  reactFlowBg: 'var(--chart-rf-bg)',
+  white: 'var(--chart-white)',
+  gridLine: 'var(--chart-grid-line)',
+  axis: 'var(--chart-axis)',
+  tick: 'var(--chart-tick)',
+  tooltipBg: 'var(--chart-tooltip-bg)',
+  tooltipBorder: 'var(--chart-tooltip-border)',
+  tooltipBorderBlue: 'var(--chart-tooltip-border-blue)',
+  whiteAlpha70: 'var(--chart-white-alpha70)',
+  gridDark: 'var(--chart-grid-dark)',
 } as const;
