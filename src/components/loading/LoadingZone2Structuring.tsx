@@ -23,35 +23,50 @@ export function LoadingZone2Structuring() {
         <h3 className="text-sm font-semibold text-textMain/50">Structuring & Analysis</h3>
       </div>
 
-      {/* Cards blur→sharp */}
-      <div className="scroll-fade-x relative">
-        <div className="flex gap-2 overflow-x-auto pb-2">
-          {Array.from({ length: CARD_COUNT }).map((_, i) => (
+      {/* Cards blur→sharp in 2x2 grid */}
+      <div className="grid grid-cols-2 gap-2">
+        {Array.from({ length: CARD_COUNT }).map((_, i) => (
+          <div
+            key={i}
+            className="flex-col rounded-lg bg-surface-1 p-3 border border-transparent animate-struct-analyze"
+            style={{
+              animationDelay: `${i * STAGGER_MS}ms`,
+              animationDuration: '0.5s',
+              borderLeft: '3px solid rgba(139,92,246,0.3)',
+            }}
+          >
+            {/* Glow border on appear */}
             <div
-              key={i}
-              className="min-w-[180px] flex-col rounded-lg bg-surface-1 p-3 border border-transparent animate-struct-analyze"
-              style={{
-                animationDelay: `${i * STAGGER_MS}ms`,
-                animationDuration: '0.5s',
-              }}
+              className="animate-struct-glow rounded-lg"
+              style={{ animationDelay: `${i * STAGGER_MS + 200}ms` }}
             >
-              {/* Glow border on appear */}
-              <div
-                className="animate-struct-glow rounded-lg"
-                style={{ animationDelay: `${i * STAGGER_MS + 200}ms` }}
-              >
-                <div className="mb-2 flex items-center gap-2">
-                  <div className="h-4 w-4 rounded bg-zoneStruct/20" />
-                  <div className="h-4 w-12 rounded bg-zoneStruct/10" />
-                </div>
-                <div className="h-4 mb-1 flex items-center">
-                  <span className="text-sm text-textSub/60">{cardLabels[i]}</span>
-                </div>
+              <div className="mb-2 flex items-center gap-2">
+                <div className="h-4 w-4 rounded bg-zoneStruct/20" />
+                <div className="h-4 w-12 rounded bg-zoneStruct/10" />
+              </div>
+              {/* Metric placeholder */}
+              <div className="mb-1.5 flex items-baseline gap-2">
+                <div className="h-6 w-12 rounded bg-neutralGray/12" />
+                <div className="h-3 w-8 rounded bg-neutralGray/8" />
+              </div>
+              <div className="h-3 w-16 rounded bg-neutralGray/8 mb-2" />
+              {/* Title */}
+              <div className="h-4 mb-1.5 flex items-center">
+                <span className="text-sm text-textSub/60">{cardLabels[i]}</span>
+              </div>
+              {/* Findings placeholder */}
+              <div className="space-y-1 mb-2">
                 <div className="h-3 w-full rounded bg-neutralGray/8" />
+                <div className="h-3 w-3/4 rounded bg-neutralGray/8" />
+              </div>
+              {/* Footer placeholder */}
+              <div className="flex items-center justify-between pt-1 border-t border-neutralGray/10">
+                <div className="h-3 w-10 rounded bg-neutralGray/8" />
+                <div className="h-3 w-12 rounded bg-neutralGray/8" />
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
 
       {/* Processing indicator */}

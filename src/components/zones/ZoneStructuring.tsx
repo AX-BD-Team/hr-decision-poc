@@ -13,6 +13,83 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   cost_impact: DollarSign,
 };
 
+const severityAccent: Record<string, { color: string; rgb: string }> = {
+  critical: { color: '#DC2626', rgb: '220,38,38' },
+  high:     { color: '#FF4D4F', rgb: '255,77,79' },
+  medium:   { color: '#FBBF24', rgb: '251,191,36' },
+  low:      { color: '#34D399', rgb: '52,211,153' },
+};
+
+const severityDot: Record<string, string> = {
+  critical: 'bg-severity-critical',
+  high: 'bg-severity-high',
+  medium: 'bg-severity-medium',
+  low: 'bg-severity-low',
+};
+
+function PatternCard({ pattern, variant }: { pattern: AnalysisPattern; variant: 'zone' | 'dock' }) {
+  const t = useT();
+  const Icon = iconMap[pattern.type] || GitBranch;
+  const accent = severityAccent[pattern.severity] || severityAccent.medium;
+  const severityKey = pattern.severity as 'critical' | 'high' | 'medium' | 'low';
+  const severityLabel = t(`zones.severity.${severityKey}`);
+
+  return (
+    <div
+      className={clsx(
+        'zone-card flex flex-col rounded-lg bg-surface-1 hover:bg-surface-3 hover:shadow-elevation-2 transition-all',
+        variant === 'dock' ? 'min-w-[220px] p-3 snap-start' : 'p-3',
+      )}
+      style={{
+        '--zone-accent': accent.color,
+        '--zone-accent-rgb': accent.rgb,
+        borderLeft: `3px solid ${accent.color}`,
+      } as React.CSSProperties}
+    >
+      {/* Header: Icon + TypeBadge + DataLabel */}
+      <div className="mb-2 flex items-center gap-2">
+        <Icon className="h-4 w-4 text-zoneStruct" aria-hidden="true" />
+        <span className="text-micro font-medium text-textSub uppercase tracking-wider">
+          {t(`zones.patternType.${pattern.type}`)}
+        </span>
+        <span className="ml-auto"><DataLabelBadge label={pattern.label} /></span>
+      </div>
+
+      {/* Metric */}
+      <div className="mb-1.5 flex items-baseline gap-2">
+        <span className="text-lg font-bold text-textMain leading-tight">{pattern.metric.value}</span>
+        <DataLabelBadge label={pattern.metric.label} />
+      </div>
+      <p className="text-micro text-textSub mb-2">{pattern.metric.name}</p>
+
+      {/* Title */}
+      <h4 className="text-sm font-medium text-textMain mb-1.5">{pattern.name}</h4>
+
+      {/* Findings */}
+      {pattern.findings.length > 0 && (
+        <ul className="mb-2 space-y-0.5">
+          {pattern.findings.slice(0, 2).map((f, i) => (
+            <li key={i} className="text-tiny text-textSub truncate" title={f}>
+              · {f}
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {/* Footer: scope + severity */}
+      <div className="mt-auto flex items-center justify-between pt-1 border-t border-neutralGray/10">
+        <span className="text-micro text-textSub">
+          {pattern.affectedScope.count} {pattern.affectedScope.unit}
+        </span>
+        <span className="flex items-center gap-1">
+          <span className={clsx('inline-block h-2 w-2 rounded-full', severityDot[pattern.severity])} />
+          <span className="text-micro font-medium text-textSub uppercase">{severityLabel}</span>
+        </span>
+      </div>
+    </div>
+  );
+}
+
 export function ZoneStructuring({ variant = 'zone' }: { variant?: 'zone' | 'dock' }) {
   const t = useT();
   const { data, activeStep, loadingPhase } = useStore();
@@ -22,27 +99,19 @@ export function ZoneStructuring({ variant = 'zone' }: { variant?: 'zone' | 'dock
   const isActive = activeStep === 2;
   const justRevealed = loadingPhase >= 3 && loadingPhase <= 5;
 
-  const inner = (
+  const inner = variant === 'dock' ? (
     <div className="scroll-fade-x relative">
       <div className="flex gap-2 overflow-x-auto pb-2 snap-x snap-mandatory scroll-smooth">
-        {data.analysisPatterns.map((pattern: AnalysisPattern) => {
-          const Icon = iconMap[pattern.type] || GitBranch;
-          return (
-            <div
-              key={pattern.id}
-              className="zone-card flex min-w-[180px] flex-col rounded-lg bg-surface-1 p-3 hover:bg-surface-3 hover:shadow-elevation-2 transition-all snap-start"
-              style={{ '--zone-accent': '#8B5CF6', '--zone-accent-rgb': '139,92,246' } as React.CSSProperties}
-            >
-              <div className="mb-2 flex items-center gap-2">
-                <Icon className="h-4 w-4 text-zoneStruct" aria-hidden="true" />
-                <DataLabelBadge label={pattern.label} />
-              </div>
-              <h4 className="text-sm font-medium text-textMain">{pattern.name}</h4>
-              <p className="mt-1 text-xs text-textSub">{pattern.description}</p>
-            </div>
-          );
-        })}
+        {data.analysisPatterns.map((pattern: AnalysisPattern) => (
+          <PatternCard key={pattern.id} pattern={pattern} variant="dock" />
+        ))}
       </div>
+    </div>
+  ) : (
+    <div className="grid grid-cols-2 gap-2 min-h-0 overflow-y-auto">
+      {data.analysisPatterns.map((pattern: AnalysisPattern) => (
+        <PatternCard key={pattern.id} pattern={pattern} variant="zone" />
+      ))}
     </div>
   );
 

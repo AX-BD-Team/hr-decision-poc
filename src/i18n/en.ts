@@ -84,6 +84,13 @@ export const en: TranslationKeys = {
       bottleneck: 'Bottleneck Analysis',
       cost_impact: 'Cost Impact',
     },
+    severity: {
+      critical: 'Critical',
+      high: 'High',
+      medium: 'Medium',
+      low: 'Low',
+    },
+    affectedScope: 'Affected Scope',
   },
   dashboard: {
     title: 'HR Dashboard',

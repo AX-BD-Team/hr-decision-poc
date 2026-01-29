@@ -94,6 +94,51 @@ describe('decisionPaths 일관성', () => {
   });
 });
 
+// ── AnalysisPattern 새 필드 유효성 ──
+
+const VALID_PATTERN_SEVERITY = ['critical', 'high', 'medium', 'low'] as const;
+
+describe('AnalysisPattern 확장 필드', () => {
+  it.each(scenarios.map((s) => [s.meta.id, s]))('시나리오 %s: severity가 유효값', (_id, data) => {
+    const d = data as DemoData;
+    for (const ap of d.analysisPatterns) {
+      expect(VALID_PATTERN_SEVERITY).toContain(ap.severity);
+    }
+  });
+
+  it.each(scenarios.map((s) => [s.meta.id, s]))('시나리오 %s: metric에 name, value, label 존재', (_id, data) => {
+    const d = data as DemoData;
+    for (const ap of d.analysisPatterns) {
+      expect(ap.metric).toBeDefined();
+      expect(ap.metric.name).toBeTruthy();
+      expect(ap.metric.value).toBeTruthy();
+      expect(VALID_LABELS).toContain(ap.metric.label);
+    }
+  });
+
+  it.each(scenarios.map((s) => [s.meta.id, s]))('시나리오 %s: findings가 1~3개 문자열 배열', (_id, data) => {
+    const d = data as DemoData;
+    for (const ap of d.analysisPatterns) {
+      expect(Array.isArray(ap.findings)).toBe(true);
+      expect(ap.findings.length).toBeGreaterThanOrEqual(1);
+      expect(ap.findings.length).toBeLessThanOrEqual(3);
+      for (const f of ap.findings) {
+        expect(typeof f).toBe('string');
+        expect(f.length).toBeGreaterThan(0);
+      }
+    }
+  });
+
+  it.each(scenarios.map((s) => [s.meta.id, s]))('시나리오 %s: affectedScope.count >= 0, unit 비어있지 않음', (_id, data) => {
+    const d = data as DemoData;
+    for (const ap of d.analysisPatterns) {
+      expect(ap.affectedScope).toBeDefined();
+      expect(ap.affectedScope.count).toBeGreaterThanOrEqual(0);
+      expect(ap.affectedScope.unit).toBeTruthy();
+    }
+  });
+});
+
 // ── Phase A: 참조 무결성 ──
 
 describe('참조 무결성 — relatedPaths', () => {

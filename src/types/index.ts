@@ -141,6 +141,10 @@ export interface AnalysisPattern {
   description: string;
   type: 'gap_analysis' | 'dependency' | 'bottleneck' | 'cost_impact';
   label: DataLabel;
+  severity: 'critical' | 'high' | 'medium' | 'low';
+  metric: { name: string; value: string; label: DataLabel };
+  findings: string[];
+  affectedScope: { count: number; unit: string };
 }
 
 // 데모 시나리오 메타데이터

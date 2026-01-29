@@ -82,6 +82,13 @@ export const ko = {
       bottleneck: '병목 분석',
       cost_impact: '비용 영향',
     },
+    severity: {
+      critical: '심각',
+      high: '높음',
+      medium: '보통',
+      low: '낮음',
+    },
+    affectedScope: '영향 범위',
   },
   dashboard: {
     title: 'HR 대시보드',

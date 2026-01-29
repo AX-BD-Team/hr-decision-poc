@@ -12,10 +12,10 @@
     {"id": "ds-opex-range", "name": "OPEX Range", "type": "opex", "label": "ESTIMATE", "description": "운영비용 범위 · as of: 2026-01-01", "coverage": 66, "fields": ["org_id", "category", "min", "max"]}
   ],
   "analysisPatterns": [
-    {"id": "ap-1", "name": "역할 커버리지 분석", "description": "필수 역할 대비 현재 인력 매핑 상태 분석", "type": "gap_analysis", "label": "REAL"},
-    {"id": "ap-2", "name": "의존도 집중 분석", "description": "특정 인력에 업무가 집중된 병목 식별", "type": "dependency", "label": "REAL"},
-    {"id": "ap-3", "name": "가동률 과밀 분석", "description": "투입률 100% 초과 인력 식별", "type": "bottleneck", "label": "ESTIMATE"},
-    {"id": "ap-4", "name": "비용 영향 시뮬레이션", "description": "대안별 OPEX 변동 추정", "type": "cost_impact", "label": "SYNTH"}
+    {"id": "ap-1", "name": "역할 커버리지 분석", "description": "필수 역할 대비 현재 인력 매핑 상태 분석", "type": "gap_analysis", "label": "REAL", "severity": "high", "metric": {"name": "커버리지", "value": "67%", "label": "REAL"}, "findings": ["아키텍트 1/2명 충원 필요", "시니어 개발자 3/4명 배치"], "affectedScope": {"count": 3, "unit": "역할"}},
+    {"id": "ap-2", "name": "의존도 집중 분석", "description": "특정 인력에 업무가 집중된 병목 식별", "type": "dependency", "label": "REAL", "severity": "critical", "metric": {"name": "집중도 지수", "value": "3.2", "label": "REAL"}, "findings": ["김A 아키텍트 단일 의존점(SPOF)"], "affectedScope": {"count": 1, "unit": "명"}},
+    {"id": "ap-3", "name": "가동률 과밀 분석", "description": "투입률 100% 초과 인력 식별", "type": "bottleneck", "label": "ESTIMATE", "severity": "high", "metric": {"name": "초과 가동률", "value": "120%", "label": "REAL"}, "findings": ["김A 120% 과부하", "시니어 3명 평균 92%"], "affectedScope": {"count": 4, "unit": "명"}},
+    {"id": "ap-4", "name": "비용 영향 시뮬레이션", "description": "대안별 OPEX 변동 추정", "type": "cost_impact", "label": "SYNTH", "severity": "medium", "metric": {"name": "OPEX 범위", "value": "0~180M", "label": "ESTIMATE"}, "findings": ["유지: 0~30M", "조정: 30~80M", "변경: 80~180M"], "affectedScope": {"count": 3, "unit": "대안"}}
   ],
   "entities": [
     {"id": "org-dev", "type": "org", "name": "개발팀", "label": "REAL", "properties": {"headcount": 12, "budget": "1.2B"}, "position": {"x": 100, "y": 200}},
