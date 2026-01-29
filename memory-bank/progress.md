@@ -76,6 +76,7 @@
 - [x] S1 이중 정의 정리 (JSON에서 dataSources/decisionPaths 통합)
 - [x] S2/S3 hrContextViews 시나리오 분화
 - [x] Edge 참조 무결성 검증 유틸리티 (`validateScenario.ts`)
+- [x] 확장 검증: relatedPaths/relatedEntityIds/utilizationMap.entityId 역참조 + orphan error types
 
 #### 상태 관리 & 데이터
 - [x] Zustand 스토어 (모드, 스텝, 선택, Dock 상태)
@@ -147,7 +148,7 @@
 - [x] ESLint 설정
 - [x] Cloudflare Pages 배포 설정
 - [x] GitHub Actions CI/CD
-- [x] Vitest 테스트 프레임워크 (17 tests)
+- [x] Vitest 테스트 프레임워크 (71 tests — 참조 무결성, Enum/범위 검증 포함)
 - [x] `/deploy` 스킬 — Cloudflare Pages 자동 배포 (lint → build → deploy)
 
 ---

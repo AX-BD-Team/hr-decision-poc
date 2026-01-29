@@ -72,18 +72,18 @@ src/
 ├── types/index.ts                    # 전체 타입 정의
 ├── store/useStore.ts                 # Zustand 스토어
 ├── constants/
-│   └── tokens.ts                     # 그래프용 색상 상수 (ENTITY_COLORS, EDGE_COLORS, PANEL_BG)
+│   └── tokens.ts                     # 색상 상수 (ENTITY_COLORS, EDGE_COLORS, PANEL_BG, CHART_COLORS)
 ├── data/
 │   ├── demo-s1.json                  # S1 기본 데이터
 │   ├── demo-s2.json                  # S2 OPEX 절감 시나리오 데이터
 │   ├── demo-s3.json                  # S3 병목 완화 시나리오 데이터
 │   ├── scenarios.ts                  # JSON import + type cast + 무결성 검증 호출
-│   ├── validateScenario.ts           # Edge 참조 무결성 검증 유틸리티
+│   ├── validateScenario.ts           # 시나리오 참조 무결성 검증 (edge/relatedPaths/relatedEntityIds/utilizationMap)
 │   ├── tourSteps.ts                  # 9개 투어 스텝 정의
 │   ├── dashboard-data.json           # 대시보드 데이터 (KPI, 프로젝트, 스킬, 인재, 인력예측)
 │   ├── docs-meta.ts                  # 6개 문서 메타데이터
 │   └── __tests__/
-│       └── scenarios.test.ts         # Vitest 시나리오 데이터 검증 (17 tests)
+│       └── scenarios.test.ts         # Vitest 시나리오 데이터 검증 (71 tests)
 ├── components/
 │   ├── common/
 │   │   ├── DataLabelBadge.tsx       # DataLabel 배지 공용 컴포넌트
@@ -158,4 +158,4 @@ npm run deploy:preview  # 빌드 후 preview 브랜치 배포
 - 접근성(a11y) 기본 구현 — ARIA roles/labels, 키보드 nav, screen reader 지원
 - TypeScript strict 모드 활성화
 - ESLint 코드 품질 검사 활성화
-- Vitest 시나리오 데이터 검증 테스트 구축됨 (UI 컴포넌트 테스트는 미구현)
+- Vitest 시나리오 데이터 검증 71 tests (참조 무결성, Enum/범위 검증 포함, UI 컴포넌트 테스트는 미구현)

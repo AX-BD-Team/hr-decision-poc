@@ -170,14 +170,24 @@ validateAllScenarios(scenarioDataById);
 
 ```typescript
 // src/data/validateScenario.ts
+// ValidationError types: orphan_edge_source | orphan_edge_target | missing_field | orphan_related_path | orphan_related_entity
 export function validateScenario(data: DemoData): ValidationError[] {
-  // 모든 edge의 source/target이 entities에 존재하는지 검증
+  // 1. edge.source/target → entity IDs
+  // 2. assumption/evidence/riskSignal.relatedPaths → decisionPath IDs
+  // 3. decisionPath/riskSignal.relatedEntityIds → entity IDs
+  // 4. utilizationMap.entityId → entity IDs
 }
 
 export function validateAllScenarios(scenarios: Record<string, DemoData>): void {
   if (import.meta.env.PROD) return; // 프로덕션에서는 스킵
   // 개발 모드에서 console.warn으로 무결성 오류 출력
 }
+
+// Vitest 테스트 (71 tests):
+// - 구조 완전성, DataLabel 유효성, 메타 고유성, decisionPaths 일관성
+// - 참조 무결성 (relatedPaths, relatedEntityIds)
+// - Enum 유효성 (EntityType, EdgeType, severity, category, etc.)
+// - 값 범위 유효성 (coverage, dependency, weight)
 ```
 
 ## 아이콘 맵 패턴

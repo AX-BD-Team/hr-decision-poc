@@ -1,48 +1,40 @@
 # Active Context
 
 ## 현재 단계
-대시보드 재설계 + 문서 파일 커밋 + gitignore 정리 완료. 모든 기능 구현 완료, 프로덕션 배포 대기.
+테스트 & 검증 체계 대폭 강화 완료 (17→71 tests). 모든 기능 구현 완료, 프로덕션 배포 대기.
 
 ## 최근 변경 이력
 
 | 커밋 | 설명 |
 |------|------|
-| `c7090d1` | chore: tool artifacts gitignore 추가 (.playwright-mcp, .trae, .vercel 등) |
-| `358ed7e` | chore: public/docs/ 6개 문서 파일 커밋 (docx + md) |
+| `3b364be` | test: 시나리오 검증 확장 — 71 tests, 참조 무결성, enum/범위 검증 |
+| `d216ed3` | docs: Memory Bank 업데이트 — 세션 종료, 브라우저 검증, git 정리 |
+| `c7090d1` | chore: tool artifacts gitignore 추가 |
+| `358ed7e` | chore: public/docs/ 6개 문서 파일 커밋 |
 | `1376285` | feat: 대시보드 재설계 — 컴포넌트 추출, 인터랙션/애니메이션 강화 |
-| `c40319c` | docs: Memory Bank 업데이트 — dashboard/docs 페이지, 페이지 라우팅 |
-| `57b7497` | feat: dashboard, docs 페이지 + PageNav 페이지 네비게이션 추가 |
 
 ## 이번 세션 변경 사항
 
-### 브라우저 검증 완료
-- **Workflow 페이지**: 4-Zone UI, 시나리오 선택, 데모, Decision Record 모두 정상
-- **대시보드 페이지**: KPI 카드(stagger 애니메이션), 도넛차트(호버 연동), 트리맵(플로팅 툴팁), 인재 테이블(정렬/필터), 인력 예측(콤보 차트+스파크라인) 모두 정상
-- **문서 페이지**: 6개 문서 카드, 카테고리 필터, 다운로드 링크 정상
-
-### Git 정리
-- `public/docs/` 6개 문서 파일 커밋
-- `.gitignore`에 `.playwright-mcp/`, `.trae/`, `.vercel/`, `nul`, `loading-phase*.png` 추가
-- Working tree clean, origin 대비 26 커밋 ahead (push 필요)
+### 테스트 & 검증 체계 강화 (17→71 tests)
+- **참조 무결성 — relatedPaths**: assumption/evidence/riskSignal → decisionPath ID 역참조 검증
+- **참조 무결성 — relatedEntityIds**: decisionPath/riskSignal/utilizationMap.entityId → entity ID 역참조 검증
+- **Enum 유효성**: EntityType, EdgeType, severity, riskLevel, effectLevel, assumption.category, insight.severity, analysisPattern.type, dataSource.type
+- **값 범위 유효성**: coverage 0~100, dependency 0~1, edge.weight 0~1
+- **validateScenario.ts 확장**: `orphan_related_path`, `orphan_related_entity` 에러 타입 추가, relatedPaths/relatedEntityIds/utilizationMap.entityId 역참조 런타임 검증
+- **CHART_COLORS 상수 추가**: SVG 인라인 스타일용 색상 상수 (`constants/tokens.ts`)
+- **S1 JSON 포맷 정리**: pretty-printed → compact (S2/S3와 동일 형식, 데이터 변경 없음)
 
 ### 빌드 결과
-| 청크 | 크기 |
-|------|------|
-| `index.js` (메인) | 279 KB |
-| `vendor-xyflow.js` | 284 KB |
-| `DashboardPage.js` | 24 KB |
-| `TourOverlay.js` | 8.3 KB |
-| `HRContextView.js` | 7.8 KB |
-| `ZoneGraph.js` | 6.9 KB |
-| `DocsPage.js` | 5.6 KB |
+- 71 tests all pass
+- 프로덕션 빌드 성공
 
 ## 현재 작업 포커스
 - 모든 기능 구현 완료
-- 브라우저 검증 통과
-- 프로덕션 배포 대기 (origin 대비 26 커밋 ahead)
+- 테스트 & 검증 체계 강화 완료
+- 프로덕션 배포 대기 (origin 대비 27 커밋 ahead)
 
 ## 다음 작업 목록 (우선순위순)
-1. **git push + Cloudflare 배포** — 26 커밋 push 후 프로덕션 배포
+1. **git push + Cloudflare 배포** — 27 커밋 push 후 프로덕션 배포
 2. **국제화(i18n)** — 하드코딩 한국어 다국어 지원
 3. **다크/라이트 테마** — 테마 전환 기능
 4. **UI 컴포넌트 테스트** — Vitest/Testing Library
@@ -63,5 +55,6 @@
 - 레이아웃: flex (main + aside sidebar), `grid-cols-[360px_1fr]` 내부 그리드
 - Error Boundary: zone 레벨 격리
 - Tour: `TourOverlay` (portal, 9스텝, 키보드/다이얼로그 a11y)
-- 테스트: Vitest (17 tests), `npm run test`
+- 테스트: Vitest (71 tests — 구조 완전성, 참조 무결성, DataLabel, Enum, 값 범위), `npm run test`
+- 런타임 검증: `validateScenario.ts` (dev-only, edge/relatedPaths/relatedEntityIds/utilizationMap 역참조)
 - 모바일: sm 미만 3-row Header + overflow menu, sm+ 기존 레이아웃
