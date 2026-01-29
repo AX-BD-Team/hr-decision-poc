@@ -3,6 +3,7 @@ import { Play, Square, RotateCcw, Download, HelpCircle, BookOpen, PanelRightOpen
 import { useStore } from '../../store/useStore';
 import { clsx } from 'clsx';
 import { scenarioMetas } from '../../data/scenarios';
+import { PageNav } from './PageNav';
 
 function scrollToId(id: string) {
   const el = document.getElementById(id);
@@ -46,6 +47,7 @@ const stepActiveClasses: Record<string, { bg: string; text: string; badge: strin
 
 export function Header() {
   const {
+    activePage,
     data,
     scenarioId,
     setScenario,
@@ -60,6 +62,7 @@ export function Header() {
     isContextSidebarOpen,
     toggleContextSidebar,
   } = useStore();
+  const isWorkflow = activePage === 'workflow';
   const [demoProgress, setDemoProgress] = useState(0); // 0 = not running, 1-4 = current demo step
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
