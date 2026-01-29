@@ -148,6 +148,13 @@ export const useStore = create<AppState>((set) => ({
 
   toggleContextSidebar: () => set((state) => ({ isContextSidebarOpen: !state.isContextSidebarOpen })),
 
+  toggleTheme: () =>
+    set((state) => {
+      const next: Theme = state.theme === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+      return { theme: next };
+    }),
+
   startTour: () =>
     set({
       isTourActive: true,
