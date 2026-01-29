@@ -106,7 +106,8 @@
 - [x] **Dock 키보드 리사이즈** — `role="separator"`, ArrowUp/Down ±20px, aria-valuenow/min/max
 
 #### Error Handling
-- [x] **Error Boundaries** — zone 레벨 에러 격리, `fallbackTitle` prop
+- [x] **Error Boundaries** — zone 레벨 에러 격리, `fallbackTitleKey` prop (i18n 키 기반)
+- [x] **ErrorBoundary i18n** — `getT()` 비-hook 번역 함수로 클래스 컴포넌트 지원
 - [x] App.tsx 5개 섹션 ErrorBoundary 래핑
 
 #### Guided Tour

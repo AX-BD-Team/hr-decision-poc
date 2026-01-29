@@ -1,62 +1,40 @@
 # Active Context
 
 ## 현재 단계
-모든 기능 구현 완료. i18n(KO/EN), 다크/라이트 테마, UI 컴포넌트 테스트 인프라 구축 완료. 프로덕션 배포 대기.
+모든 기능 구현 완료. i18n(KO/EN), 다크/라이트 테마, UI 컴포넌트 테스트 인프라 구축 완료. **프로덕션 배포 완료** (Cloudflare Pages). ErrorBoundary i18n 마이그레이션 완료.
 
 ## 최근 변경 이력
 
 | 커밋 | 설명 |
 |------|------|
+| `7783cce` | feat: ErrorBoundary i18n 마이그레이션 — getT() 헬퍼 함수, fallbackTitleKey prop |
+| `7da6d21` | fix: Header 테마 토글 aria-label 하드코딩 한국어 → i18n 교체 |
 | `bd08ef2` | feat: 나머지 14개 컴포넌트 i18n 마이그레이션 완료 |
 | `0261fb6` | feat: ZoneDecisionPaths, ZoneGraph 남은 라벨 i18n 적용 |
-| `95a9ea1` | feat: ZoneGraph, ZoneStructuring 라벨 i18n 적용 |
 | `56a996f` | feat: i18n 커버리지 확장 — locale 토글, 대시보드/zone/차트 번역 |
-| `bdb1f95` | feat: locale 토글 상태 + i18n 기반 구축 |
-| `f36c97e` | feat: PageNav/Header 모바일 메뉴에 테마 토글 버튼 추가 |
-| `4900a26` | fix: 버튼 hover에 color-mix 사용 (CSS 변수 호환) |
 
 ## 이번 세션 변경 사항
 
-### 1. Git Push (27 커밋)
-- 이전 세션의 미 push 커밋 + 이번 세션 커밋 모두 `origin main`에 push
+### ErrorBoundary i18n 마이그레이션
+- **`getT()` 함수 추가** (`src/i18n/index.ts`) — 클래스 컴포넌트용 비-hook 번역 함수
+- **ErrorBoundary 리팩토링** — `fallbackTitle` → `fallbackTitleKey` prop (i18n 키 기반)
+- **errorBoundary 네임스페이스** ko.ts/en.ts에 추가 (defaultTitle, description, retry, 6개 zone별 에러 타이틀)
+- **App.tsx** — 모든 ErrorBoundary 사용처 `fallbackTitleKey` prop으로 교체
 
-### 2. UI 컴포넌트 테스트 인프라 구축
-- **의존성 설치**: @testing-library/react, @testing-library/user-event, @testing-library/jest-dom, jsdom
-- **vitest.config.ts** 신규 생성 (jsdom 환경, 글로벌, 셋업 파일)
-- **src/test/setup.ts** — jest-dom matchers 등록
-- **src/test/utils.tsx** — 커스텀 render(resetStore + userEvent)
-- **6개 컴포넌트 테스트 파일**: DataLabelBadge(11), PageNav(4), KpiCardGrid(4), TalentTable(5), DashboardPage(5), ZoneDecisionPaths(5) → 총 34 UI 테스트
-- 전체 105 tests (71 데이터 + 34 컴포넌트) 통과
-
-### 3. 다크/라이트 테마 시스템
-- CSS 변수 기반 다크/라이트 테마 (~50 CSS 변수)
-- Tailwind 색상 토큰 → CSS 변수 참조 (appBg, panelBg, textMain, textSub, surface)
-- CHART_COLORS/PANEL_BG → CSS 변수 참조
-- Theme 타입 + Zustand toggleTheme + localStorage 퍼시스턴스
-- PageNav + Header 모바일 메뉴에 Sun/Moon 토글
-
-### 4. 국제화(i18n) 시스템
-- **경량 자체 구현** (외부 라이브러리 없음): `src/i18n/` (ko.ts, en.ts, index.ts)
-- **useT() hook**: dot-path 키 해석 (`t('dashboard.title')`)
-- **타입 안전성**: `as const` + `Widen<T>` 유틸리티 타입
-- **Locale 상태**: Zustand toggleLocale + localStorage 퍼시스턴스
-- **KO|EN 토글**: PageNav + Header 모바일 메뉴
-- **38개 컴포넌트 마이그레이션**: 모든 하드코딩 한국어 → `t()` 호출 교체
-
-### 빌드 결과
-- `npm run build` 통과
-- `npm run lint` 통과 (0 errors, 1 warning)
-- `npm run test` 통과 (105/105)
+### 브라우저 전체 페이지 검증 완료
+- Decision Workflow (EN + Dark) ✅
+- Dashboard > Resource Allocation (EN + Dark) ✅
+- Dashboard > Talent Info (EN + Dark) ✅
+- Dashboard > Workforce Forecast (EN + Dark) ✅
+- Documents (EN + Dark) ✅
 
 ## 현재 작업 포커스
-- 모든 기능 구현 완료
-- 프로덕션 배포 대기
+- 모든 기능 구현 + 배포 완료
+- 전체 페이지 브라우저 검증 완료 (Documents 페이지 포함)
 
 ## 다음 작업 목록 (우선순위순)
-1. **Cloudflare 배포** — 프로덕션 배포 (`/deploy`)
-2. **라이트 테마 시각 검증** — 브라우저에서 light mode 확인
-3. **ErrorBoundary i18n** — ErrorBoundary는 클래스 컴포넌트라 hook 사용 불가, props로 번역 전달 필요
-4. **추가 컴포넌트 테스트** — 커버리지 확장
+1. **추가 컴포넌트 테스트** — 커버리지 확장
+2. **라이트 테마 미세 조정** — 일부 글래스 패널/그래프 노드 가시성 개선 (필요 시)
 
 ## 알려진 이슈 — 모두 해결됨
 - ~~#1~10: 이전 이슈~~ → 모두 해결
@@ -67,7 +45,7 @@
 - 상태 관리: Zustand 단일 스토어 (`loadingPhase`, `isContextSidebarOpen`, `activePage`, `theme`, `locale`)
 - 스타일링: Tailwind CSS + CSS 변수 테마 (`data-theme` 속성) + 시맨틱 디자인 토큰 체계
 - 테마: CSS 변수 기반 다크/라이트, localStorage 퍼시스턴스, `CHART_COLORS`는 CSS 변수 참조
-- i18n: 경량 자체 구현 (`src/i18n/`), `useT()` hook, KO/EN 토글, localStorage 퍼시스턴스
+- i18n: 경량 자체 구현 (`src/i18n/`), `useT()` hook + `getT()` 비-hook 함수, KO/EN 토글, localStorage 퍼시스턴스
 - 그래프: @xyflow/react v12, dagre 자동 레이아웃, 커스텀 `EntityNode`
 - 산점도: 순수 SVG 기반 (`UtilizationScatterChart.tsx`)
 - 대시보드 차트: 순수 SVG (stroke 도넛, squarified 트리맵, 그룹 바차트+라인) — 외부 차트 라이브러리 미사용
