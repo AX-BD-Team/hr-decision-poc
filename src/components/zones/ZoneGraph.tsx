@@ -154,7 +154,7 @@ export function ZoneGraph() {
           aria-label="그래프 초기화 및 오버뷰로 이동"
           className="flex items-center gap-2 rounded-lg border border-neutralGray/20 bg-appBg/40 px-3 py-2 text-xs text-textSub transition-all hover:bg-appBg/70 hover:text-textMain focus-ring"
         >
-          <RotateCcw className="h-4 w-4" />
+          <RotateCcw className="h-4 w-4" aria-hidden="true" />
           <span className="hidden sm:inline">Reset/Back to Overview</span>
         </button>
       </div>

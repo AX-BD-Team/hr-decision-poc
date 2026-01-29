@@ -131,6 +131,7 @@ Claude Code와 Cline 간 프로젝트 컨텍스트를 공유하기 위한 스킬
 |------|------|
 | `/session-start [작업내용]` | 세션 시작 시 Memory Bank에서 컨텍스트 복원 |
 | `/session-end [메모]` | 세션 종료 시 변경사항을 Memory Bank에 반영 |
+| `/deploy [--preview]` | Cloudflare Pages 배포 (lint → build → deploy) |
 
 **워크플로우**:
 ```

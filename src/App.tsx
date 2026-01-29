@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { Header } from './components/layout/Header';
 import { ZoneDataIngestion } from './components/zones/ZoneDataIngestion';
 import { ZoneGraph } from './components/zones/ZoneGraph';
@@ -9,18 +10,37 @@ import { TourOverlay } from './components/tour/TourOverlay';
 import { HRContextView } from './components/context/HRContextView';
 import { useStore } from './store/useStore';
 import { clsx } from 'clsx';
+import { scenarioDataById } from './data/scenarios';
 
 function App() {
   const isContextSidebarOpen = useStore((s) => s.isContextSidebarOpen);
+  const scenarioId = useStore((s) => s.scenarioId);
+  const announcementRef = useRef<HTMLDivElement>(null);
+
+  // Announce scenario changes for screen readers
+  useEffect(() => {
+    const name = scenarioDataById[scenarioId]?.meta.name;
+    if (name && announcementRef.current) {
+      announcementRef.current.textContent = `시나리오 ${scenarioId.toUpperCase()}(${name})로 전환되었습니다`;
+    }
+  }, [scenarioId]);
 
   return (
     <div className="min-h-screen bg-appBg cmd-grid-bg text-textMain">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:rounded-lg focus:bg-decisionBlue focus:px-4 focus:py-2 focus:text-white focus:shadow-lg"
+      >
+        본문으로 건너뛰기
+      </a>
+      <div ref={announcementRef} aria-live="polite" className="sr-only" />
       <Header />
       <TourOverlay />
       <div className="flex">
         <main
+          id="main-content"
           className={clsx(
-            'mx-auto w-full px-2 sm:px-4 pb-10 transition-all',
+            'mx-auto w-full px-2 sm:px-4 pb-10 sm:pb-10 transition-all safe-area-bottom',
             isContextSidebarOpen ? 'max-w-[1440px]' : 'max-w-[1440px]'
           )}
           style={{ flex: '1 1 0%', minWidth: 0 }}
@@ -32,7 +52,7 @@ function App() {
               </ErrorBoundary>
             </section>
 
-            <section id="section-graph" className="min-h-0 overflow-hidden animate-stagger-2 scroll-mt-32">
+            <section id="section-graph" className="min-h-[280px] lg:min-h-0 overflow-hidden animate-stagger-2 scroll-mt-32">
               <ErrorBoundary fallbackTitle="온톨로지 그래프 영역 오류">
                 <ZoneGraph />
               </ErrorBoundary>

@@ -53,7 +53,7 @@ export function HRContextView({ variant = 'panel' }: { variant?: 'panel' | 'dock
               className="rounded-lg bg-appBg/50 p-3 hover:bg-appBg/80 transition-all cursor-default"
             >
               <div className="mb-1 flex items-center justify-between">
-                <Icon className="h-4 w-4 text-contextGreen" />
+                <Icon className="h-4 w-4 text-contextGreen" aria-hidden="true" />
                 <DataLabelBadge label={kpi.label} />
               </div>
               <div className="text-lg font-bold font-mono text-textMain">
@@ -114,7 +114,7 @@ export function HRContextView({ variant = 'panel' }: { variant?: 'panel' | 'dock
                   severityColors[insight.severity]
                 )}
               >
-                <Icon className="mt-0.5 h-3 w-3 flex-shrink-0" />
+                <Icon className="mt-0.5 h-3 w-3 flex-shrink-0" aria-hidden="true" />
                 <div className="flex-1">
                   <p className="text-xs">{insight.text}</p>
                   <DataLabelBadge label={insight.label} />

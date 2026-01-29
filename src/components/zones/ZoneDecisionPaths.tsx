@@ -32,7 +32,7 @@ export function ZoneDecisionPaths({ variant = 'zone' }: { variant?: 'zone' | 'do
   const justRevealed = loadingPhase === 5;
 
   const inner = (
-    <div className="flex-1 overflow-y-auto grid gap-2 md:grid-cols-3">
+    <div className="flex-1 overflow-y-auto grid gap-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
       {data.decisionPaths.map((path: DecisionPath) => (
         <button
           key={path.id}
@@ -52,7 +52,7 @@ export function ZoneDecisionPaths({ variant = 'zone' }: { variant?: 'zone' | 'do
           <div className="mb-2 flex items-center justify-between">
             <h4 className="text-sm font-semibold text-textMain">{path.name}</h4>
             {selectedPathId === path.id && (
-              <CheckCircle className="h-4 w-4 text-zonePath" />
+              <CheckCircle className="h-4 w-4 text-zonePath" aria-hidden="true" />
             )}
           </div>
           <p className="mb-3 text-xs text-textSub">{path.summary}</p>
@@ -60,11 +60,11 @@ export function ZoneDecisionPaths({ variant = 'zone' }: { variant?: 'zone' | 'do
           <div className="mb-3 flex items-center gap-2 text-xs">
             <span className={clsx('inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-mono text-tiny', riskBadgeStyles[path.riskLevel])}>
               <span className={clsx('h-1.5 w-1.5 rounded-full', riskDotColors[path.riskLevel], path.riskLevel === 'high' && 'animate-glow-pulse')} />
-              <AlertTriangle className="h-3 w-3" />
+              <AlertTriangle className="h-3 w-3" aria-hidden="true" />
               리스크 {path.riskLevel.toUpperCase()}
             </span>
             <span className={clsx('inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-mono text-tiny', effectBadgeStyles[path.effectLevel])}>
-              <TrendingUp className="h-3 w-3" />
+              <TrendingUp className="h-3 w-3" aria-hidden="true" />
               효과 {path.effectLevel.toUpperCase()}
             </span>
           </div>

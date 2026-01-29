@@ -32,7 +32,7 @@ export function ZoneStructuring({ variant = 'zone' }: { variant?: 'zone' | 'dock
               style={{ '--zone-accent': '#8B5CF6', '--zone-accent-rgb': '139,92,246' } as React.CSSProperties}
             >
               <div className="mb-2 flex items-center gap-2">
-                <Icon className="h-4 w-4 text-zoneStruct" />
+                <Icon className="h-4 w-4 text-zoneStruct" aria-hidden="true" />
                 <DataLabelBadge label={pattern.label} />
               </div>
               <h4 className="text-sm font-medium text-textMain">{pattern.name}</h4>

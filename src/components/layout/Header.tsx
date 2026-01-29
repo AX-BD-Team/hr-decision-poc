@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Play, Square, RotateCcw, Download, HelpCircle, BookOpen, PanelRightOpen, PanelRightClose } from 'lucide-react';
+import { Play, Square, RotateCcw, Download, HelpCircle, BookOpen, PanelRightOpen, PanelRightClose, MoreVertical } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { clsx } from 'clsx';
 import { scenarioMetas } from '../../data/scenarios';
@@ -61,7 +61,9 @@ export function Header() {
     toggleContextSidebar,
   } = useStore();
   const [demoProgress, setDemoProgress] = useState(0); // 0 = not running, 1-4 = current demo step
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const clearDemoTimers = useCallback(() => {
     timersRef.current.forEach(clearTimeout);
@@ -70,6 +72,18 @@ export function Header() {
 
   // Clean up timers on unmount
   useEffect(() => clearDemoTimers, [clearDemoTimers]);
+
+  // Close mobile menu on outside click
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [isMobileMenuOpen]);
 
   const handleStopDemo = useCallback(() => {
     clearDemoTimers();
@@ -137,9 +151,66 @@ export function Header() {
     URL.revokeObjectURL(url);
   };
 
+  const stepNavigator = (
+    <nav className="flex items-center gap-1" data-tour="step-navigator" role="navigation" aria-label="워크플로우 단계 네비게이터">
+      {steps.map((step, idx) => {
+        const isStepActive = activeStep === step.num;
+        const classes = stepActiveClasses[step.color];
+        const isCompleted = step.num < activeStep;
+        return (
+          <div key={step.num} className="flex items-center">
+            <button
+              aria-label={`Step ${step.num}: ${step.label}`}
+              aria-current={isStepActive ? 'step' : undefined}
+              onClick={() => {
+                setActiveStep(step.num);
+                if (step.num === 2) scrollToId('section-structuring');
+                if (step.num === 4) scrollToId('section-paths');
+                if (step.num === 1) {
+                  setRecordTab('evidence');
+                  scrollToId('section-ingestion');
+                }
+                if (step.num === 3) scrollToId('section-graph');
+              }}
+              className={clsx(
+                'flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-all',
+                isStepActive
+                  ? `${classes.bg} ${classes.text}`
+                  : 'text-textSub hover:bg-appBg hover:text-textMain'
+              )}
+            >
+              <span
+                className={clsx(
+                  'flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold transition-all',
+                  isStepActive
+                    ? `${classes.badge} text-white`
+                    : isCompleted
+                    ? `${classes.badge}/40 text-white`
+                    : 'bg-neutralGray/30'
+                )}
+              >
+                {step.num}
+              </span>
+              <span className="hidden lg:inline">{step.label}</span>
+            </button>
+            {idx < steps.length - 1 && (
+              <div
+                className={clsx(
+                  'mx-1 h-px w-6 transition-all',
+                  isCompleted ? classes.connector : 'bg-neutralGray/30'
+                )}
+              />
+            )}
+          </div>
+        );
+      })}
+    </nav>
+  );
+
   return (
-    <header className="sticky top-0 z-50 glass-header border-b border-neutralGray/20 px-3 sm:px-6 py-4">
-      <div className="flex items-center justify-between">
+    <header className="sticky top-0 z-50 glass-header border-b border-neutralGray/20 px-3 sm:px-6 py-3 sm:py-4">
+      {/* ===== Desktop layout (sm+): original 3-column row ===== */}
+      <div className="hidden sm:flex items-center justify-between">
         {/* 좌측: 타이틀 + 시나리오 */}
         <div className="flex items-center gap-6">
           <div>
@@ -165,66 +236,7 @@ export function Header() {
         </div>
 
         {/* 중앙: Step Navigator */}
-        <nav className="flex items-center gap-1" data-tour="step-navigator" role="navigation" aria-label="워크플로우 단계 네비게이터">
-          {steps.map((step, idx) => {
-            const isStepActive = activeStep === step.num;
-            const classes = stepActiveClasses[step.color];
-            // Steps before activeStep are "completed"
-            const isCompleted = step.num < activeStep;
-            return (
-              <div key={step.num} className="flex items-center">
-                <button
-                  aria-label={`Step ${step.num}: ${step.label}`}
-                  aria-current={isStepActive ? 'step' : undefined}
-                  onClick={() => {
-                    setActiveStep(step.num);
-                    if (step.num === 2) {
-                      scrollToId('section-structuring');
-                    }
-                    if (step.num === 4) {
-                      scrollToId('section-paths');
-                    }
-                    if (step.num === 1) {
-                      setRecordTab('evidence');
-                      scrollToId('section-ingestion');
-                    }
-                    if (step.num === 3) {
-                      scrollToId('section-graph');
-                    }
-                  }}
-                  className={clsx(
-                    'flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-all',
-                    isStepActive
-                      ? `${classes.bg} ${classes.text}`
-                      : 'text-textSub hover:bg-appBg hover:text-textMain'
-                  )}
-                >
-                  <span
-                    className={clsx(
-                      'flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold transition-all',
-                      isStepActive
-                        ? `${classes.badge} text-white`
-                        : isCompleted
-                        ? `${classes.badge}/40 text-white`
-                        : 'bg-neutralGray/30'
-                    )}
-                  >
-                    {step.num}
-                  </span>
-                  <span className="hidden lg:inline">{step.label}</span>
-                </button>
-                {idx < steps.length - 1 && (
-                  <div
-                    className={clsx(
-                      'mx-1 h-px w-6 transition-all',
-                      isCompleted ? classes.connector : 'bg-neutralGray/30'
-                    )}
-                  />
-                )}
-              </div>
-            );
-          })}
-        </nav>
+        {stepNavigator}
 
         {/* 우측: 액션 버튼 */}
         <div className="flex items-center gap-2">
@@ -250,12 +262,12 @@ export function Header() {
           >
             {isTourActive ? (
               <>
-                <Square className="h-4 w-4" />
+                <Square className="h-4 w-4" aria-hidden="true" />
                 투어 종료
               </>
             ) : (
               <>
-                <BookOpen className="h-4 w-4" />
+                <BookOpen className="h-4 w-4" aria-hidden="true" />
                 Guide
               </>
             )}
@@ -272,12 +284,12 @@ export function Header() {
           >
             {isTourActive ? (
               <>
-                <Square className="h-4 w-4" />
+                <Square className="h-4 w-4" aria-hidden="true" />
                 Stop Demo
               </>
             ) : (
               <>
-                <Play className="h-4 w-4" />
+                <Play className="h-4 w-4" aria-hidden="true" />
                 Start Demo
               </>
             )}
@@ -285,6 +297,7 @@ export function Header() {
           <button
             onClick={toggleContextSidebar}
             aria-label="HR Context 패널 토글"
+            aria-expanded={isContextSidebarOpen}
             className={clsx(
               'flex items-center gap-2 rounded-lg glass-panel px-3 py-2 text-sm transition-all',
               isContextSidebarOpen
@@ -292,7 +305,7 @@ export function Header() {
                 : 'text-textSub hover:bg-appBg/50 hover:text-textMain'
             )}
           >
-            {isContextSidebarOpen ? <PanelRightClose className="h-4 w-4" /> : <PanelRightOpen className="h-4 w-4" />}
+            {isContextSidebarOpen ? <PanelRightClose className="h-4 w-4" aria-hidden="true" /> : <PanelRightOpen className="h-4 w-4" aria-hidden="true" />}
             <span className="hidden md:inline">HR Context</span>
           </button>
           <button
@@ -300,7 +313,7 @@ export function Header() {
             aria-label="초기화"
             className="flex items-center gap-2 rounded-lg glass-panel px-3 py-2 text-sm text-textSub transition-all hover:bg-appBg/50 hover:text-textMain"
           >
-            <RotateCcw className="h-4 w-4" />
+            <RotateCcw className="h-4 w-4" aria-hidden="true" />
             <span className="hidden md:inline">Reset</span>
           </button>
           <button
@@ -308,16 +321,139 @@ export function Header() {
             aria-label="보고서 내보내기"
             className="flex items-center gap-2 rounded-lg glass-panel px-3 py-2 text-sm text-textSub transition-all hover:bg-appBg/50 hover:text-textMain"
           >
-            <Download className="h-4 w-4" />
+            <Download className="h-4 w-4" aria-hidden="true" />
             <span className="hidden md:inline">Export</span>
+          </button>
+        </div>
+      </div>
+
+      {/* ===== Mobile layout (< sm): multi-row ===== */}
+      <div className="sm:hidden space-y-2">
+        {/* Row 1: 타이틀 + 시나리오 셀렉터 + 오버플로 메뉴(⋮) */}
+        <div className="flex items-center justify-between gap-2">
+          <div className="min-w-0">
+            <h1 className="text-base font-semibold text-textMain truncate">HR 의사결정 지원</h1>
+          </div>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <select
+              value={scenarioId}
+              onChange={(e) => setScenario(e.target.value)}
+              className="rounded bg-appBg/40 px-2 py-1 text-sm font-medium text-decisionBlue outline-none ring-0 focus-ring max-w-[140px]"
+            >
+              {scenarioMetas.map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.name}
+                </option>
+              ))}
+            </select>
+            <div className="relative" ref={menuRef}>
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                aria-label="더보기 메뉴"
+                aria-expanded={isMobileMenuOpen}
+                className="rounded-lg glass-panel p-2 text-textSub hover:bg-appBg/50 hover:text-textMain min-h-[44px] min-w-[44px] flex items-center justify-center"
+              >
+                <MoreVertical className="h-4 w-4" aria-hidden="true" />
+              </button>
+              {isMobileMenuOpen && (
+                <div className="absolute right-0 top-full mt-1 z-50 w-48 rounded-lg glass-panel border border-neutralGray/20 py-1 shadow-lg">
+                  <button
+                    onClick={() => { handleExport(); setIsMobileMenuOpen(false); }}
+                    className="flex w-full items-center gap-2 px-3 py-2.5 text-sm text-textSub hover:bg-appBg/50 hover:text-textMain min-h-[44px]"
+                  >
+                    <Download className="h-4 w-4" aria-hidden="true" />
+                    Export
+                  </button>
+                  <button
+                    onClick={() => { reset(); setIsMobileMenuOpen(false); }}
+                    className="flex w-full items-center gap-2 px-3 py-2.5 text-sm text-textSub hover:bg-appBg/50 hover:text-textMain min-h-[44px]"
+                  >
+                    <RotateCcw className="h-4 w-4" aria-hidden="true" />
+                    Reset
+                  </button>
+                  <button
+                    onClick={() => { toggleContextSidebar(); setIsMobileMenuOpen(false); }}
+                    className={clsx(
+                      'flex w-full items-center gap-2 px-3 py-2.5 text-sm min-h-[44px]',
+                      isContextSidebarOpen
+                        ? 'text-contextGreen'
+                        : 'text-textSub hover:bg-appBg/50 hover:text-textMain'
+                    )}
+                  >
+                    {isContextSidebarOpen ? <PanelRightClose className="h-4 w-4" aria-hidden="true" /> : <PanelRightOpen className="h-4 w-4" aria-hidden="true" />}
+                    HR Context
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Row 2: Step Navigator (horizontal scroll) */}
+        <div className="overflow-x-auto -mx-3 px-3">
+          {stepNavigator}
+        </div>
+
+        {/* Row 3: Start Demo + Guide */}
+        <div className="flex items-center gap-2">
+          {isTourActive && (
+            <span className="flex items-center gap-1.5 rounded-lg bg-decisionBlue/10 border border-decisionBlue/30 px-2 py-1 text-xs font-mono text-decisionBlue animate-glow-pulse">
+              Step {demoProgress}/4
+            </span>
+          )}
+          <button
+            onClick={handleStartDemo}
+            className={clsx(
+              'flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-white transition-all min-h-[44px]',
+              isTourActive
+                ? 'bg-alertRed hover:bg-alertRed/80'
+                : 'bg-decisionBlue hover:bg-decisionBlue/80 hover:shadow-glow-blue'
+            )}
+            data-tour="start-demo"
+          >
+            {isTourActive ? (
+              <>
+                <Square className="h-4 w-4" aria-hidden="true" />
+                Stop
+              </>
+            ) : (
+              <>
+                <Play className="h-4 w-4" aria-hidden="true" />
+                Demo
+              </>
+            )}
+          </button>
+          <button
+            onClick={() => {
+              if (isTourActive) handleStopDemo();
+              else startTour();
+            }}
+            className={clsx(
+              'flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-all min-h-[44px]',
+              isTourActive
+                ? 'bg-alertRed text-white hover:bg-alertRed/80'
+                : 'glass-panel text-textSub hover:bg-appBg/50 hover:text-textMain'
+            )}
+          >
+            {isTourActive ? (
+              <>
+                <Square className="h-4 w-4" aria-hidden="true" />
+                종료
+              </>
+            ) : (
+              <>
+                <BookOpen className="h-4 w-4" aria-hidden="true" />
+                Guide
+              </>
+            )}
           </button>
         </div>
       </div>
 
       {/* 핵심 질문 */}
       {data.meta.keyQuestion && (
-        <div className="mt-3 flex items-center gap-2 rounded-lg bg-decisionBlue/10 border border-decisionBlue/20 px-3 py-2">
-          <HelpCircle className="h-4 w-4 flex-shrink-0 text-decisionBlue" />
+        <div className="mt-2 sm:mt-3 flex items-center gap-2 rounded-lg bg-decisionBlue/10 border border-decisionBlue/20 px-3 py-2">
+          <HelpCircle className="h-4 w-4 flex-shrink-0 text-decisionBlue" aria-hidden="true" />
           <span className="text-sm text-textMain">{data.meta.keyQuestion}</span>
         </div>
       )}

@@ -82,10 +82,27 @@ export function Dock() {
       data-tour="dock"
     >
       <div
-        className="flex cursor-row-resize items-center justify-center border-b border-neutralGray/20 py-1 text-textSub/70 hover:text-textSub"
+        className="flex cursor-row-resize items-center justify-center border-b border-neutralGray/20 py-1 text-textSub/70 hover:text-textSub focus-ring"
         onPointerDown={onStartResize}
+        tabIndex={0}
+        role="separator"
+        aria-orientation="horizontal"
+        aria-valuenow={dockHeight}
+        aria-valuemin={220}
+        aria-valuemax={560}
+        aria-label="독 높이 조절"
+        onKeyDown={(e) => {
+          if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (!isDockExpanded) setDockExpanded(true);
+            setDockHeight(clampHeight(dockHeight + 20));
+          } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            setDockHeight(clampHeight(dockHeight - 20));
+          }
+        }}
       >
-        <GripHorizontal className="h-4 w-4" />
+        <GripHorizontal className="h-4 w-4" aria-hidden="true" />
       </div>
 
       <div className="flex items-center justify-between border-b border-neutralGray/20 px-4">
@@ -103,13 +120,13 @@ export function Dock() {
                   if (!isDockExpanded) setDockExpanded(true);
                 }}
                 className={clsx(
-                  'relative flex items-center gap-2 px-3 py-3 text-sm transition-all focus-ring rounded whitespace-nowrap',
+                  'relative flex items-center gap-2 px-3 py-3 text-sm transition-all focus-ring rounded whitespace-nowrap min-h-[44px]',
                   active
                     ? 'text-decisionBlue'
                     : 'text-textSub hover:bg-appBg/30 hover:text-textMain'
                 )}
               >
-                <Icon className="h-4 w-4" />
+                <Icon className="h-4 w-4" aria-hidden="true" />
                 <span className="font-medium hidden sm:inline">{tab.label}</span>
                 {active && <span className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-decisionBlue" />}
               </button>
@@ -120,6 +137,7 @@ export function Dock() {
           onClick={toggleDock}
           className="rounded p-1.5 text-textSub transition-all hover:bg-appBg hover:text-textMain focus-ring"
           aria-label={isDockExpanded ? 'Collapse dock' : 'Expand dock'}
+          aria-expanded={isDockExpanded}
         >
           <ChevronUp
             className={clsx('h-4 w-4 transition-transform duration-200 ease-out', isDockExpanded && 'rotate-180')}
@@ -163,13 +181,13 @@ export function Dock() {
                         aria-selected={active}
                         onClick={() => setRecordTab(tab.id)}
                         className={clsx(
-                          'relative flex items-center gap-2 px-3 py-3 text-sm transition-all focus-ring rounded whitespace-nowrap',
+                          'relative flex items-center gap-2 px-3 py-3 text-sm transition-all focus-ring rounded whitespace-nowrap min-h-[44px]',
                           active
                             ? 'text-contextGreen'
                             : 'text-textSub hover:bg-appBg/30 hover:text-textMain'
                         )}
                       >
-                        <Icon className="h-4 w-4" />
+                        <Icon className="h-4 w-4" aria-hidden="true" />
                         <span className="font-medium hidden sm:inline">{tab.label}</span>
                         {active && <span className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-contextGreen" />}
                       </button>

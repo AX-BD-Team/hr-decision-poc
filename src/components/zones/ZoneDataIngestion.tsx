@@ -57,7 +57,7 @@ export function ZoneDataIngestion() {
               style={{ '--zone-accent': '#3B82F6', '--zone-accent-rgb': '59,130,246' } as React.CSSProperties}
             >
               <div className="flex items-center gap-3">
-                <Icon className="h-4 w-4 text-zoneIngest" />
+                <Icon className="h-4 w-4 text-zoneIngest" aria-hidden="true" />
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-medium text-textMain">{ds.name}</span>
