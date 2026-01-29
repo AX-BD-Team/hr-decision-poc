@@ -1,4 +1,4 @@
-import { CheckCircle, AlertTriangle, TrendingUp } from 'lucide-react';
+import { CheckCircle, AlertTriangle, TrendingUp, FileText, Lightbulb, ShieldAlert } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { clsx } from 'clsx';
 import type { DecisionPath } from '../../types';
@@ -105,6 +105,58 @@ export function ZoneDecisionPaths({ variant = 'zone' }: { variant?: 'zone' | 'do
               </span>
             ))}
           </div>
+
+          {/* Evidence / Assumptions / Limitations blocks */}
+          {selectedPathId === path.id && (
+            <div className="mt-3 space-y-2 border-t border-neutralGray/10 pt-3">
+              {/* Evidence */}
+              {(() => {
+                const related = data.evidence.filter((e) => e.relatedPaths.includes(path.id));
+                if (related.length === 0) return null;
+                return (
+                  <div>
+                    <div className="flex items-center gap-1.5 mb-1">
+                      <FileText className="h-3 w-3 text-contextGreen" aria-hidden="true" />
+                      <span className="text-micro font-medium text-contextGreen uppercase tracking-wider">근거 ({related.length})</span>
+                    </div>
+                    <ul className="space-y-0.5">
+                      {related.slice(0, 3).map((e) => (
+                        <li key={e.id} className="text-tiny text-textSub truncate" title={e.text}>· {e.text}</li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })()}
+              {/* Assumptions */}
+              {(() => {
+                const related = data.assumptions.filter((a) => a.relatedPaths.includes(path.id));
+                if (related.length === 0) return null;
+                return (
+                  <div>
+                    <div className="flex items-center gap-1.5 mb-1">
+                      <Lightbulb className="h-3 w-3 text-warning" aria-hidden="true" />
+                      <span className="text-micro font-medium text-warning uppercase tracking-wider">가정 ({related.length})</span>
+                    </div>
+                    <ul className="space-y-0.5">
+                      {related.slice(0, 3).map((a) => (
+                        <li key={a.id} className="text-tiny text-textSub truncate" title={a.text}>· {a.text}</li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })()}
+              {/* Limitations */}
+              {path.limitations && (
+                <div>
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <ShieldAlert className="h-3 w-3 text-severity-high" aria-hidden="true" />
+                    <span className="text-micro font-medium text-severity-high uppercase tracking-wider">한계</span>
+                  </div>
+                  <p className="text-tiny text-textSub">{path.limitations}</p>
+                </div>
+              )}
+            </div>
+          )}
         </button>
       ))}
     </div>

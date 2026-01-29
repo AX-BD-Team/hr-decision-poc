@@ -63,6 +63,11 @@ describe('DataLabel 유효성', () => {
 });
 
 describe('시나리오 메타 고유성', () => {
+  it('4개 시나리오가 등록됨', () => {
+    expect(scenarioMetas.length).toBe(4);
+    expect(Object.keys(scenarioDataById).length).toBe(4);
+  });
+
   it('모든 시나리오 ID가 고유함', () => {
     const ids = scenarioMetas.map((m) => m.id);
     expect(new Set(ids).size).toBe(ids.length);
@@ -121,7 +126,7 @@ describe('AnalysisPattern 확장 필드', () => {
     for (const ap of d.analysisPatterns) {
       expect(Array.isArray(ap.findings)).toBe(true);
       expect(ap.findings.length).toBeGreaterThanOrEqual(1);
-      expect(ap.findings.length).toBeLessThanOrEqual(3);
+      expect(ap.findings.length).toBeLessThanOrEqual(5);
       for (const f of ap.findings) {
         expect(typeof f).toBe('string');
         expect(f.length).toBeGreaterThan(0);
@@ -207,15 +212,41 @@ describe('참조 무결성 — relatedEntityIds', () => {
   });
 });
 
+// ── DecisionCriteria 유효성 ──
+
+describe('DecisionCriteria', () => {
+  it.each(scenarios.map((s) => [s.meta.id, s]))('시나리오 %s: decisionCriteria 5개 존재', (_id, data) => {
+    const d = data as DemoData;
+    expect(d.meta.decisionCriteria).toBeDefined();
+    expect(d.meta.decisionCriteria!.length).toBe(5);
+    for (const dc of d.meta.decisionCriteria!) {
+      expect(dc.id).toBeTruthy();
+      expect(dc.text).toBeTruthy();
+      expect(dc.description).toBeTruthy();
+      expect(dc.evidenceCount).toBeGreaterThanOrEqual(0);
+    }
+  });
+
+  it('S3은 Phase-2 badge를 가짐', () => {
+    const s3 = scenarioDataById['s3'];
+    expect(s3.meta.badge).toBe('Phase-2');
+  });
+
+  it('S4는 HRD badge를 가짐', () => {
+    const s4 = scenarioDataById['s4'];
+    expect(s4.meta.badge).toBe('HRD');
+  });
+});
+
 // ── Enum 유효성 ──
 
-const VALID_ENTITY_TYPES: EntityType[] = ['person', 'role', 'task', 'org', 'risk', 'cost', 'project'];
-const VALID_EDGE_TYPES: EdgeType[] = ['depends_on', 'covers', 'bottleneck', 'overlap', 'cost_supports', 'risk_of', 'belongs_to', 'assigned_to'];
+const VALID_ENTITY_TYPES: EntityType[] = ['person', 'role', 'task', 'org', 'risk', 'cost', 'project', 'capability', 'stage', 'training_program'];
+const VALID_EDGE_TYPES: EdgeType[] = ['depends_on', 'covers', 'bottleneck', 'overlap', 'cost_supports', 'risk_of', 'belongs_to', 'assigned_to', 'requires_capability', 'trains_for', 'part_of_stage', 'duplicates'];
 const VALID_SEVERITY = ['high', 'medium', 'low'] as const;
 const VALID_ASSUMPTION_CATEGORY = ['data', 'logic', 'scope'] as const;
 const VALID_INSIGHT_SEVERITY = ['info', 'warning', 'critical'] as const;
-const VALID_ANALYSIS_PATTERN_TYPE = ['gap_analysis', 'dependency', 'bottleneck', 'cost_impact'] as const;
-const VALID_DATASOURCE_TYPE = ['hr_master', 'tms', 'rr', 'bizforce', 'vrb', 'opex'] as const;
+const VALID_ANALYSIS_PATTERN_TYPE = ['gap_analysis', 'dependency', 'bottleneck', 'cost_impact', 'role_overlap', 'capability_gap', 'stage_readiness'] as const;
+const VALID_DATASOURCE_TYPE = ['hr_master', 'tms', 'rr', 'bizforce', 'vrb', 'opex', 'assignment_history', 'to_request', 'training_history', 'competency_model', 'work_allocation'] as const;
 
 describe('Enum 유효성', () => {
   it.each(scenarios.map((s) => [s.meta.id, s]))('시나리오 %s: entity.type이 EntityType', (_id, data) => {

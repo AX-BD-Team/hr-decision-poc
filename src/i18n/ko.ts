@@ -81,6 +81,9 @@ export const ko = {
       dependency: '의존성 분석',
       bottleneck: '병목 분석',
       cost_impact: '비용 영향',
+      role_overlap: '역할 중복',
+      capability_gap: '역량 갭',
+      stage_readiness: '단계 준비도',
     },
     severity: {
       critical: '심각',

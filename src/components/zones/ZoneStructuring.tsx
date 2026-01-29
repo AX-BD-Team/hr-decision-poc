@@ -1,4 +1,4 @@
-import { GitBranch, AlertTriangle, TrendingUp, DollarSign } from 'lucide-react';
+import { GitBranch, AlertTriangle, TrendingUp, DollarSign, Copy, Target, Milestone } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { clsx } from 'clsx';
 import type { AnalysisPattern } from '../../types';
@@ -11,6 +11,9 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   dependency: TrendingUp,
   bottleneck: AlertTriangle,
   cost_impact: DollarSign,
+  role_overlap: Copy,
+  capability_gap: Target,
+  stage_readiness: Milestone,
 };
 
 const severityAccent: Record<string, { color: string; rgb: string }> = {

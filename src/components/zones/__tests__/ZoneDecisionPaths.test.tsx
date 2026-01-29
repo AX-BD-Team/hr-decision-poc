@@ -51,8 +51,9 @@ describe('ZoneDecisionPaths', () => {
   it('shows risk and effect levels', () => {
     renderWithProviders(<ZoneDecisionPaths />);
     const paths = useStore.getState().data.decisionPaths;
-    paths.forEach((p) => {
-      expect(screen.getByText(new RegExp(`리스크 ${p.riskLevel.toUpperCase()}`))).toBeInTheDocument();
+    const riskLevels = [...new Set(paths.map((p) => p.riskLevel.toUpperCase()))];
+    riskLevels.forEach((level) => {
+      expect(screen.getAllByText(new RegExp(`리스크 ${level}`)).length).toBeGreaterThan(0);
     });
   });
 });

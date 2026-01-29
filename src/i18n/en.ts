@@ -83,6 +83,9 @@ export const en: TranslationKeys = {
       dependency: 'Dependency Analysis',
       bottleneck: 'Bottleneck Analysis',
       cost_impact: 'Cost Impact',
+      role_overlap: 'Role Overlap',
+      capability_gap: 'Capability Gap',
+      stage_readiness: 'Stage Readiness',
     },
     severity: {
       critical: 'Critical',
