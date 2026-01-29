@@ -58,6 +58,9 @@ export function Header() {
     isTourActive,
     startTour,
     endTour,
+    isDemoRunning,
+    startDemo,
+    stopDemo,
     selectPath,
     setRecordTab,
     isContextSidebarOpen,
@@ -97,11 +100,12 @@ export function Header() {
   const handleStopDemo = useCallback(() => {
     clearDemoTimers();
     setDemoProgress(0);
-    endTour();
-  }, [clearDemoTimers, endTour]);
+    stopDemo();
+    if (isTourActive) endTour();
+  }, [clearDemoTimers, stopDemo, isTourActive, endTour]);
 
   const handleStartDemo = () => {
-    if (isTourActive) {
+    if (isDemoRunning) {
       handleStopDemo();
       return;
     }
@@ -109,38 +113,38 @@ export function Header() {
     // Trigger skeleton → reveal animation sequence
     setScenario(scenarioId);
 
-    startTour();
+    startDemo();              // isDemoRunning=true (no TourOverlay)
     setDemoProgress(1);
     setRecordTab('evidence');
     scrollToId('section-ingestion');
 
-    // Step 2 at 2s
+    // Step 2: skeleton 완료(3s) + 여유(2s) = 5s
     const t1 = setTimeout(() => {
       setActiveStep(2);
       setDemoProgress(2);
       scrollToId('section-structuring');
-    }, 2000);
+    }, 5000);
 
-    // Step 3 at 4s
+    // Step 3: +5s = 10s
     const t2 = setTimeout(() => {
       setActiveStep(3);
       setDemoProgress(3);
       scrollToId('section-graph');
-    }, 4000);
+    }, 10000);
 
-    // Step 4 at 6s — also expand dock & select first path
+    // Step 4: +5s = 15s
     const t3 = setTimeout(() => {
       setActiveStep(4);
       setDemoProgress(4);
       selectPath('path-a');
       scrollToId('section-paths');
-    }, 6000);
+    }, 15000);
 
-    // End demo at 9s
+    // End demo: +6s = 21s
     const t4 = setTimeout(() => {
       setDemoProgress(0);
-      endTour();
-    }, 9000);
+      stopDemo();
+    }, 21000);
 
     timersRef.current = [t1, t2, t3, t4];
   };
@@ -256,7 +260,7 @@ export function Header() {
 
         {/* 우측: 액션 버튼 */}
         <div className="flex items-center gap-2">
-          {isTourActive && (
+          {isDemoRunning && (
             <span className="flex items-center gap-1.5 rounded-lg bg-decisionBlue/10 border border-decisionBlue/30 px-3 py-1.5 text-xs font-mono text-decisionBlue animate-glow-pulse">
               {t('common.demoProgress')} Step {demoProgress}/4
             </span>
@@ -269,11 +273,14 @@ export function Header() {
                 startTour();
               }
             }}
+            disabled={isDemoRunning}
             className={clsx(
               'flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-all',
-              isTourActive
-                ? 'bg-alertRed text-white hover:bg-alertRed/80'
-                : 'glass-panel text-textSub hover:bg-appBg/50 hover:text-textMain'
+              isDemoRunning
+                ? 'opacity-40 cursor-not-allowed glass-panel text-textSub'
+                : isTourActive
+                  ? 'bg-alertRed text-white hover:bg-alertRed/80'
+                  : 'glass-panel text-textSub hover:bg-appBg/50 hover:text-textMain'
             )}
           >
             {isTourActive ? (
@@ -292,13 +299,13 @@ export function Header() {
             onClick={handleStartDemo}
             className={clsx(
               'flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white transition-all',
-              isTourActive
+              isDemoRunning
                 ? 'bg-alertRed hover:bg-alertRed/80'
                 : 'bg-decisionBlue hover:bg-decisionBlue/80 hover:shadow-glow-blue'
             )}
             data-tour="start-demo"
           >
-            {isTourActive ? (
+            {isDemoRunning ? (
               <>
                 <Square className="h-4 w-4" aria-hidden="true" />
                 Stop Demo
@@ -444,7 +451,7 @@ export function Header() {
 
         {/* Row 3: Start Demo + Guide */}
         <div className="flex items-center gap-2">
-          {isTourActive && (
+          {isDemoRunning && (
             <span className="flex items-center gap-1.5 rounded-lg bg-decisionBlue/10 border border-decisionBlue/30 px-2 py-1 text-xs font-mono text-decisionBlue animate-glow-pulse">
               Step {demoProgress}/4
             </span>
@@ -453,13 +460,13 @@ export function Header() {
             onClick={handleStartDemo}
             className={clsx(
               'flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-white transition-all min-h-[44px]',
-              isTourActive
+              isDemoRunning
                 ? 'bg-alertRed hover:bg-alertRed/80'
                 : 'bg-decisionBlue hover:bg-decisionBlue/80 hover:shadow-glow-blue'
             )}
             data-tour="start-demo"
           >
-            {isTourActive ? (
+            {isDemoRunning ? (
               <>
                 <Square className="h-4 w-4" aria-hidden="true" />
                 Stop
@@ -476,11 +483,14 @@ export function Header() {
               if (isTourActive) handleStopDemo();
               else startTour();
             }}
+            disabled={isDemoRunning}
             className={clsx(
               'flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-all min-h-[44px]',
-              isTourActive
-                ? 'bg-alertRed text-white hover:bg-alertRed/80'
-                : 'glass-panel text-textSub hover:bg-appBg/50 hover:text-textMain'
+              isDemoRunning
+                ? 'opacity-40 cursor-not-allowed glass-panel text-textSub'
+                : isTourActive
+                  ? 'bg-alertRed text-white hover:bg-alertRed/80'
+                  : 'glass-panel text-textSub hover:bg-appBg/50 hover:text-textMain'
             )}
           >
             {isTourActive ? (

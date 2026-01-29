@@ -35,6 +35,9 @@ interface AppState {
   isTourActive: boolean;
   tourStep: number;
 
+  // Demo (auto-play, no TourOverlay)
+  isDemoRunning: boolean;
+
   // Actions
   setActivePage: (page: PageId) => void;
   setScenario: (scenarioId: string) => void;
@@ -54,6 +57,8 @@ interface AppState {
   nextTourStep: () => void;
   prevTourStep: () => void;
   endTour: () => void;
+  startDemo: () => void;
+  stopDemo: () => void;
   reset: () => void;
 }
 
@@ -88,6 +93,7 @@ const initialState = {
   isContextSidebarOpen: false,
   isTourActive: false,
   tourStep: 0,
+  isDemoRunning: false,
 };
 
 export const useStore = create<AppState>((set) => ({
@@ -196,6 +202,21 @@ export const useStore = create<AppState>((set) => ({
     set({
       isTourActive: false,
       tourStep: 0,
+      mode: 'OVERVIEW',
+    }),
+
+  startDemo: () =>
+    set({
+      isDemoRunning: true,
+      mode: 'GUIDED_DEMO',
+      activeStep: 1,
+      selectedEntityId: null,
+      selectedPathId: null,
+    }),
+
+  stopDemo: () =>
+    set({
+      isDemoRunning: false,
       mode: 'OVERVIEW',
     }),
 
