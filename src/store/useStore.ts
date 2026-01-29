@@ -122,7 +122,7 @@ export const useStore = create<AppState>((set) => ({
       isDockExpanded: false,
       checkedCriteria: {
         ...state.checkedCriteria,
-        [scenarioId]: state.checkedCriteria[scenarioId] || scenarioData.meta.decisionCriteria.map((c) => c.id),
+        [scenarioId]: state.checkedCriteria[scenarioId] || (scenarioData.meta.decisionCriteria ?? []).map((c) => c.id),
       },
     }));
 

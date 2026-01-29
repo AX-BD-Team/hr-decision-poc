@@ -169,7 +169,7 @@ export interface ScenarioMeta {
   description: string;
   keyQuestion: string;
   badge?: 'Phase-2' | 'HRD';
-  decisionCriteria: DecisionCriterion[];
+  decisionCriteria?: DecisionCriterion[];
 }
 
 // 전체 데모 데이터

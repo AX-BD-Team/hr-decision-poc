@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Handle, Position, type NodeProps } from '@xyflow/react';
-import { Users, Briefcase, ClipboardList, Building2, AlertTriangle, DollarSign, FolderKanban } from 'lucide-react';
+import { Users, Briefcase, ClipboardList, Building2, AlertTriangle, DollarSign, FolderKanban, Puzzle, Milestone, GraduationCap } from 'lucide-react';
 import { ENTITY_COLORS, CHART_COLORS } from '../../constants/tokens';
 import { DataLabelBadge } from '../common/DataLabelBadge';
 import type { Entity, EntityType } from '../../types';
@@ -13,6 +13,9 @@ const entityIcons: Record<EntityType, React.ComponentType<{ className?: string }
   risk: AlertTriangle,
   cost: DollarSign,
   project: FolderKanban,
+  capability: Puzzle,
+  stage: Milestone,
+  training_program: GraduationCap,
 };
 
 function getEntityDetail(entity: Entity): string | null {
