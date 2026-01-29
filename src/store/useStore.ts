@@ -6,6 +6,7 @@ interface AppState {
   // 데이터
   data: DemoData;
   scenarioId: string;
+  isLoading: boolean;
 
   // UI 상태
   mode: AppMode;
@@ -16,6 +17,9 @@ interface AppState {
   recordTab: RecordTab;
   isDockExpanded: boolean;
   dockHeight: number;
+
+  // HR Context Sidebar
+  isContextSidebarOpen: boolean;
 
   // Guided Tour
   isTourActive: boolean;
@@ -32,6 +36,7 @@ interface AppState {
   setDockExpanded: (expanded: boolean) => void;
   setDockHeight: (height: number) => void;
   toggleDock: () => void;
+  toggleContextSidebar: () => void;
   startTour: () => void;
   nextTourStep: () => void;
   prevTourStep: () => void;
@@ -42,6 +47,7 @@ interface AppState {
 const initialState = {
   scenarioId: 's1',
   data: scenarioDataById.s1,
+  isLoading: false,
   mode: 'OVERVIEW' as AppMode,
   activeStep: 1,
   selectedEntityId: null,
@@ -50,6 +56,7 @@ const initialState = {
   recordTab: 'evidence' as RecordTab,
   isDockExpanded: false,
   dockHeight: 300,
+  isContextSidebarOpen: false,
   isTourActive: false,
   tourStep: 0,
 };
@@ -57,17 +64,24 @@ const initialState = {
 export const useStore = create<AppState>((set) => ({
   ...initialState,
 
-  setScenario: (scenarioId) =>
+  setScenario: (scenarioId) => {
     set(() => ({
       scenarioId,
-      data: scenarioDataById[scenarioId] || scenarioDataById.s1,
+      isLoading: true,
       mode: 'OVERVIEW',
       activeStep: 1,
       selectedEntityId: null,
       selectedPathId: null,
       recordTab: 'evidence',
       isDockExpanded: false,
-    })),
+    }));
+    setTimeout(() => {
+      set(() => ({
+        data: scenarioDataById[scenarioId] || scenarioDataById.s1,
+        isLoading: false,
+      }));
+    }, 400);
+  },
 
   setMode: (mode) => set({ mode }),
 
@@ -90,6 +104,8 @@ export const useStore = create<AppState>((set) => ({
   setDockHeight: (height) => set({ dockHeight: height }),
 
   toggleDock: () => set((state) => ({ isDockExpanded: !state.isDockExpanded })),
+
+  toggleContextSidebar: () => set((state) => ({ isContextSidebarOpen: !state.isContextSidebarOpen })),
 
   startTour: () =>
     set({

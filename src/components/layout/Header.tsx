@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Play, Square, RotateCcw, Download, HelpCircle, BookOpen } from 'lucide-react';
+import { Play, Square, RotateCcw, Download, HelpCircle, BookOpen, PanelRightOpen, PanelRightClose } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { clsx } from 'clsx';
 import { scenarioMetas } from '../../data/scenarios';
@@ -57,6 +57,8 @@ export function Header() {
     endTour,
     selectPath,
     setRecordTab,
+    isContextSidebarOpen,
+    toggleContextSidebar,
   } = useStore();
   const [demoProgress, setDemoProgress] = useState(0); // 0 = not running, 1-4 = current demo step
   const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
@@ -136,7 +138,7 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 glass-header border-b border-neutralGray/20 px-6 py-4">
+    <header className="sticky top-0 z-50 glass-header border-b border-neutralGray/20 px-3 sm:px-6 py-4">
       <div className="flex items-center justify-between">
         {/* 좌측: 타이틀 + 시나리오 */}
         <div className="flex items-center gap-6">
@@ -163,7 +165,7 @@ export function Header() {
         </div>
 
         {/* 중앙: Step Navigator */}
-        <nav className="flex items-center gap-1" data-tour="step-navigator">
+        <nav className="flex items-center gap-1" data-tour="step-navigator" role="navigation" aria-label="워크플로우 단계 네비게이터">
           {steps.map((step, idx) => {
             const isStepActive = activeStep === step.num;
             const classes = stepActiveClasses[step.color];
@@ -172,6 +174,8 @@ export function Header() {
             return (
               <div key={step.num} className="flex items-center">
                 <button
+                  aria-label={`Step ${step.num}: ${step.label}`}
+                  aria-current={isStepActive ? 'step' : undefined}
                   onClick={() => {
                     setActiveStep(step.num);
                     if (step.num === 2) {
@@ -279,18 +283,33 @@ export function Header() {
             )}
           </button>
           <button
+            onClick={toggleContextSidebar}
+            aria-label="HR Context 패널 토글"
+            className={clsx(
+              'flex items-center gap-2 rounded-lg glass-panel px-3 py-2 text-sm transition-all',
+              isContextSidebarOpen
+                ? 'text-contextGreen border border-contextGreen/30 bg-contextGreen/10'
+                : 'text-textSub hover:bg-appBg/50 hover:text-textMain'
+            )}
+          >
+            {isContextSidebarOpen ? <PanelRightClose className="h-4 w-4" /> : <PanelRightOpen className="h-4 w-4" />}
+            <span className="hidden md:inline">HR Context</span>
+          </button>
+          <button
             onClick={reset}
+            aria-label="초기화"
             className="flex items-center gap-2 rounded-lg glass-panel px-3 py-2 text-sm text-textSub transition-all hover:bg-appBg/50 hover:text-textMain"
           >
             <RotateCcw className="h-4 w-4" />
-            Reset
+            <span className="hidden md:inline">Reset</span>
           </button>
           <button
             onClick={handleExport}
+            aria-label="보고서 내보내기"
             className="flex items-center gap-2 rounded-lg glass-panel px-3 py-2 text-sm text-textSub transition-all hover:bg-appBg/50 hover:text-textMain"
           >
             <Download className="h-4 w-4" />
-            Export
+            <span className="hidden md:inline">Export</span>
           </button>
         </div>
       </div>
@@ -304,7 +323,7 @@ export function Header() {
       )}
 
       {/* 데이터 라벨 범례 */}
-      <div className="mt-2 flex items-center gap-4 text-xs opacity-60 hover:opacity-100 transition-opacity" data-tour="data-labels">
+      <div className="mt-2 hidden md:flex items-center gap-4 text-xs opacity-60 hover:opacity-100 transition-opacity" data-tour="data-labels">
         <span className="text-textSub font-mono uppercase tracking-wider text-micro">Data Labels:</span>
         <span className="rounded bg-label-real/20 px-2 py-0.5 text-label-real font-mono">REAL</span>
         <span className="rounded bg-label-estimate/20 px-2 py-0.5 text-label-estimate font-mono">ESTIMATE</span>

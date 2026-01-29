@@ -3,6 +3,7 @@ import { useStore } from '../../store/useStore';
 import { clsx } from 'clsx';
 import type { DataSource } from '../../types';
 import { DataLabelBadge } from '../common/DataLabelBadge';
+import { SkeletonZone } from '../common/SkeletonZone';
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   hr_master: Users,
@@ -14,7 +15,9 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 export function ZoneDataIngestion() {
-  const { data, activeStep } = useStore();
+  const { data, activeStep, isLoading } = useStore();
+
+  if (isLoading) return <SkeletonZone variant="default" />;
   const isActive = activeStep === 1;
 
   return (

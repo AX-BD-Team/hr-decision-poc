@@ -3,6 +3,7 @@ import { useStore } from '../../store/useStore';
 import { clsx } from 'clsx';
 import type { DecisionPath } from '../../types';
 import { DataLabelBadge } from '../common/DataLabelBadge';
+import { SkeletonZone } from '../common/SkeletonZone';
 
 const riskDotColors = {
   high: 'bg-severity-high',
@@ -23,7 +24,9 @@ const effectBadgeStyles = {
 };
 
 export function ZoneDecisionPaths({ variant = 'zone' }: { variant?: 'zone' | 'dock' }) {
-  const { data, activeStep, selectedPathId, selectPath } = useStore();
+  const { data, activeStep, selectedPathId, selectPath, isLoading } = useStore();
+
+  if (isLoading) return <SkeletonZone variant="paths" />;
   const isActive = activeStep === 4;
 
   const inner = (
@@ -32,8 +35,10 @@ export function ZoneDecisionPaths({ variant = 'zone' }: { variant?: 'zone' | 'do
         <button
           key={path.id}
           onClick={() => selectPath(selectedPathId === path.id ? null : path.id)}
+          aria-pressed={selectedPathId === path.id}
+          aria-label={`경로 ${path.name}, 리스크 ${path.riskLevel}, 효과 ${path.effectLevel}`}
           className={clsx(
-            'relative rounded-lg border p-4 text-left transition-all overflow-hidden focus-ring',
+            'relative rounded-lg border p-3 md:p-4 text-left transition-all overflow-hidden focus-ring',
             selectedPathId === path.id
               ? 'border-zonePath bg-zonePath/10 shadow-glow-amber shadow-inner-glow-amber'
               : 'border-neutralGray/20 bg-surface-1 hover:border-neutralGray/40 hover:bg-surface-3 hover:shadow-elevation-2'

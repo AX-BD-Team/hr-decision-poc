@@ -15,20 +15,22 @@ import { clsx } from 'clsx';
 import type { Entity, Edge } from '../../types';
 import { RotateCcw } from 'lucide-react';
 import { ENTITY_COLORS, EDGE_COLORS, PANEL_BG } from '../../constants/tokens';
+import { SkeletonZone } from '../common/SkeletonZone';
+import { EntityNode } from '../graph/EntityNode';
+
+const nodeTypes = { entity: EntityNode };
 
 export function ZoneGraph() {
-  const { data, activeStep, selectedEntityId, selectedPathId, selectEntity, setActiveStep } = useStore();
+  const { data, activeStep, selectedEntityId, selectedPathId, selectEntity, setActiveStep, isLoading } = useStore();
   const isActive = activeStep === 3;
 
   const pathRelatedEntityIds = useMemo(() => {
     if (!selectedPathId) return new Set<string>();
     const ids = new Set<string>();
-    // Direct relatedEntityIds from the path
     const path = data.decisionPaths.find((p) => p.id === selectedPathId);
     if (path?.relatedEntityIds) {
       for (const eid of path.relatedEntityIds) ids.add(eid);
     }
-    // Also include entities from related risk signals
     for (const rs of data.riskSignals) {
       if (rs.relatedPaths.includes(selectedPathId)) {
         for (const eid of rs.relatedEntityIds) ids.add(eid);
@@ -40,35 +42,14 @@ export function ZoneGraph() {
   const initialNodes: Node[] = useMemo(
     () =>
       data.entities.map((entity: Entity) => {
-        const baseColor = ENTITY_COLORS[entity.type] || '#666';
         const isSelected = selectedEntityId === entity.id;
         const isPathRelated = pathRelatedEntityIds.has(entity.id);
         const isDimmed = !!selectedPathId && !isPathRelated && !isSelected;
         return {
           id: entity.id,
+          type: 'entity',
           position: entity.position || { x: 0, y: 0 },
-          data: { label: entity.name, entity },
-          style: {
-            background: `linear-gradient(135deg, ${baseColor}, ${baseColor}CC)`,
-            color: '#fff',
-            border: isPathRelated
-              ? `2px solid ${baseColor}`
-              : isSelected
-              ? '2px solid #fff'
-              : `1px solid ${baseColor}66`,
-            borderRadius: '8px',
-            padding: '8px 12px',
-            fontSize: '12px',
-            fontWeight: 500,
-            fontFamily: '"Pretendard", sans-serif',
-            boxShadow: isPathRelated
-              ? `0 0 28px ${baseColor}AA`
-              : isSelected
-              ? `0 0 24px ${baseColor}80`
-              : `0 0 12px ${baseColor}30`,
-            opacity: isDimmed ? 0.35 : 1,
-            transition: 'all 0.3s ease',
-          },
+          data: { label: entity.name, entity, isSelected, isPathRelated, isDimmed },
         };
       }),
     [data.entities, selectedEntityId, selectedPathId, pathRelatedEntityIds]
@@ -127,6 +108,8 @@ export function ZoneGraph() {
     [selectEntity, selectedEntityId]
   );
 
+  if (isLoading) return <SkeletonZone variant="graph" />;
+
   return (
     <div
       className={clsx(
@@ -136,6 +119,7 @@ export function ZoneGraph() {
           : 'border-neutralGray/20 bg-panelBg/50'
       )}
       data-tour="zone-3"
+      aria-label="온톨로지 관계 그래프"
     >
       <div className="flex items-center justify-between gap-3 border-b border-neutralGray/20 px-4 py-3">
         <div className="flex items-center gap-2">
@@ -157,10 +141,11 @@ export function ZoneGraph() {
             selectEntity(null);
             setActiveStep(1);
           }}
+          aria-label="그래프 초기화 및 오버뷰로 이동"
           className="flex items-center gap-2 rounded-lg border border-neutralGray/20 bg-appBg/40 px-3 py-2 text-xs text-textSub transition-all hover:bg-appBg/70 hover:text-textMain focus-ring"
         >
           <RotateCcw className="h-4 w-4" />
-          Reset/Back to Overview
+          <span className="hidden sm:inline">Reset/Back to Overview</span>
         </button>
       </div>
 
@@ -171,11 +156,13 @@ export function ZoneGraph() {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onNodeClick={onNodeClick}
+          nodeTypes={nodeTypes}
           fitView
           proOptions={{ hideAttribution: true }}
         >
           <Background color="#1a2744" gap={20} />
           <Controls
+            className="hidden sm:flex"
             style={{
               background: PANEL_BG,
               borderRadius: '8px',
@@ -185,12 +172,17 @@ export function ZoneGraph() {
         </ReactFlow>
 
         {/* Floating Legend Overlay */}
-        <div className="absolute bottom-3 right-3 flex flex-wrap gap-2 rounded-lg bg-surface-2/90 backdrop-blur-sm px-3 py-2 border border-neutralGray/20 shadow-elevation-2 max-w-[280px]">
+        <div
+          className="absolute bottom-3 right-3 flex flex-wrap gap-2 rounded-lg bg-surface-2/90 backdrop-blur-sm px-3 py-2 border border-neutralGray/20 shadow-elevation-2 max-w-[280px]"
+          role="list"
+          aria-label="엔티티 타입 범례"
+        >
           {Object.entries(ENTITY_COLORS).map(([type, color]) => (
-            <div key={type} className="flex items-center gap-1">
+            <div key={type} className="flex items-center gap-1" role="listitem">
               <span
                 className="h-2.5 w-2.5 rounded"
                 style={{ backgroundColor: color }}
+                aria-hidden="true"
               />
               <span className="text-micro text-textSub font-mono uppercase">{type}</span>
             </div>

@@ -89,19 +89,21 @@ export function Dock() {
       </div>
 
       <div className="flex items-center justify-between border-b border-neutralGray/20 px-4">
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 overflow-x-auto" role="tablist" aria-label="독 섹션">
           {sections.map((tab) => {
             const Icon = tab.icon;
             const active = dockSection === tab.id;
             return (
               <button
                 key={tab.id}
+                role="tab"
+                aria-selected={active}
                 onClick={() => {
                   setDockSection(tab.id);
                   if (!isDockExpanded) setDockExpanded(true);
                 }}
                 className={clsx(
-                  'relative flex items-center gap-2 px-3 py-3 text-sm transition-all focus-ring rounded',
+                  'relative flex items-center gap-2 px-3 py-3 text-sm transition-all focus-ring rounded whitespace-nowrap',
                   active
                     ? 'text-decisionBlue'
                     : 'text-textSub hover:bg-appBg/30 hover:text-textMain'
@@ -150,16 +152,18 @@ export function Dock() {
           {dockSection === 'record' && (
             <div className="flex h-full flex-col overflow-hidden animate-fade-in">
               <div className="flex items-center justify-between border-b border-neutralGray/20 px-4">
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1 overflow-x-auto" role="tablist" aria-label="결정 레코드 탭">
                   {recordTabs.map((tab) => {
                     const Icon = tab.icon;
                     const active = recordTab === tab.id;
                     return (
                       <button
                         key={tab.id}
+                        role="tab"
+                        aria-selected={active}
                         onClick={() => setRecordTab(tab.id)}
                         className={clsx(
-                          'relative flex items-center gap-2 px-3 py-3 text-sm transition-all focus-ring rounded',
+                          'relative flex items-center gap-2 px-3 py-3 text-sm transition-all focus-ring rounded whitespace-nowrap',
                           active
                             ? 'text-contextGreen'
                             : 'text-textSub hover:bg-appBg/30 hover:text-textMain'

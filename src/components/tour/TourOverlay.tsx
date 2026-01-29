@@ -181,6 +181,9 @@ export function TourOverlay() {
       {/* Tooltip */}
       {pos && (
         <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="tour-title"
           className="absolute w-[360px] rounded-xl border border-decisionBlue/30 bg-panelBg shadow-lg pointer-events-auto"
           style={{ top: pos.top, left: pos.left }}
           onClick={(e) => e.stopPropagation()}
@@ -188,11 +191,12 @@ export function TourOverlay() {
           {/* Header */}
           <div className="flex items-center justify-between border-b border-neutralGray/20 px-4 py-3">
             <div>
-              <h3 className="text-sm font-semibold text-textMain">{currentStep.titleKo}</h3>
-              <span className="text-[10px] font-mono uppercase tracking-wider text-textSub">{currentStep.titleEn}</span>
+              <h3 id="tour-title" className="text-sm font-semibold text-textMain">{currentStep.titleKo}</h3>
+              <span className="text-micro font-mono uppercase tracking-wider text-textSub">{currentStep.titleEn}</span>
             </div>
             <button
               onClick={endTour}
+              aria-label="투어 닫기"
               className="rounded-lg p-1 text-textSub transition-colors hover:bg-appBg hover:text-textMain"
             >
               <X className="h-4 w-4" />
@@ -227,6 +231,7 @@ export function TourOverlay() {
               <button
                 onClick={prevTourStep}
                 disabled={isFirst}
+                aria-label="이전 단계"
                 className={clsx(
                   'rounded-lg p-1.5 transition-colors',
                   isFirst ? 'text-neutralGray/30' : 'text-textSub hover:bg-appBg hover:text-textMain'
@@ -243,6 +248,7 @@ export function TourOverlay() {
               <button
                 onClick={nextTourStep}
                 disabled={isLast}
+                aria-label="다음 단계"
                 className={clsx(
                   'rounded-lg p-1.5 transition-colors',
                   isLast ? 'text-neutralGray/30' : 'text-textSub hover:bg-appBg hover:text-textMain'

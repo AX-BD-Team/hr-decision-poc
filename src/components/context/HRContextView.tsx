@@ -1,8 +1,9 @@
 import { Users, TrendingUp, Clock, Target, AlertCircle, AlertTriangle, Info } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { DataLabelBadge } from '../common/DataLabelBadge';
+import { UtilizationScatterChart } from './UtilizationScatterChart';
 import { clsx } from 'clsx';
-import type { HRKpi, UtilizationPoint, ContextInsight } from '../../types';
+import type { HRKpi, ContextInsight } from '../../types';
 
 const kpiIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   Headcount: Users,
@@ -89,58 +90,12 @@ export function HRContextView({ variant = 'panel' }: { variant?: 'panel' | 'dock
           Talent Utilization Map
           <span className="ml-1 font-normal text-textSub">(Dependency × Utilization)</span>
         </h4>
-        <div className="relative h-[160px] rounded-lg bg-appBg/50 p-2">
-          {/* 위험 구간 tint (top-right quadrant) */}
-          <div className="absolute right-2 top-2 w-[45%] h-[45%] rounded bg-alertRed/5" />
-
-          {/* 축 라벨 */}
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 -rotate-90 text-tiny text-textSub font-mono">
-            Dependency
-          </div>
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-tiny text-textSub font-mono">
-            Utilization
-          </div>
-
-          {/* 사분면 라인 */}
-          <div className="absolute left-1/2 top-2 bottom-6 w-px bg-neutralGray/30" />
-          <div className="absolute top-1/2 left-6 right-2 h-px bg-neutralGray/30" />
-
-          {/* 사분면 라벨 */}
-          <div className="absolute left-8 top-3 text-mini text-textSub">높은 의존도</div>
-          <div className="absolute right-3 top-3 flex items-center gap-1 text-mini text-alertRed">
-            <span className="inline-block h-2 w-2 rounded-full bg-alertRed animate-glow-pulse" />
-            위험 구간
-          </div>
-          <div className="absolute left-8 bottom-8 text-mini text-textSub">안정</div>
-          <div className="absolute right-3 bottom-8 text-mini text-warning">주의</div>
-
-          {/* 데이터 포인트 */}
-          {contextView.utilizationMap.map((point: UtilizationPoint) => {
-            // 퍼센트 기반 포지셔닝 (축 라벨 영역 고려: left 15%~95%, top 5%~80%)
-            const xPct = 15 + (point.utilization / 1.5) * 80; // 0~1.5 → 15%~95%
-            const yPct = 80 - point.dependency * 75; // 0~1 → 80%~5% (y 반전)
-            const isSelected = selectedEntityId === point.entityId;
-            const isDanger = point.utilization > 1 && point.dependency > 0.7;
-
-            return (
-              <button
-                key={point.id}
-                onClick={() => selectEntity(point.entityId || null)}
-                className={clsx(
-                  'absolute flex h-6 w-6 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full text-tiny font-bold transition-all hover:scale-125',
-                  isSelected
-                    ? 'bg-decisionBlue text-white ring-2 ring-white'
-                    : isDanger
-                    ? 'bg-alertRed text-white'
-                    : 'bg-contextGreen/80 text-white hover:bg-contextGreen'
-                )}
-                style={{ left: `${xPct}%`, top: `${yPct}%` }}
-                title={`${point.name}: 의존도 ${(point.dependency * 100).toFixed(0)}%, 가동률 ${(point.utilization * 100).toFixed(0)}%`}
-              >
-                {point.name.charAt(0)}
-              </button>
-            );
-          })}
+        <div className="h-[120px] sm:h-[200px] rounded-lg bg-appBg/50">
+          <UtilizationScatterChart
+            data={contextView.utilizationMap}
+            selectedEntityId={selectedEntityId}
+            onSelectEntity={selectEntity}
+          />
         </div>
       </div>
 
@@ -153,6 +108,7 @@ export function HRContextView({ variant = 'panel' }: { variant?: 'panel' | 'dock
             return (
               <div
                 key={insight.id}
+                role={insight.severity === 'critical' ? 'alert' : undefined}
                 className={clsx(
                   'flex items-start gap-2 rounded-lg border p-2',
                   severityColors[insight.severity]
