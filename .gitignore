@@ -38,3 +38,10 @@ dist-ssr
 # Cline
 .clinerules
 memory-bank/
+
+# Tool artifacts
+.playwright-mcp/
+.trae/
+.vercel/
+nul
+loading-phase*.png
