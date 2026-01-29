@@ -1,3 +1,6 @@
+// 페이지 라우팅
+export type PageId = 'workflow' | 'dashboard' | 'docs';
+
 // 데이터 라벨 타입
 export type DataLabel = 'REAL' | 'MOCK' | 'ESTIMATE' | 'SYNTH';
 
@@ -182,3 +185,81 @@ export type DockSection = 'paths' | 'record' | 'structuring' | 'context';
 
 // Decision Record Tabs (secondary)
 export type RecordTab = 'assumptions' | 'evidence' | 'risks' | 'alternatives' | 'report';
+
+// Dashboard 데이터 타입
+export interface DashboardKpi {
+  id: string;
+  name: string;
+  value: string | number;
+  unit?: string;
+  change?: string;
+  changeIsPositive?: boolean;
+}
+
+export interface HeadcountSummary {
+  total: number;
+  newTMTarget: number;
+  projectUtilRate: number;
+  avgTenure: number;
+  avgSkillLevel: string;
+}
+
+export interface ProjectStatusItem {
+  status: string;
+  count: number;
+  color: string;
+}
+
+export interface SkillTreemapItem {
+  name: string;
+  value: number;
+  color: string;
+}
+
+export interface TalentRow {
+  id: string;
+  name: string;
+  rank: string;
+  role: string;
+  skillLevel: string;
+  evalGrade: string;
+  department: string;
+}
+
+export interface MonthlyWorkforceData {
+  month: string;
+  in: number;
+  out: number;
+  forecast: number;
+  surplus: number;
+  totalHeadcount: number;
+  pipeline: number;
+}
+
+export interface DashboardData {
+  resourceAllocation: {
+    kpis: DashboardKpi[];
+    headcount: HeadcountSummary;
+    projectStatus: ProjectStatusItem[];
+    skillTreemap: SkillTreemapItem[];
+  };
+  talentInfo: {
+    kpis: DashboardKpi[];
+    talentTable: TalentRow[];
+    skillTreemap: SkillTreemapItem[];
+  };
+  workforceForecast: {
+    monthly: MonthlyWorkforceData[];
+  };
+}
+
+// 문서 메타데이터
+export interface DocMeta {
+  id: string;
+  filename: string;
+  title: string;
+  description: string;
+  category: string;
+  lastUpdated: string;
+  fileSize: string;
+}

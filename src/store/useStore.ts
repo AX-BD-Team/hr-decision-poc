@@ -1,8 +1,11 @@
 import { create } from 'zustand';
-import type { DemoData, AppMode, DockSection, RecordTab } from '../types';
+import type { DemoData, AppMode, DockSection, RecordTab, PageId } from '../types';
 import { scenarioDataById } from '../data/scenarios';
 
 interface AppState {
+  // 페이지 라우팅
+  activePage: PageId;
+
   // 데이터
   data: DemoData;
   scenarioId: string;
@@ -27,6 +30,7 @@ interface AppState {
   tourStep: number;
 
   // Actions
+  setActivePage: (page: PageId) => void;
   setScenario: (scenarioId: string) => void;
   setMode: (mode: AppMode) => void;
   setActiveStep: (step: number) => void;
@@ -46,6 +50,7 @@ interface AppState {
 }
 
 const initialState = {
+  activePage: 'workflow' as PageId,
   scenarioId: 's1',
   data: scenarioDataById.s1,
   loadingPhase: 0,
@@ -65,6 +70,8 @@ const initialState = {
 
 export const useStore = create<AppState>((set) => ({
   ...initialState,
+
+  setActivePage: (page) => set({ activePage: page }),
 
   setScenario: (scenarioId) => {
     const abortId = Date.now();
