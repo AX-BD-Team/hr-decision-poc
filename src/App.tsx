@@ -98,7 +98,7 @@ function App() {
               </section>
             </div>
 
-            <section id="section-record" className="mt-2 sm:mt-4 scroll-mt-32">
+            <section id="section-record" data-tour="decision-record" className="mt-2 sm:mt-4 scroll-mt-32">
               <ErrorBoundary fallbackTitleKey="errorBoundary.decisionRecord">
                 <DecisionRecordSection />
               </ErrorBoundary>

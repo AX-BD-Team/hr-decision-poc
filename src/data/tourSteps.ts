@@ -79,7 +79,7 @@ export const tourSteps: TourStep[] = [
   },
   {
     id: 9,
-    target: 'dock',
+    target: 'decision-record',
     titleKo: '의사결정 기록',
     titleEn: 'Decision Record',
     contentKo: '가정, 근거, 리스크, 대안비교, 리포트 탭을 통해 의사결정 과정을 기록하고 검토합니다.',

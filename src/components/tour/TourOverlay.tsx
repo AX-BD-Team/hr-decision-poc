@@ -55,6 +55,8 @@ export function TourOverlay() {
     selectPath,
     setDockSection,
     setRecordTab,
+    isContextSidebarOpen,
+    toggleContextSidebar,
   } = useStore();
   const [pos, setPos] = useState<TooltipPos | null>(null);
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
@@ -69,8 +71,13 @@ export function TourOverlay() {
     }
     const el = document.querySelector(`[data-tour="${currentStep.target}"]`);
     if (!el) {
-      setPos(null);
+      // Fallback: show tooltip centered on screen without spotlight
       setTargetRect(null);
+      setPos({
+        top: window.innerHeight / 2 - 110,
+        left: window.innerWidth / 2 - 180,
+        placement: 'bottom',
+      });
       return;
     }
     const rect = el.getBoundingClientRect();
@@ -90,12 +97,16 @@ export function TourOverlay() {
       selectPath(currentStep.actionPayload);
     }
     if (currentStep.action === 'OPEN_DOCK_TAB' && typeof currentStep.actionPayload === 'string') {
-      setDockSection(currentStep.actionPayload as 'paths' | 'record' | 'structuring' | 'context');
+      if (currentStep.actionPayload === 'context') {
+        if (!isContextSidebarOpen) toggleContextSidebar();
+      } else {
+        setDockSection(currentStep.actionPayload as 'paths' | 'record' | 'structuring' | 'context');
+      }
     }
     if (currentStep.action === 'SHOW_REPORT' && typeof currentStep.actionPayload === 'string') {
       setRecordTab(currentStep.actionPayload as RecordTab);
     }
-  }, [isTourActive, currentStep, setActiveStep, selectPath, setDockSection, setRecordTab]);
+  }, [isTourActive, currentStep, setActiveStep, selectPath, setDockSection, setRecordTab, isContextSidebarOpen, toggleContextSidebar]);
 
   // Scroll into view + delayed position measurement
   useEffect(() => {
@@ -103,11 +114,11 @@ export function TourOverlay() {
 
     const el = document.querySelector(`[data-tour="${currentStep.target}"]`);
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
-    // Wait for scroll to settle before measuring
-    const timer = setTimeout(measureTarget, 400);
+    // Wait for scroll to settle before measuring (500ms for sidebar animation)
+    const timer = setTimeout(measureTarget, 500);
     window.addEventListener('resize', measureTarget);
     window.addEventListener('scroll', measureTarget, true);
     return () => {
