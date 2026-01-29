@@ -47,7 +47,7 @@ export function ZoneStructuring({ variant = 'zone' }: { variant?: 'zone' | 'dock
             <h3 className="text-sm font-semibold text-textMain">Structuring & Analysis</h3>
             <span className="text-xs text-textSub">구조화/분석 패턴</span>
           </div>
-          <span className="data-mono text-[10px] uppercase tracking-wider text-textSub">Patterns</span>
+          <span className="data-mono text-micro uppercase tracking-wider text-textSub">Patterns</span>
         </div>
         {inner}
       </div>

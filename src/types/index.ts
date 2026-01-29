@@ -90,6 +90,7 @@ export interface DecisionPath {
     label: DataLabel;
   }[];
   highlights: string[];
+  relatedEntityIds?: string[];
 }
 
 // KPI 카드

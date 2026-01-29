@@ -5,20 +5,20 @@ import type { DecisionPath } from '../../types';
 import { DataLabelBadge } from '../common/DataLabelBadge';
 
 const riskDotColors = {
-  high: 'bg-alertRed',
-  medium: 'bg-amber-400',
-  low: 'bg-emerald-400',
+  high: 'bg-severity-high',
+  medium: 'bg-severity-medium',
+  low: 'bg-severity-low',
 };
 
 const riskBadgeStyles = {
-  high: 'bg-alertRed/20 text-alertRed',
-  medium: 'bg-amber-500/20 text-amber-400',
-  low: 'bg-emerald-500/20 text-emerald-400',
+  high: 'bg-severity-high/20 text-severity-high',
+  medium: 'bg-severity-medium/20 text-warning',
+  low: 'bg-severity-low/20 text-success',
 };
 
 const effectBadgeStyles = {
-  high: 'bg-emerald-500/20 text-emerald-400',
-  medium: 'bg-amber-500/20 text-amber-400',
+  high: 'bg-success/20 text-success',
+  medium: 'bg-warning/20 text-warning',
   low: 'bg-neutralGray/20 text-textSub',
 };
 
@@ -51,12 +51,12 @@ export function ZoneDecisionPaths({ variant = 'zone' }: { variant?: 'zone' | 'do
           <p className="mb-3 text-xs text-textSub">{path.summary}</p>
 
           <div className="mb-3 flex items-center gap-2 text-xs">
-            <span className={clsx('inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-mono text-[11px]', riskBadgeStyles[path.riskLevel])}>
+            <span className={clsx('inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-mono text-tiny', riskBadgeStyles[path.riskLevel])}>
               <span className={clsx('h-1.5 w-1.5 rounded-full', riskDotColors[path.riskLevel], path.riskLevel === 'high' && 'animate-glow-pulse')} />
               <AlertTriangle className="h-3 w-3" />
               리스크 {path.riskLevel.toUpperCase()}
             </span>
-            <span className={clsx('inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-mono text-[11px]', effectBadgeStyles[path.effectLevel])}>
+            <span className={clsx('inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-mono text-tiny', effectBadgeStyles[path.effectLevel])}>
               <TrendingUp className="h-3 w-3" />
               효과 {path.effectLevel.toUpperCase()}
             </span>
@@ -71,10 +71,10 @@ export function ZoneDecisionPaths({ variant = 'zone' }: { variant?: 'zone' | 'do
                   {metric.change && (
                     <span
                       className={clsx(
-                        'rounded px-1 py-0.5 text-[10px] font-mono font-medium',
+                        'rounded px-1 py-0.5 text-micro font-mono font-medium',
                         metric.changeIsPositive !== undefined
-                          ? metric.changeIsPositive ? 'bg-emerald-500/20 text-emerald-400' : 'bg-alertRed/20 text-alertRed'
-                          : metric.change.startsWith('-') ? 'bg-emerald-500/20 text-emerald-400' : 'bg-alertRed/20 text-alertRed'
+                          ? metric.changeIsPositive ? 'bg-success/20 text-success' : 'bg-severity-high/20 text-severity-high'
+                          : metric.change.startsWith('-') ? 'bg-success/20 text-success' : 'bg-severity-high/20 text-severity-high'
                       )}
                     >
                       {metric.change}
@@ -90,7 +90,7 @@ export function ZoneDecisionPaths({ variant = 'zone' }: { variant?: 'zone' | 'do
             {path.highlights.map((h, idx) => (
               <span
                 key={idx}
-                className="rounded bg-neutralGray/20 px-1.5 py-0.5 text-[11px] text-textSub"
+                className="rounded bg-neutralGray/20 px-1.5 py-0.5 text-tiny text-textSub"
               >
                 {h}
               </span>
@@ -109,7 +109,7 @@ export function ZoneDecisionPaths({ variant = 'zone' }: { variant?: 'zone' | 'do
             <h3 className="text-sm font-semibold text-textMain">Decision Paths</h3>
             <span className="text-xs text-textSub">의사결정 대안 카드</span>
           </div>
-          <span className="data-mono text-[10px] uppercase tracking-wider text-textSub">A/B/C Compare</span>
+          <span className="data-mono text-micro uppercase tracking-wider text-textSub">A/B/C Compare</span>
         </div>
         {inner}
       </div>

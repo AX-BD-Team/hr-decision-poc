@@ -172,7 +172,7 @@ export function Dock() {
                     );
                   })}
                 </div>
-                <span className="data-mono text-[10px] uppercase tracking-wider text-textSub">
+                <span className="data-mono text-micro uppercase tracking-wider text-textSub">
                   Explainability & Decision Record
                 </span>
               </div>

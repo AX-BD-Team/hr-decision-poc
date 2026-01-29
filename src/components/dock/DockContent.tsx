@@ -24,10 +24,10 @@ function AssumptionsTab() {
         <div key={asm.id} className="flex items-start gap-3 rounded-lg border border-neutralGray/10 bg-appBg/50 p-3">
           <span
             className={clsx(
-              'rounded px-1.5 py-0.5 text-[11px] font-medium font-mono uppercase',
-              asm.category === 'data' && 'bg-cyan-500/20 text-cyan-400',
-              asm.category === 'logic' && 'bg-purple-500/20 text-purple-400',
-              asm.category === 'scope' && 'bg-amber-500/20 text-amber-400'
+              'rounded px-1.5 py-0.5 text-tiny font-medium font-mono uppercase',
+              asm.category === 'data' && 'bg-assumption-data/20 text-assumption-data',
+              asm.category === 'logic' && 'bg-assumption-logic/20 text-assumption-logic',
+              asm.category === 'scope' && 'bg-assumption-scope/20 text-assumption-scope'
             )}
           >
             {asm.category.toUpperCase()}
@@ -72,15 +72,15 @@ function RisksTab() {
     : data.riskSignals;
 
   const severityStyles = {
-    high: 'border-alertRed/50 bg-alertRed/10',
-    medium: 'border-amber-500/50 bg-amber-500/10',
-    low: 'border-emerald-500/50 bg-emerald-500/10',
+    high: 'border-severity-high/50 bg-severity-high/10',
+    medium: 'border-severity-medium/50 bg-severity-medium/10',
+    low: 'border-severity-low/50 bg-severity-low/10',
   };
 
   const severityTextColors = {
-    high: 'text-alertRed',
-    medium: 'text-amber-400',
-    low: 'text-emerald-400',
+    high: 'text-severity-high',
+    medium: 'text-warning',
+    low: 'text-success',
   };
 
   return (
@@ -120,7 +120,7 @@ function AlternativesTab() {
       <div className="rounded-lg border border-neutralGray/20 overflow-hidden">
         <table className="w-full text-sm">
           <thead>
-            <tr className="bg-surface-1 text-left text-[11px] text-textSub">
+            <tr className="bg-surface-1 text-left text-tiny text-textSub">
               <th className="px-4 py-2.5 font-mono font-semibold uppercase tracking-wider">대안</th>
               <th className="px-4 py-2.5 font-mono font-semibold uppercase tracking-wider">비용</th>
               <th className="px-4 py-2.5 font-mono font-semibold uppercase tracking-wider">기간</th>
@@ -158,9 +158,9 @@ function AlternativesTab() {
                     <span
                       className={clsx(
                         'rounded px-1.5 py-0.5 text-xs font-medium font-mono',
-                        path.riskLevel === 'high' && 'bg-alertRed/20 text-alertRed',
-                        path.riskLevel === 'medium' && 'bg-amber-500/20 text-amber-400',
-                        path.riskLevel === 'low' && 'bg-emerald-500/20 text-emerald-400'
+                        path.riskLevel === 'high' && 'bg-severity-high/20 text-severity-high',
+                        path.riskLevel === 'medium' && 'bg-severity-medium/20 text-warning',
+                        path.riskLevel === 'low' && 'bg-severity-low/20 text-success'
                       )}
                     >
                       {path.riskLevel.toUpperCase()}
@@ -170,8 +170,8 @@ function AlternativesTab() {
                     <span
                       className={clsx(
                         'rounded px-1.5 py-0.5 text-xs font-medium font-mono',
-                        path.effectLevel === 'high' && 'bg-emerald-500/20 text-emerald-400',
-                        path.effectLevel === 'medium' && 'bg-amber-500/20 text-amber-400',
+                        path.effectLevel === 'high' && 'bg-success/20 text-success',
+                        path.effectLevel === 'medium' && 'bg-warning/20 text-warning',
                         path.effectLevel === 'low' && 'bg-neutralGray/20 text-textSub'
                       )}
                     >
@@ -218,8 +218,8 @@ function ReportTab() {
                       className={clsx(
                         'text-xs font-mono',
                         metric.changeIsPositive !== undefined
-                          ? metric.changeIsPositive ? 'text-emerald-400' : 'text-alertRed'
-                          : metric.change.startsWith('-') ? 'text-emerald-400' : 'text-alertRed'
+                          ? metric.changeIsPositive ? 'text-success' : 'text-severity-high'
+                          : metric.change.startsWith('-') ? 'text-success' : 'text-severity-high'
                       )}
                     >
                       {metric.change}

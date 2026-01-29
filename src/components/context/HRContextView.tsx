@@ -18,9 +18,9 @@ const severityIcons = {
 };
 
 const severityColors = {
-  critical: 'border-alertRed/50 bg-alertRed/10 text-alertRed',
-  warning: 'border-amber-500/50 bg-amber-500/10 text-amber-400',
-  info: 'border-decisionBlue/50 bg-decisionBlue/10 text-decisionBlue',
+  critical: 'border-severity-critical/50 bg-severity-critical/10 text-severity-critical',
+  warning: 'border-severity-medium/50 bg-severity-medium/10 text-warning',
+  info: 'border-severity-info/50 bg-severity-info/10 text-severity-info',
 };
 
 export function HRContextView({ variant = 'panel' }: { variant?: 'panel' | 'dock' }) {
@@ -39,7 +39,7 @@ export function HRContextView({ variant = 'panel' }: { variant?: 'panel' | 'dock
       <div className="border-b border-neutralGray/20 px-4 py-3">
         <h3 className="text-sm font-semibold text-contextGreen">HR Context Reference</h3>
         <p className="text-xs text-textSub">{contextView.scope}</p>
-        <p className="mt-1 text-[11px] text-textSub">※ 평가/보상 목적이 아닌 의사결정 맥락 참조용</p>
+        <p className="mt-1 text-tiny text-textSub">※ 평가/보상 목적이 아닌 의사결정 맥락 참조용</p>
       </div>
 
       {/* KPI Cards */}
@@ -70,7 +70,7 @@ export function HRContextView({ variant = 'panel' }: { variant?: 'panel' | 'dock
                         const isGood = kpi.higherIsBetter !== undefined
                           ? kpi.higherIsBetter ? isPositiveChange : !isPositiveChange
                           : isPositiveChange;
-                        return isGood ? 'text-emerald-400' : 'text-alertRed';
+                        return isGood ? 'text-success' : 'text-severity-high';
                       })()
                     )}
                   >
@@ -94,10 +94,10 @@ export function HRContextView({ variant = 'panel' }: { variant?: 'panel' | 'dock
           <div className="absolute right-2 top-2 w-[45%] h-[45%] rounded bg-alertRed/5" />
 
           {/* 축 라벨 */}
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 -rotate-90 text-[11px] text-textSub font-mono">
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 -rotate-90 text-tiny text-textSub font-mono">
             Dependency
           </div>
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-[11px] text-textSub font-mono">
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-tiny text-textSub font-mono">
             Utilization
           </div>
 
@@ -106,13 +106,13 @@ export function HRContextView({ variant = 'panel' }: { variant?: 'panel' | 'dock
           <div className="absolute top-1/2 left-6 right-2 h-px bg-neutralGray/30" />
 
           {/* 사분면 라벨 */}
-          <div className="absolute left-8 top-3 text-[9px] text-textSub">높은 의존도</div>
-          <div className="absolute right-3 top-3 flex items-center gap-1 text-[9px] text-alertRed">
+          <div className="absolute left-8 top-3 text-mini text-textSub">높은 의존도</div>
+          <div className="absolute right-3 top-3 flex items-center gap-1 text-mini text-alertRed">
             <span className="inline-block h-2 w-2 rounded-full bg-alertRed animate-glow-pulse" />
             위험 구간
           </div>
-          <div className="absolute left-8 bottom-8 text-[9px] text-textSub">안정</div>
-          <div className="absolute right-3 bottom-8 text-[9px] text-amber-400">주의</div>
+          <div className="absolute left-8 bottom-8 text-mini text-textSub">안정</div>
+          <div className="absolute right-3 bottom-8 text-mini text-warning">주의</div>
 
           {/* 데이터 포인트 */}
           {contextView.utilizationMap.map((point: UtilizationPoint) => {
@@ -127,7 +127,7 @@ export function HRContextView({ variant = 'panel' }: { variant?: 'panel' | 'dock
                 key={point.id}
                 onClick={() => selectEntity(point.entityId || null)}
                 className={clsx(
-                  'absolute flex h-6 w-6 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full text-[11px] font-bold transition-all hover:scale-125',
+                  'absolute flex h-6 w-6 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full text-tiny font-bold transition-all hover:scale-125',
                   isSelected
                     ? 'bg-decisionBlue text-white ring-2 ring-white'
                     : isDanger

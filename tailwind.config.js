@@ -24,6 +24,42 @@ export default {
         zoneStruct: '#8B5CF6',
         zoneGraph: '#06B6D4',
         zonePath: '#F59E0B',
+        // Status colors
+        warning: '#FBBF24',
+        warningDark: '#F59E0B',
+        success: '#34D399',
+        successDark: '#10B981',
+        // Data label colors
+        label: {
+          real: '#10B981',
+          estimate: '#F59E0B',
+          mock: '#8B5CF6',
+          synth: '#06B6D4',
+        },
+        // Graph entity colors
+        entity: {
+          org: '#4F8CFF',
+          role: '#10B981',
+          person: '#F59E0B',
+          project: '#8B5CF6',
+          task: '#6366F1',
+          risk: '#FF4D4F',
+          cost: '#EC4899',
+        },
+        // Assumption category colors
+        assumption: {
+          data: '#06B6D4',
+          logic: '#8B5CF6',
+          scope: '#F59E0B',
+        },
+        // Severity colors
+        severity: {
+          critical: '#FF4D4F',
+          high: '#FF4D4F',
+          medium: '#FBBF24',
+          low: '#34D399',
+          info: '#4F8CFF',
+        },
         // Surface elevation scale
         surface: {
           0: '#0B1220',
@@ -32,6 +68,11 @@ export default {
           3: '#162034',
           4: '#1A2640',
         },
+      },
+      fontSize: {
+        mini: '0.5625rem',   // 9px
+        micro: '0.625rem',   // 10px
+        tiny: '0.6875rem',   // 11px
       },
       transitionTimingFunction: {
         'smooth': 'cubic-bezier(0.4, 0, 0.2, 1)',

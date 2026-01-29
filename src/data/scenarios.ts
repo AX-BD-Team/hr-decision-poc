@@ -1,100 +1,10 @@
 import type { DemoData } from '../types';
 import demoS1 from './demo-s1.json';
+import { validateAllScenarios } from './validateScenario';
 
 const base = demoS1 as DemoData;
 
 const s1 = structuredClone(base) as DemoData;
-
-s1.dataSources = [
-  {
-    id: 'ds-hr-master',
-    name: 'HR Master',
-    type: 'hr_master',
-    label: 'REAL' as const,
-    description: 'HRIS 기반 인사 데이터 · 갱신: 2026-01-15',
-    coverage: 95,
-    fields: ['emp_id', 'org_id', 'grade', 'tenure_months', 'skills'],
-  },
-  {
-    id: 'ds-project-task',
-    name: 'Project / Task',
-    type: 'vrb',
-    label: 'ESTIMATE' as const,
-    description: 'PM 툴 기반 과제/작업 · 갱신: 2026-01-10',
-    coverage: 78,
-    fields: ['proj_id', 'task_id', 'role', 'effort', 'deadline'],
-  },
-  {
-    id: 'ds-org-role-map',
-    name: 'Org Role Map',
-    type: 'rr',
-    label: 'REAL' as const,
-    description: '조직-역할 매핑 · 갱신: 2026-01-05',
-    coverage: 88,
-    fields: ['org_id', 'role_id', 'responsibility', 'owner'],
-  },
-  {
-    id: 'ds-opex-range',
-    name: 'OPEX Range',
-    type: 'opex',
-    label: 'ESTIMATE' as const,
-    description: '운영비용 범위 · as of: 2026-01-01',
-    coverage: 66,
-    fields: ['org_id', 'category', 'min', 'max'],
-  },
-];
-
-s1.decisionPaths = s1.decisionPaths.map((p) => {
-  if (p.id === 'path-a') {
-    return {
-      ...p,
-      name: 'A. Maintain (현 구조 유지)',
-      summary: '최소 변경으로 현재 운영 방식 유지',
-      description: '현재 리소스 분배를 유지하고, 단기 리스크를 낮추는 방향으로 운영합니다.',
-      riskLevel: 'low',
-      effectLevel: 'medium',
-      keyMetrics: [
-        { name: 'Score', value: '76/100', label: 'SYNTH' as const },
-        { name: '예상 비용', value: '0~30M', label: 'ESTIMATE' as const },
-        { name: '소요 기간', value: '즉시~2주', label: 'ESTIMATE' as const },
-      ],
-      highlights: ['현재 리소스 분배 유지', '변경 리스크 낮음', '빠른 적용'],
-    };
-  }
-  if (p.id === 'path-b') {
-    return {
-      ...p,
-      name: 'B. Adjust (부분 조정)',
-      summary: '핵심 역할 보강 + 업무량 균형 조정',
-      description: 'PM/지원 역할을 부분 보강하고, 병목 구간의 백로그를 정리해 업무량을 균형화합니다.',
-      riskLevel: 'medium',
-      effectLevel: 'high',
-      keyMetrics: [
-        { name: 'Score', value: '82/100', label: 'SYNTH' as const },
-        { name: '예상 비용', value: '30~80M', label: 'ESTIMATE' as const },
-        { name: '소요 기간', value: '2~6주', label: 'ESTIMATE' as const },
-      ],
-      highlights: ['PM 1인 보강 제안', '백로그 정리 + 지원 강화', '업무량 균형 개선'],
-    };
-  }
-  if (p.id === 'path-c') {
-    return {
-      ...p,
-      name: 'C. Restructure (구조 변경)',
-      summary: '역할/직무 재정의 및 재배치',
-      description: '역할 구조를 재정의하고, 단기/장기 계획을 분리해 단계적으로 구조를 변경합니다.',
-      riskLevel: 'high',
-      effectLevel: 'medium',
-      keyMetrics: [
-        { name: 'Score', value: '67/100', label: 'SYNTH' as const },
-        { name: '예상 비용', value: '80~180M', label: 'ESTIMATE' as const },
-        { name: '소요 기간', value: '6~12주', label: 'ESTIMATE' as const },
-      ],
-      highlights: ['역할/직무 재정의', '단계적 추진 권장', '변경 비용 큼'],
-    };
-  }
-  return p;
-});
 
 const s2 = structuredClone(s1) as DemoData;
 s2.meta = {
@@ -161,6 +71,18 @@ s2.decisionPaths = s1.decisionPaths.map((p) => {
   if (p.id === 'path-c') return { ...p, keyMetrics: [{ name: 'Score', value: '64/100', label: 'SYNTH' as const }, { name: '예상 비용', value: '40~90M', label: 'ESTIMATE' as const }, { name: '소요 기간', value: '4~10주', label: 'ESTIMATE' as const }] };
   return p;
 });
+s2.hrContextViews = s1.hrContextViews.map((v) => ({
+  ...v,
+  kpis: v.kpis.map((k) =>
+    k.id === 'kpi-4'
+      ? { ...k, value: 68, change: '-17%', label: 'ESTIMATE' as const }
+      : k
+  ),
+  insights: [
+    ...v.insights,
+    { id: 'ins-4', text: 'OPEX 10% 감축 목표 적용 시 외부 채용 옵션 제한', severity: 'warning' as const, label: 'REAL' as const },
+  ],
+}));
 
 const s3 = structuredClone(s1) as DemoData;
 s3.meta = {
@@ -216,6 +138,19 @@ s3.decisionPaths = s1.decisionPaths.map((p) => {
   if (p.id === 'path-c') return { ...p, keyMetrics: [{ name: 'Score', value: '72/100', label: 'SYNTH' as const }, { name: '예상 비용', value: '60~140M', label: 'ESTIMATE' as const }, { name: '소요 기간', value: '6~12주', label: 'ESTIMATE' as const }] };
   return p;
 });
+s3.hrContextViews = s1.hrContextViews.map((v) => ({
+  ...v,
+  utilizationMap: v.utilizationMap.map((u) =>
+    u.entityId === 'person-a'
+      ? { ...u, utilization: 1.35, dependency: 0.95, label: 'REAL' as const }
+      : u
+  ),
+  insights: v.insights.map((ins) =>
+    ins.id === 'ins-2'
+      ? { ...ins, text: '김A 가동률 135% - 병목 심각 (SPOF)', severity: 'critical' as const, label: 'REAL' as const }
+      : ins
+  ),
+}));
 
 export const scenarioDataById: Record<string, DemoData> = {
   [s1.meta.id]: s1,
@@ -224,4 +159,6 @@ export const scenarioDataById: Record<string, DemoData> = {
 };
 
 export const scenarioMetas = [s1.meta, s2.meta, s3.meta];
+
+validateAllScenarios(scenarioDataById);
 

@@ -13,6 +13,8 @@ npm run dev          # Vite 개발 서버 시작 (HMR, localhost:5173)
 npm run build        # TypeScript 컴파일 + Vite 프로덕션 빌드
 npm run lint         # ESLint 검사
 npm run preview      # 프로덕션 빌드 로컬 미리보기
+npm run deploy       # 빌드 + Cloudflare Pages 배포
+npm run deploy:preview # 프리뷰 브랜치 배포
 ```
 
 ## 기술 스택
@@ -28,10 +30,27 @@ npm run preview      # 프로덕션 빌드 로컬 미리보기
 
 ```
 src/
-├── main.tsx         # React DOM 진입점
-├── App.tsx          # 메인 애플리케이션 컴포넌트
-├── index.css        # Tailwind CSS 스타일
-└── vite-env.d.ts    # Vite 타입 정의
+├── main.tsx                          # React DOM 진입점
+├── App.tsx                           # 메인 애플리케이션 (4-Zone 레이아웃)
+├── index.css                         # Tailwind + glassmorphism 스타일
+├── types/index.ts                    # 전체 TypeScript 타입 정의
+├── store/useStore.ts                 # Zustand 상태 관리
+├── constants/
+│   └── tokens.ts                     # 그래프용 색상 상수 (ENTITY_COLORS, EDGE_COLORS)
+├── data/
+│   ├── scenarios.ts                  # 데모 시나리오 설정
+│   └── demo-s1.json                  # S1 시나리오 데이터
+└── components/
+    ├── layout/Header.tsx             # 헤더 + 스텝 네비게이터
+    ├── zones/
+    │   ├── ZoneDataIngestion.tsx     # Zone 1: 데이터 수집
+    │   ├── ZoneStructuring.tsx       # Zone 2: 분석 패턴
+    │   ├── ZoneGraph.tsx            # Zone 3: 온톨로지 그래프 (ReactFlow)
+    │   └── ZoneDecisionPaths.tsx    # Zone 4: 의사결정 경로
+    ├── context/HRContextView.tsx     # HR 컨텍스트 사이드 패널
+    ├── record/DecisionRecordSection.tsx # 하단 독 탭
+    ├── dock/                         # Dock 컨테이너/콘텐츠
+    └── common/DataLabelBadge.tsx     # 데이터 라벨 배지
 ```
 
 ## 스타일링
@@ -44,6 +63,40 @@ src/
 - `panelBg`: 패널 배경 (#111A2E)
 - `textMain`: 주요 텍스트 (#E6EAF2)
 - `textSub`: 보조 텍스트 (#AAB4C5)
+
+Zone 별 액센트 색상:
+- `zoneIngest`: Zone 1 (#3B82F6, blue)
+- `zoneStruct`: Zone 2 (#8B5CF6, purple)
+- `zoneGraph`: Zone 3 (#06B6D4, cyan)
+- `zonePath`: Zone 4 (#F59E0B, amber)
+
+시맨틱 토큰 (status/severity/label/entity/assumption):
+- `warning` / `warningDark`: 주의 (#FBBF24 / #F59E0B)
+- `success` / `successDark`: 성공/양호 (#34D399 / #10B981)
+- `label-{real|estimate|mock|synth}`: 데이터 라벨 색상
+- `entity-{org|role|person|project|task|risk|cost}`: 그래프 엔티티 색상
+- `assumption-{data|logic|scope}`: 가정 카테고리 색상
+- `severity-{critical|high|medium|low|info}`: 심각도 색상
+- `surface-{0..4}`: Surface elevation scale
+
+커스텀 폰트 크기:
+- `text-mini`: 9px (0.5625rem)
+- `text-micro`: 10px (0.625rem)
+- `text-tiny`: 11px (0.6875rem)
+
+그래프 인라인 스타일용 상수: `src/constants/tokens.ts`
+- `ENTITY_COLORS`: 엔티티 노드 색상 (ReactFlow inline style)
+- `EDGE_COLORS`: 엣지 색상 (ReactFlow inline style)
+- `PANEL_BG`: 패널 배경 (#111A2E)
+
+## 코드 컨벤션
+
+- **컴포넌트**: named export 사용 (default export 금지)
+- **조건부 클래스**: `clsx` + `tailwind-merge` 사용
+- **상태 접근**: `useStore()` 훅 (Zustand)
+- **UI 텍스트**: 한국어 / **코드(변수, 함수, 타입)**: 영어
+- **데이터 라벨**: `REAL` | `MOCK` | `ESTIMATE` | `SYNTH` (출처 표시 시스템)
+- **테스트 없음**: 현재 단위/통합 테스트 미구성
 
 ## 경로 별칭
 
@@ -58,6 +111,7 @@ src/
 
 ## 문서
 
+`docs/` 폴더에 위치:
 - `01_Project_Charter_O-AOD_HR_Decision_PoC.docx` - 프로젝트 헌장
 - `02_WBS_Execution_Plan.docx` - WBS 및 실행 계획
 - `03_Data_Requirements_Spec.docx` - 데이터 요구사항 명세

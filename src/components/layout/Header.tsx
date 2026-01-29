@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Play, Square, RotateCcw, Download, HelpCircle } from 'lucide-react';
+import { Play, Square, RotateCcw, Download, HelpCircle, BookOpen } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { clsx } from 'clsx';
 import { scenarioMetas } from '../../data/scenarios';
@@ -230,6 +230,33 @@ export function Header() {
             </span>
           )}
           <button
+            onClick={() => {
+              if (isTourActive) {
+                handleStopDemo();
+              } else {
+                startTour();
+              }
+            }}
+            className={clsx(
+              'flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-all',
+              isTourActive
+                ? 'bg-alertRed text-white hover:bg-alertRed/80'
+                : 'glass-panel text-textSub hover:bg-appBg/50 hover:text-textMain'
+            )}
+          >
+            {isTourActive ? (
+              <>
+                <Square className="h-4 w-4" />
+                투어 종료
+              </>
+            ) : (
+              <>
+                <BookOpen className="h-4 w-4" />
+                Guide
+              </>
+            )}
+          </button>
+          <button
             onClick={handleStartDemo}
             className={clsx(
               'flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white transition-all',
@@ -278,11 +305,11 @@ export function Header() {
 
       {/* 데이터 라벨 범례 */}
       <div className="mt-2 flex items-center gap-4 text-xs opacity-60 hover:opacity-100 transition-opacity" data-tour="data-labels">
-        <span className="text-textSub font-mono uppercase tracking-wider text-[10px]">Data Labels:</span>
-        <span className="rounded bg-emerald-500/20 px-2 py-0.5 text-emerald-400 font-mono">REAL</span>
-        <span className="rounded bg-amber-500/20 px-2 py-0.5 text-amber-400 font-mono">ESTIMATE</span>
-        <span className="rounded bg-purple-500/20 px-2 py-0.5 text-purple-400 font-mono">MOCK</span>
-        <span className="rounded bg-cyan-500/20 px-2 py-0.5 text-cyan-400 font-mono">SYNTH</span>
+        <span className="text-textSub font-mono uppercase tracking-wider text-micro">Data Labels:</span>
+        <span className="rounded bg-label-real/20 px-2 py-0.5 text-label-real font-mono">REAL</span>
+        <span className="rounded bg-label-estimate/20 px-2 py-0.5 text-label-estimate font-mono">ESTIMATE</span>
+        <span className="rounded bg-label-mock/20 px-2 py-0.5 text-label-mock font-mono">MOCK</span>
+        <span className="rounded bg-label-synth/20 px-2 py-0.5 text-label-synth font-mono">SYNTH</span>
         <span className="ml-2 text-textSub">| 이 화면은 평가/인사관리 목적이 아닙니다</span>
       </div>
     </header>

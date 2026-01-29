@@ -7,40 +7,40 @@
   },
   "dataSources": [
     {
-      "id": "ds-hr",
-      "name": "HR Master Data",
+      "id": "ds-hr-master",
+      "name": "HR Master",
       "type": "hr_master",
       "label": "REAL",
-      "description": "사번, 조직, 직급, 근속, 역량 정보",
+      "description": "HRIS 기반 인사 데이터 · 갱신: 2026-01-15",
       "coverage": 95,
       "fields": ["emp_id", "org_id", "grade", "tenure_months", "skills"]
     },
     {
-      "id": "ds-tms",
-      "name": "TMS 투입 데이터",
+      "id": "ds-project-task",
+      "name": "Project / Task",
       "type": "tms",
-      "label": "REAL",
-      "description": "주차별 프로젝트 투입 시간",
-      "coverage": 88,
-      "fields": ["emp_id", "proj_id", "week", "hours"]
+      "label": "ESTIMATE",
+      "description": "PM 툴 기반 과제/작업 · 갱신: 2026-01-10",
+      "coverage": 78,
+      "fields": ["proj_id", "task_id", "role", "effort", "deadline"]
     },
     {
-      "id": "ds-rr",
-      "name": "전사 R&R",
+      "id": "ds-org-role-map",
+      "name": "Org Role Map",
       "type": "rr",
       "label": "REAL",
-      "description": "조직-역할 매핑, 책임범위",
-      "coverage": 72,
-      "fields": ["org_id", "role_id", "responsibility"]
+      "description": "조직-역할 매핑 · 갱신: 2026-01-05",
+      "coverage": 88,
+      "fields": ["org_id", "role_id", "responsibility", "owner"]
     },
     {
-      "id": "ds-bizforce",
-      "name": "BizForce 사업기회",
-      "type": "bizforce",
+      "id": "ds-opex-range",
+      "name": "OPEX Range",
+      "type": "opex",
       "label": "ESTIMATE",
-      "description": "수주 예정 프로젝트, 요구 역량",
-      "coverage": 65,
-      "fields": ["opp_id", "start_date", "required_roles", "probability"]
+      "description": "운영비용 범위 · as of: 2026-01-01",
+      "coverage": 66,
+      "fields": ["org_id", "category", "min", "max"]
     }
   ],
   "analysisPatterns": [
@@ -268,45 +268,48 @@
   "decisionPaths": [
     {
       "id": "path-a",
-      "name": "A안: 신규 채용",
-      "summary": "아키텍트 1명 외부 채용",
-      "description": "시니어 아키텍트 1명을 외부에서 채용하여 역할 공백을 해소합니다. 온보딩 기간과 채용 리스크가 있으나, 장기적 역량 확보에 유리합니다.",
-      "riskLevel": "medium",
-      "effectLevel": "high",
+      "name": "A. Maintain (현 구조 유지)",
+      "summary": "최소 변경으로 현재 운영 방식 유지",
+      "description": "현재 리소스 분배를 유지하고, 단기 리스크를 낮추는 방향으로 운영합니다.",
+      "riskLevel": "low",
+      "effectLevel": "medium",
       "keyMetrics": [
-        { "name": "예상 비용", "value": "180M", "label": "ESTIMATE" },
-        { "name": "소요 기간", "value": "2.5~3개월", "label": "ESTIMATE" },
-        { "name": "가동률 개선", "value": "120% → 85%", "change": "-35%p", "changeIsPositive": true, "label": "SYNTH" }
+        { "name": "Score", "value": "76/100", "label": "SYNTH" },
+        { "name": "예상 비용", "value": "0~30M", "label": "ESTIMATE" },
+        { "name": "소요 기간", "value": "즉시~2주", "label": "ESTIMATE" }
       ],
-      "highlights": ["장기적 역량 확보", "온보딩 기간 필요", "채용 실패 리스크"]
+      "highlights": ["현재 리소스 분배 유지", "변경 리스크 낮음", "빠른 적용"],
+      "relatedEntityIds": ["org-dev", "role-arch", "person-a", "proj-q2"]
     },
     {
       "id": "path-b",
-      "name": "B안: 내부 이동",
-      "summary": "타 조직 시니어를 아키텍트로 전환",
-      "description": "유사 역량을 보유한 타 조직 시니어 개발자를 아키텍트 역할로 전환 배치합니다. 빠른 투입이 가능하나, 원 조직 공백이 발생합니다.",
+      "name": "B. Adjust (부분 조정)",
+      "summary": "핵심 역할 보강 + 업무량 균형 조정",
+      "description": "PM/지원 역할을 부분 보강하고, 병목 구간의 백로그를 정리해 업무량을 균형화합니다.",
       "riskLevel": "medium",
-      "effectLevel": "medium",
+      "effectLevel": "high",
       "keyMetrics": [
-        { "name": "예상 비용", "value": "0원", "label": "REAL" },
-        { "name": "소요 기간", "value": "2주", "label": "ESTIMATE" },
-        { "name": "가동률 개선", "value": "120% → 90%", "change": "-30%p", "changeIsPositive": true, "label": "SYNTH" }
+        { "name": "Score", "value": "82/100", "label": "SYNTH" },
+        { "name": "예상 비용", "value": "30~80M", "label": "ESTIMATE" },
+        { "name": "소요 기간", "value": "2~6주", "label": "ESTIMATE" }
       ],
-      "highlights": ["빠른 투입 가능", "기존 조직 공백", "역량 검증 필요"]
+      "highlights": ["PM 1인 보강 제안", "백로그 정리 + 지원 강화", "업무량 균형 개선"],
+      "relatedEntityIds": ["role-arch", "role-dev-sr", "person-a", "person-b", "risk-bottleneck", "cost-hiring"]
     },
     {
       "id": "path-c",
-      "name": "C안: 역량 강화",
-      "summary": "시니어 개발자 아키텍트 육성",
-      "description": "기존 시니어 개발자 중 1명을 아키텍트로 육성합니다. 시간이 가장 오래 걸리나, 조직 역량 내재화에 유리합니다.",
-      "riskLevel": "low",
-      "effectLevel": "low",
+      "name": "C. Restructure (구조 변경)",
+      "summary": "역할/직무 재정의 및 재배치",
+      "description": "역할 구조를 재정의하고, 단기/장기 계획을 분리해 단계적으로 구조를 변경합니다.",
+      "riskLevel": "high",
+      "effectLevel": "medium",
       "keyMetrics": [
-        { "name": "예상 비용", "value": "30M", "label": "ESTIMATE" },
-        { "name": "소요 기간", "value": "6개월", "label": "ESTIMATE" },
-        { "name": "가동률 개선", "value": "120% → 100%", "change": "-20%p", "changeIsPositive": true, "label": "SYNTH" }
+        { "name": "Score", "value": "67/100", "label": "SYNTH" },
+        { "name": "예상 비용", "value": "80~180M", "label": "ESTIMATE" },
+        { "name": "소요 기간", "value": "6~12주", "label": "ESTIMATE" }
       ],
-      "highlights": ["조직 역량 내재화", "장기 소요", "Q2 대응 불가"]
+      "highlights": ["역할/직무 재정의", "단계적 추진 권장", "변경 비용 큼"],
+      "relatedEntityIds": ["org-dev", "role-arch", "role-dev-sr", "role-dev-jr", "person-a", "person-b", "person-c", "person-d", "proj-q2", "cost-hiring"]
     }
   ],
   "hrContextViews": [
