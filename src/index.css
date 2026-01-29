@@ -148,13 +148,27 @@ body {
 
 /* Button variants */
 .btn-primary {
-  @apply rounded-lg bg-decisionBlue px-4 py-2 text-sm font-medium text-white transition-all hover:bg-decisionBlue/80;
+  @apply rounded-lg px-4 py-2 text-sm font-medium text-white transition-all;
+  background-color: #4F8CFF;
+}
+.btn-primary:hover {
+  background-color: rgba(79, 140, 255, 0.8);
 }
 .btn-secondary {
-  @apply rounded-lg glass-panel px-3 py-2 text-sm text-textSub transition-all hover:bg-appBg/50 hover:text-textMain;
+  @apply rounded-lg px-3 py-2 text-sm transition-all;
+  color: var(--color-text-sub);
+}
+.btn-secondary:hover {
+  background-color: rgba(11, 18, 32, 0.5);
+  color: var(--color-text-main);
 }
 .btn-ghost {
-  @apply rounded-lg px-3 py-2 text-sm text-textSub transition-all hover:bg-appBg/50 hover:text-textMain;
+  @apply rounded-lg px-3 py-2 text-sm transition-all;
+  color: var(--color-text-sub);
+}
+.btn-ghost:hover {
+  background-color: rgba(11, 18, 32, 0.5);
+  color: var(--color-text-main);
 }
 
 /* Zone card with left accent border */
