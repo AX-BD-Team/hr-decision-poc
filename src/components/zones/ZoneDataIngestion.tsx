@@ -18,7 +18,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 
 export function ZoneDataIngestion() {
   const t = useT();
-  const { data, activeStep, loadingPhase, isTourActive } = useStore();
+  const { data, activeStep, loadingPhase, isTourActive, isDemoRunning } = useStore();
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const toggleExpand = useCallback((id: string) => {
     setExpandedId((prev) => (prev === id ? null : id));
@@ -35,7 +35,7 @@ export function ZoneDataIngestion() {
         'flex flex-1 min-h-0 flex-col rounded-xl border p-4 transition-all',
         justRevealed && 'animate-phase-reveal',
         isActive
-          ? clsx('border-zoneIngest/70 bg-zoneIngest/10 shadow-glow-blue', isTourActive && 'zone-pulse-blue')
+          ? clsx('border-zoneIngest/70 bg-zoneIngest/10 shadow-glow-blue', (isDemoRunning || isTourActive) && 'zone-pulse-blue')
           : 'border-neutralGray/20 bg-panelBg/50'
       )}
       style={{ '--zone-accent': '#3B82F6' } as React.CSSProperties}
