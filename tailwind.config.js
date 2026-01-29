@@ -116,6 +116,7 @@ export default {
         'stagger-3': 'fade-in-up 0.5s ease-out 0.3s both',
         'stagger-4': 'fade-in-up 0.5s ease-out 0.4s both',
         'shimmer': 'shimmer 8s linear infinite',
+        'phase-reveal': 'fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both',
       },
       boxShadow: {
         'glow-blue': '0 0 20px rgba(59, 130, 246, 0.3)',

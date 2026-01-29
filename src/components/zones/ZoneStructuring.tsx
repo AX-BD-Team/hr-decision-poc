@@ -13,10 +13,12 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 export function ZoneStructuring({ variant = 'zone' }: { variant?: 'zone' | 'dock' }) {
-  const { data, activeStep, isLoading } = useStore();
+  const { data, activeStep, loadingPhase } = useStore();
+  const showSkeleton = loadingPhase >= 1 && loadingPhase < 3;
 
-  if (isLoading) return <SkeletonZone variant="default" />;
+  if (showSkeleton) return <SkeletonZone variant="default" processingLabel="분석 패턴 구조화 중..." />;
   const isActive = activeStep === 2;
+  const justRevealed = loadingPhase >= 3 && loadingPhase <= 5;
 
   const inner = (
     <div className="scroll-fade-x relative">
@@ -61,6 +63,7 @@ export function ZoneStructuring({ variant = 'zone' }: { variant?: 'zone' | 'dock
     <div
       className={clsx(
         'relative flex min-h-0 flex-col rounded-xl border p-4 transition-all',
+        justRevealed && 'animate-phase-reveal',
         isActive
           ? 'border-zoneStruct/50 bg-zoneStruct/5 shadow-glow-violet'
           : 'border-neutralGray/20 bg-panelBg/50'

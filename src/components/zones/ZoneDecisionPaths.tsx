@@ -24,10 +24,12 @@ const effectBadgeStyles = {
 };
 
 export function ZoneDecisionPaths({ variant = 'zone' }: { variant?: 'zone' | 'dock' }) {
-  const { data, activeStep, selectedPathId, selectPath, isLoading } = useStore();
+  const { data, activeStep, selectedPathId, selectPath, loadingPhase } = useStore();
+  const showSkeleton = loadingPhase >= 1 && loadingPhase < 5;
 
-  if (isLoading) return <SkeletonZone variant="paths" />;
+  if (showSkeleton) return <SkeletonZone variant="paths" processingLabel="의사결정 경로 도출 중..." />;
   const isActive = activeStep === 4;
+  const justRevealed = loadingPhase === 5;
 
   const inner = (
     <div className="flex-1 overflow-y-auto grid gap-2 md:grid-cols-3">
@@ -125,6 +127,7 @@ export function ZoneDecisionPaths({ variant = 'zone' }: { variant?: 'zone' | 'do
     <div
       className={clsx(
         'flex flex-1 min-h-0 flex-col rounded-xl border p-4 transition-all',
+        justRevealed && 'animate-phase-reveal',
         isActive
           ? 'border-zonePath/50 bg-zonePath/5 shadow-glow-amber'
           : 'border-neutralGray/20 bg-panelBg/50'
