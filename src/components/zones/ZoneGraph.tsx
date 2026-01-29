@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ReactFlow,
   Background,
@@ -13,7 +13,7 @@ import '@xyflow/react/dist/style.css';
 import { useStore } from '../../store/useStore';
 import { clsx } from 'clsx';
 import type { Entity, Edge } from '../../types';
-import { RotateCcw } from 'lucide-react';
+import { Maximize2, Minimize2, RotateCcw } from 'lucide-react';
 import { useT } from '../../i18n';
 import { ENTITY_COLORS, EDGE_COLORS, PANEL_BG, CHART_COLORS } from '../../constants/tokens';
 import { LoadingZone3Graph } from '../loading/LoadingZone3Graph';
@@ -25,9 +25,30 @@ const nodeTypes = { entity: EntityNode };
 export function ZoneGraph() {
   const t = useT();
   const { data, activeStep, selectedEntityId, selectedPathId, selectEntity, setActiveStep, loadingPhase, isTourActive, isDemoRunning } = useStore();
+  const [isExpanded, setIsExpanded] = useState(false);
   const isActive = activeStep === 3;
   const showSkeleton = loadingPhase >= 1 && loadingPhase < 4;
   const justRevealed = loadingPhase >= 4 && loadingPhase <= 5;
+
+  // ESC key to close expanded mode
+  useEffect(() => {
+    if (!isExpanded) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsExpanded(false);
+    };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [isExpanded]);
+
+  // Lock body scroll in expanded mode
+  useEffect(() => {
+    if (isExpanded) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [isExpanded]);
 
   const pathRelatedEntityIds = useMemo(() => {
     if (!selectedPathId) return new Set<string>();
@@ -122,85 +143,108 @@ export function ZoneGraph() {
   if (showSkeleton) return <LoadingZone3Graph />;
 
   return (
-    <div
-      className={clsx(
-        'scan-line-overlay flex h-full min-h-0 flex-col rounded-xl border transition-all',
-        justRevealed && 'animate-phase-reveal',
-        isActive
-          ? clsx('border-zoneGraph/70 bg-zoneGraph/10 shadow-glow-cyan', (isDemoRunning || isTourActive) && 'zone-pulse-cyan')
-          : 'border-neutralGray/20 bg-panelBg/50'
+    <>
+      {/* Backdrop overlay when expanded */}
+      {isExpanded && (
+        <div
+          className="fixed inset-0 z-[59] bg-black/60 backdrop-blur-sm"
+          onClick={() => setIsExpanded(false)}
+        />
       )}
-      data-tour="zone-3"
-      aria-label={t('a11y.ontologyGraphAria')}
-    >
-      <div className="flex items-center justify-between gap-3 border-b border-neutralGray/20 px-4 py-3">
-        <div className="flex items-center gap-2">
-          <span
-            className={clsx(
-              'flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold',
-              isActive ? 'bg-zoneGraph text-white' : 'bg-neutralGray/30 text-textSub'
-            )}
-          >
-            3
-          </span>
-          <div className="min-w-0">
-            <h3 className="text-sm font-semibold text-textMain">Ontology Relationship Core</h3>
-            <p className="text-xs text-textSub">{t('zones.zone3Description')}</p>
+
+      <div
+        className={clsx(
+          isExpanded
+            ? 'fixed inset-4 z-[60] flex flex-col rounded-xl border bg-panelBg graph-expand-enter'
+            : 'scan-line-overlay flex h-full min-h-0 flex-col rounded-xl border transition-all',
+          !isExpanded && justRevealed && 'animate-phase-reveal',
+          isActive
+            ? clsx('border-zoneGraph/70 bg-zoneGraph/10 shadow-glow-cyan', !isExpanded && (isDemoRunning || isTourActive) && 'zone-pulse-cyan')
+            : 'border-neutralGray/20 bg-panelBg/50'
+        )}
+        data-tour="zone-3"
+        aria-label={t('a11y.ontologyGraphAria')}
+      >
+        <div className="flex items-center justify-between gap-3 border-b border-neutralGray/20 px-4 py-3">
+          <div className="flex items-center gap-2">
+            <span
+              className={clsx(
+                'flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold',
+                isActive ? 'bg-zoneGraph text-white' : 'bg-neutralGray/30 text-textSub'
+              )}
+            >
+              3
+            </span>
+            <div className="min-w-0">
+              <h3 className="text-sm font-semibold text-textMain">Ontology Relationship Core</h3>
+              <p className="text-xs text-textSub">{t('zones.zone3Description')}</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIsExpanded(!isExpanded)}
+              aria-label={isExpanded ? 'Collapse graph' : 'Expand graph'}
+              className="flex items-center gap-2 rounded-lg border border-neutralGray/20 bg-appBg/40 px-3 py-2 text-xs text-textSub transition-all hover:bg-appBg/70 hover:text-textMain focus-ring"
+            >
+              {isExpanded ? <Minimize2 className="h-4 w-4" aria-hidden="true" /> : <Maximize2 className="h-4 w-4" aria-hidden="true" />}
+              <span className="hidden sm:inline">{isExpanded ? 'Collapse' : 'Expand'}</span>
+            </button>
+            <button
+              onClick={() => {
+                selectEntity(null);
+                setActiveStep(1);
+              }}
+              aria-label={t('a11y.resetGraphAria')}
+              className="flex items-center gap-2 rounded-lg border border-neutralGray/20 bg-appBg/40 px-3 py-2 text-xs text-textSub transition-all hover:bg-appBg/70 hover:text-textMain focus-ring"
+            >
+              <RotateCcw className="h-4 w-4" aria-hidden="true" />
+              <span className="hidden sm:inline">Reset/Back to Overview</span>
+            </button>
           </div>
         </div>
-        <button
-          onClick={() => {
-            selectEntity(null);
-            setActiveStep(1);
-          }}
-          aria-label={t('a11y.resetGraphAria')}
-          className="flex items-center gap-2 rounded-lg border border-neutralGray/20 bg-appBg/40 px-3 py-2 text-xs text-textSub transition-all hover:bg-appBg/70 hover:text-textMain focus-ring"
-        >
-          <RotateCcw className="h-4 w-4" aria-hidden="true" />
-          <span className="hidden sm:inline">Reset/Back to Overview</span>
-        </button>
-      </div>
 
-      <div className="flex-1 min-h-0 relative">
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          onNodeClick={onNodeClick}
-          nodeTypes={nodeTypes}
-          fitView
-          proOptions={{ hideAttribution: true }}
-        >
-          <Background color={CHART_COLORS.reactFlowBg} gap={20} />
-          <Controls
-            className="hidden sm:flex"
-            style={{
-              background: PANEL_BG,
-              borderRadius: '8px',
-              border: '1px solid rgba(170, 180, 197, 0.2)',
-            }}
-          />
-        </ReactFlow>
+        <div className="flex-1 min-h-0 relative">
+          <ReactFlow
+            key={isExpanded ? 'expanded' : 'normal'}
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onNodeClick={onNodeClick}
+            nodeTypes={nodeTypes}
+            fitView
+            proOptions={{ hideAttribution: true }}
+          >
+            <Background color={CHART_COLORS.reactFlowBg} gap={20} />
+            <Controls
+              className="hidden sm:flex"
+              style={{
+                background: PANEL_BG,
+                borderRadius: '8px',
+                border: '1px solid rgba(170, 180, 197, 0.2)',
+              }}
+            />
+          </ReactFlow>
 
-        {/* Floating Legend Overlay */}
-        <div
-          className="absolute bottom-3 right-3 flex flex-wrap gap-2 rounded-lg bg-surface-2/90 backdrop-blur-sm px-3 py-2 border border-neutralGray/20 shadow-elevation-2 max-w-[280px]"
-          role="list"
-          aria-label={t('a11y.entityTypeLegendAria')}
-        >
-          {Object.entries(ENTITY_COLORS).map(([type, color]) => (
-            <div key={type} className="flex items-center gap-1" role="listitem">
-              <span
-                className="h-2.5 w-2.5 rounded"
-                style={{ backgroundColor: color }}
-                aria-hidden="true"
-              />
-              <span className="text-micro text-textSub font-mono uppercase">{type}</span>
-            </div>
-          ))}
+          {/* Floating Legend Overlay */}
+          <div
+            className="absolute bottom-3 right-3 flex flex-wrap gap-2 rounded-lg bg-surface-2/90 backdrop-blur-sm px-3 py-2 border border-neutralGray/20 shadow-elevation-2 max-w-[280px]"
+            role="list"
+            aria-label={t('a11y.entityTypeLegendAria')}
+          >
+            {Object.entries(ENTITY_COLORS).map(([type, color]) => (
+              <div key={type} className="flex items-center gap-1" role="listitem">
+                <span
+                  className="h-2.5 w-2.5 rounded"
+                  style={{ backgroundColor: color }}
+                  aria-hidden="true"
+                />
+                <span className="text-micro text-textSub font-mono uppercase">{type}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
