@@ -26,4 +26,10 @@ export function useT() {
   return (key: string) => get(dict as unknown as Record<string, unknown>, key);
 }
 
+/** Translation function for use outside React components (e.g. class components) */
+export function getT(locale: Locale) {
+  const dict = translations[locale];
+  return (key: string) => get(dict as unknown as Record<string, unknown>, key);
+}
+
 export { ko, en };

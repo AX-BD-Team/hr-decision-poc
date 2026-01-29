@@ -1,9 +1,11 @@
 import { Component, type ReactNode, type ErrorInfo } from 'react';
 import { AlertTriangle, RotateCcw } from 'lucide-react';
+import { useStore } from '@/store/useStore';
+import { getT } from '@/i18n';
 
 interface Props {
   children: ReactNode;
-  fallbackTitle?: string;
+  fallbackTitleKey?: string;
 }
 
 interface State {
@@ -28,7 +30,11 @@ export class ErrorBoundary extends Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
-      const title = this.props.fallbackTitle || '오류가 발생했습니다';
+      const locale = useStore.getState().locale;
+      const t = getT(locale);
+      const title = this.props.fallbackTitleKey
+        ? t(this.props.fallbackTitleKey)
+        : t('errorBoundary.defaultTitle');
       return (
         <div className="flex h-full min-h-[120px] items-center justify-center p-6">
           <div className="w-full max-w-md rounded-xl border border-alertRed/30 bg-panelBg p-6 text-center shadow-lg">
@@ -39,7 +45,7 @@ export class ErrorBoundary extends Component<Props, State> {
               {title}
             </h2>
             <p className="mb-3 text-xs text-textSub">
-              예기치 않은 오류가 발생했습니다. 아래 버튼을 눌러 다시 시도해 주세요.
+              {t('errorBoundary.description')}
             </p>
             {this.state.error && (
               <pre className="mb-3 max-h-24 overflow-auto rounded-lg bg-appBg/60 p-2 text-left text-xs text-alertRed/80 font-mono">
@@ -51,7 +57,7 @@ export class ErrorBoundary extends Component<Props, State> {
               className="inline-flex items-center gap-2 rounded-lg bg-decisionBlue px-3 py-1.5 text-xs font-medium text-white transition-all hover:bg-decisionBlue/80"
             >
               <RotateCcw className="h-3.5 w-3.5" />
-              다시 시도
+              {t('errorBoundary.retry')}
             </button>
           </div>
         </div>

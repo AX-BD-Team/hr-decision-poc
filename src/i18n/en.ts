@@ -234,4 +234,15 @@ export const en: TranslationKeys = {
       pathC: 'Path C: Hybrid',
     },
   },
+  errorBoundary: {
+    defaultTitle: 'An error occurred',
+    description: 'An unexpected error occurred. Please click the button below to try again.',
+    retry: 'Try again',
+    dataIngestion: 'Data Ingestion Error',
+    ontologyGraph: 'Ontology Graph Error',
+    analysisPattern: 'Analysis Pattern Error',
+    decisionPaths: 'Decision Paths Error',
+    decisionRecord: 'Decision Record Error',
+    hrContext: 'HR Context Error',
+  },
 } as const;

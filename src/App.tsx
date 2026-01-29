@@ -71,13 +71,13 @@ function App() {
           >
             <div className="grid grid-cols-1 gap-2 sm:gap-4 pt-4 lg:grid-cols-[360px_1fr]">
               <section id="section-ingestion" className="min-h-0 overflow-hidden animate-stagger-1 scroll-mt-32">
-                <ErrorBoundary fallbackTitle="Data Ingestion Error">
+                <ErrorBoundary fallbackTitleKey="errorBoundary.dataIngestion">
                   <ZoneDataIngestion />
                 </ErrorBoundary>
               </section>
 
               <section id="section-graph" className="min-h-[280px] lg:min-h-0 overflow-hidden animate-stagger-2 scroll-mt-32">
-                <ErrorBoundary fallbackTitle="Ontology Graph Error">
+                <ErrorBoundary fallbackTitleKey="errorBoundary.ontologyGraph">
                   <Suspense fallback={<LoadingZone3Graph />}>
                     <ZoneGraph />
                   </Suspense>
@@ -87,19 +87,19 @@ function App() {
 
             <div className="mt-2 sm:mt-4 grid grid-cols-1 gap-2 sm:gap-4 lg:grid-cols-[360px_1fr]">
               <section id="section-structuring" className="min-h-0 overflow-hidden scroll-mt-32 h-full">
-                <ErrorBoundary fallbackTitle="Analysis Pattern Error">
+                <ErrorBoundary fallbackTitleKey="errorBoundary.analysisPattern">
                   <ZoneStructuring />
                 </ErrorBoundary>
               </section>
               <section id="section-paths" className="min-h-0 overflow-hidden scroll-mt-32">
-                <ErrorBoundary fallbackTitle="Decision Paths Error">
+                <ErrorBoundary fallbackTitleKey="errorBoundary.decisionPaths">
                   <ZoneDecisionPaths />
                 </ErrorBoundary>
               </section>
             </div>
 
             <section id="section-record" className="mt-2 sm:mt-4 scroll-mt-32">
-              <ErrorBoundary fallbackTitle="Decision Record Error">
+              <ErrorBoundary fallbackTitleKey="errorBoundary.decisionRecord">
                 <DecisionRecordSection />
               </ErrorBoundary>
             </section>
@@ -113,7 +113,7 @@ function App() {
             )}
           >
             {isContextSidebarOpen && (
-              <ErrorBoundary fallbackTitle="HR Context Error">
+              <ErrorBoundary fallbackTitleKey="errorBoundary.hrContext">
                 <Suspense fallback={<div className="p-4 text-textSub text-sm">Loading...</div>}>
                   <HRContextView variant="panel" />
                 </Suspense>

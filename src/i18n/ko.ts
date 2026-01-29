@@ -232,6 +232,17 @@ export const ko = {
       pathC: '경로 C: 하이브리드',
     },
   },
+  errorBoundary: {
+    defaultTitle: '오류가 발생했습니다',
+    description: '예기치 않은 오류가 발생했습니다. 아래 버튼을 눌러 다시 시도해 주세요.',
+    retry: '다시 시도',
+    dataIngestion: '데이터 수집 영역 오류',
+    ontologyGraph: '온톨로지 그래프 오류',
+    analysisPattern: '분석 패턴 오류',
+    decisionPaths: '의사결정 경로 오류',
+    decisionRecord: '의사결정 기록 오류',
+    hrContext: 'HR 컨텍스트 오류',
+  },
 } as const;
 
 /** Recursively widen literal strings to `string` while preserving structure */
