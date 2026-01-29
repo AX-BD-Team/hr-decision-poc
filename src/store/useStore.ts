@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { DemoData, AppMode, DockSection, RecordTab, PageId, Theme } from '../types';
+import type { DemoData, AppMode, DockSection, RecordTab, PageId, Theme, Locale } from '../types';
 import { scenarioDataById } from '../data/scenarios';
 
 interface AppState {
@@ -25,6 +25,9 @@ interface AppState {
   // Theme
   theme: Theme;
 
+  // Locale
+  locale: Locale;
+
   // HR Context Sidebar
   isContextSidebarOpen: boolean;
 
@@ -46,6 +49,7 @@ interface AppState {
   toggleDock: () => void;
   toggleContextSidebar: () => void;
   toggleTheme: () => void;
+  toggleLocale: () => void;
   startTour: () => void;
   nextTourStep: () => void;
   prevTourStep: () => void;
@@ -80,6 +84,7 @@ const initialState = {
   isDockExpanded: false,
   dockHeight: 300,
   theme: getInitialTheme(),
+  locale: (typeof window !== 'undefined' && localStorage.getItem('locale') === 'en' ? 'en' : 'ko') as Locale,
   isContextSidebarOpen: false,
   isTourActive: false,
   tourStep: 0,
@@ -153,6 +158,13 @@ export const useStore = create<AppState>((set) => ({
       const next: Theme = state.theme === 'dark' ? 'light' : 'dark';
       applyTheme(next);
       return { theme: next };
+    }),
+
+  toggleLocale: () =>
+    set((state) => {
+      const next: Locale = state.locale === 'ko' ? 'en' : 'ko';
+      localStorage.setItem('locale', next);
+      return { locale: next };
     }),
 
   startTour: () =>

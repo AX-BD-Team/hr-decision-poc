@@ -141,6 +141,15 @@
 - [x] SkillTreemap 개선 (플로팅 툴팁, white stroke 하이라이트)
 - [x] DashboardPage 재작성 (탭 아이콘, fade-in-up 전환, 인라인 코드 제거)
 
+#### 디자인 시스템 토큰 통합
+- [x] CHART_COLORS 상수 (tokens.ts) — SVG 인라인 색상 18개, CSS 변수 참조
+- [x] SVG 하드코딩 색상 교체 (7개 컴포넌트, 30+ hex 리터럴 → 토큰)
+- [x] 버튼 유틸리티 클래스 (.btn-primary, .btn-secondary, .btn-ghost)
+- [x] 레이아웃 상수 추출 (constants/layout.ts — Dock 높이 상수)
+- [x] severity.critical 색상 차별화 (#DC2626 vs #FF4D4F)
+- [x] CSS 변수 `:root` 기본값 선언 (--zone-accent, 테마 팔레트)
+- [x] Tailwind 색상 토큰 CSS 변수 연동 (appBg, panelBg, textMain, textSub, surface)
+
 #### 인프라
 - [x] Vite 빌드 설정
 - [x] TypeScript strict 설정
@@ -160,7 +169,7 @@
 ### 미구현 — Low Priority
 
 - [ ] 국제화(i18n)
-- [ ] 다크/라이트 테마 전환
+- [x] ~~다크/라이트 테마 전환~~ → 완료 (CSS 변수 테마 + Zustand toggleTheme + localStorage)
 - [x] ~~번들 크기 최적화~~ → 완료 (React.lazy + manualChunks, 565KB→277KB)
 - [ ] UI 컴포넌트 테스트 (Vitest/Testing Library)
 - [x] ~~recharts 패키지 제거~~ → 완료

@@ -183,6 +183,9 @@ export type AppMode = 'OVERVIEW' | 'GUIDED_DEMO' | 'DRILLDOWN';
 // Theme
 export type Theme = 'dark' | 'light';
 
+// Locale
+export type Locale = 'ko' | 'en';
+
 // Bottom Dock (primary)
 export type DockSection = 'paths' | 'record' | 'structuring' | 'context';
 

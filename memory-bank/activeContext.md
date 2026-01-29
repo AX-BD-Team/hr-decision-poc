@@ -1,42 +1,50 @@
 # Active Context
 
 ## 현재 단계
-테스트 & 검증 체계 대폭 강화 완료 (17→71 tests). 모든 기능 구현 완료, 프로덕션 배포 대기.
+디자인 시스템 토큰 통합 + 다크/라이트 테마 기반 구축 완료. 모든 기능 구현 완료, 프로덕션 배포 대기.
 
 ## 최근 변경 이력
 
 | 커밋 | 설명 |
 |------|------|
-| `3b364be` | test: 시나리오 검증 확장 — 71 tests, 참조 무결성, enum/범위 검증 |
-| `d216ed3` | docs: Memory Bank 업데이트 — 세션 종료, 브라우저 검증, git 정리 |
-| `c7090d1` | chore: tool artifacts gitignore 추가 |
-| `358ed7e` | chore: public/docs/ 6개 문서 파일 커밋 |
-| `1376285` | feat: 대시보드 재설계 — 컴포넌트 추출, 인터랙션/애니메이션 강화 |
+| `f36c97e` | feat: PageNav/Header 모바일 메뉴에 테마 토글 버튼 추가 |
+| `4900a26` | fix: 버튼 hover에 color-mix 사용 (CSS 변수 호환) |
+| `338c00b` | feat: Header 테마 토글 UI + main.tsx 테마 초기 적용 |
+| `83db624` | feat: toggleTheme 액션 구현 |
+| `491e628` | feat: Theme 타입 + 다크/라이트 토글 (localStorage) |
+| `2f2085d` | refactor: CHART_COLORS/PANEL_BG에 CSS 변수 사용 + layout 상수 |
+| `e88f813` | refactor: CSS 변수 테마 + CHART_COLORS 마이그레이션 |
 
 ## 이번 세션 변경 사항
 
-### 테스트 & 검증 체계 강화 (17→71 tests)
-- **참조 무결성 — relatedPaths**: assumption/evidence/riskSignal → decisionPath ID 역참조 검증
-- **참조 무결성 — relatedEntityIds**: decisionPath/riskSignal/utilizationMap.entityId → entity ID 역참조 검증
-- **Enum 유효성**: EntityType, EdgeType, severity, riskLevel, effectLevel, assumption.category, insight.severity, analysisPattern.type, dataSource.type
-- **값 범위 유효성**: coverage 0~100, dependency 0~1, edge.weight 0~1
-- **validateScenario.ts 확장**: `orphan_related_path`, `orphan_related_entity` 에러 타입 추가, relatedPaths/relatedEntityIds/utilizationMap.entityId 역참조 런타임 검증
-- **CHART_COLORS 상수 추가**: SVG 인라인 스타일용 색상 상수 (`constants/tokens.ts`)
-- **S1 JSON 포맷 정리**: pretty-printed → compact (S2/S3와 동일 형식, 데이터 변경 없음)
+### 디자인 시스템 토큰 통합
+- **CHART_COLORS 상수**: `tokens.ts`에 18개 SVG 인라인 색상 토큰 추가, CSS 변수(`var(--chart-*)`) 참조
+- **SVG 하드코딩 교체**: 7개 SVG 컴포넌트에서 30+ hex/rgba 리터럴을 `CHART_COLORS.*`로 교체
+- **버튼 유틸리티 클래스**: `.btn-primary`, `.btn-secondary`, `.btn-ghost` — `index.css`에 추가
+- **레이아웃 상수**: `constants/layout.ts` 신규 (DOCK_COLLAPSED/MIN/MAX_HEIGHT), Dock.tsx 적용
+- **severity.critical 차별화**: `#FF4D4F` → `#DC2626` (severity.high와 구분)
+- **CSS 변수 기본값**: `:root`에 `--zone-accent`, `--zone-accent-rgb` 선언
+
+### 다크/라이트 테마 인프라 (병렬 작업)
+- **CSS 변수 테마**: `:root[data-theme="dark"]` / `:root[data-theme="light"]` 전체 팔레트 선언
+- **Tailwind CSS 변수 연동**: `appBg`, `panelBg`, `textMain`, `textSub`, `neutralGray`, `surface` → CSS 변수 참조
+- **Theme 상태 관리**: `Theme` 타입, `useStore.toggleTheme()`, localStorage 퍼시스턴스
+- **테마 토글 UI**: PageNav + Header 모바일 메뉴에 Sun/Moon 버튼
+- **color-mix 호환**: 버튼 hover에 `color-mix(in srgb, ...)` 사용 (CSS 변수 + opacity)
 
 ### 빌드 결과
-- 71 tests all pass
-- 프로덕션 빌드 성공
+- `npm run build` 통과
+- `npm run lint` 통과
 
 ## 현재 작업 포커스
-- 모든 기능 구현 완료
-- 테스트 & 검증 체계 강화 완료
-- 프로덕션 배포 대기 (origin 대비 27 커밋 ahead)
+- 디자인 시스템 토큰 통합 완료
+- 다크/라이트 테마 기반 구축 완료
+- 프로덕션 배포 대기
 
 ## 다음 작업 목록 (우선순위순)
-1. **git push + Cloudflare 배포** — 27 커밋 push 후 프로덕션 배포
-2. **국제화(i18n)** — 하드코딩 한국어 다국어 지원
-3. **다크/라이트 테마** — 테마 전환 기능
+1. **git push + Cloudflare 배포** — push 후 프로덕션 배포
+2. **라이트 테마 시각 검증** — 실제 브라우저에서 light mode 레이아웃/색상 확인
+3. **국제화(i18n)** — 하드코딩 한국어 다국어 지원
 4. **UI 컴포넌트 테스트** — Vitest/Testing Library
 
 ## 알려진 이슈 — 모두 해결됨
@@ -45,8 +53,9 @@
 ## 활성 결정 사항
 - 페이지 라우팅: Zustand `activePage` 상태 기반 (React Router 미사용, 단순 조건부 렌더링)
 - 데이터 소스: 독립 JSON 파일 (`demo-s1.json`, `demo-s2.json`, `demo-s3.json`, `dashboard-data.json`) + `scenarios.ts` import
-- 상태 관리: Zustand 단일 스토어 (`loadingPhase` phased 로딩, `isContextSidebarOpen` 사이드바, `activePage` 라우팅)
-- 스타일링: Tailwind CSS (커스텀 다크 테마) + 시맨틱 디자인 토큰 체계
+- 상태 관리: Zustand 단일 스토어 (`loadingPhase`, `isContextSidebarOpen`, `activePage`, `theme`)
+- 스타일링: Tailwind CSS + CSS 변수 테마 (`data-theme` 속성) + 시맨틱 디자인 토큰 체계
+- 테마: CSS 변수 기반 다크/라이트, localStorage 퍼시스턴스, `CHART_COLORS`는 CSS 변수 참조
 - 그래프: @xyflow/react v12, dagre 자동 레이아웃, 커스텀 `EntityNode`
 - 산점도: 순수 SVG 기반 (`UtilizationScatterChart.tsx`)
 - 대시보드 차트: 순수 SVG (stroke 도넛, squarified 트리맵, 그룹 바차트+라인) — 외부 차트 라이브러리 미사용

@@ -72,7 +72,8 @@ src/
 ├── types/index.ts                    # 전체 타입 정의
 ├── store/useStore.ts                 # Zustand 스토어
 ├── constants/
-│   └── tokens.ts                     # 색상 상수 (ENTITY_COLORS, EDGE_COLORS, PANEL_BG, CHART_COLORS)
+│   ├── tokens.ts                     # 색상 상수 (ENTITY_COLORS, EDGE_COLORS, PANEL_BG, CHART_COLORS — CSS 변수 참조)
+│   └── layout.ts                     # 레이아웃 상수 (DOCK_COLLAPSED/MIN/MAX_HEIGHT)
 ├── data/
 │   ├── demo-s1.json                  # S1 기본 데이터
 │   ├── demo-s2.json                  # S2 OPEX 절감 시나리오 데이터
@@ -154,6 +155,7 @@ npm run deploy:preview  # 빌드 후 preview 브랜치 배포
 ## 제약 사항
 - 백엔드 API 없음 — 정적 JSON + scenarios.ts 데이터만 사용
 - 라우팅: Zustand `activePage` 기반 조건부 렌더링 (React Router 미사용, 3페이지: workflow/dashboard/docs)
+- 다크/라이트 테마: CSS 변수 기반 (`data-theme` 속성), Zustand `theme` 상태, localStorage 퍼시스턴스
 - 국제화(i18n) 없음 — 한국어 하드코딩
 - 접근성(a11y) 기본 구현 — ARIA roles/labels, 키보드 nav, screen reader 지원
 - TypeScript strict 모드 활성화

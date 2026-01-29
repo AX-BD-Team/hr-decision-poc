@@ -229,9 +229,85 @@ const labelStyles: Record<DataLabel, string> = {
 
 ReactFlow 노드/엣지 등 인라인 style이 필요한 곳에서는 `src/constants/tokens.ts` 상수를 import:
 ```tsx
-import { ENTITY_COLORS, EDGE_COLORS, PANEL_BG } from '../../constants/tokens';
+import { ENTITY_COLORS, EDGE_COLORS, PANEL_BG, CHART_COLORS } from '../../constants/tokens';
 // Tailwind 클래스 대신 인라인 style에서 사용
 const baseColor = ENTITY_COLORS[entity.type] || '#666';
+
+// SVG 차트에서는 CHART_COLORS 사용 (CSS 변수 참조로 테마 대응)
+<line stroke={CHART_COLORS.gridLine} />
+<text fill={CHART_COLORS.textSub} />
+<rect fill={CHART_COLORS.tooltipBg} stroke={CHART_COLORS.tooltipBorder} />
+```
+
+## CSS 변수 테마 패턴
+
+```css
+/* index.css — 다크/라이트 테마 CSS 변수 */
+:root, :root[data-theme="dark"] {
+  --color-app-bg: #0B1220;
+  --color-panel-bg: #111A2E;
+  --color-text-main: #E6EAF2;
+  --chart-text-sub: #AAB4C5;
+  /* ... 50+ CSS 변수 */
+}
+:root[data-theme="light"] {
+  --color-app-bg: #F8FAFC;
+  --color-panel-bg: #FFFFFF;
+  --color-text-main: #1E293B;
+  --chart-text-sub: #64748B;
+  /* ... */
+}
+
+/* tailwind.config.js — CSS 변수 참조 */
+appBg: 'var(--color-app-bg)',
+panelBg: 'var(--color-panel-bg)',
+textMain: 'var(--color-text-main)',
+
+/* tokens.ts — CHART_COLORS는 CSS 변수 참조 */
+export const CHART_COLORS = {
+  textSub: 'var(--chart-text-sub)',
+  tooltipBg: 'var(--chart-tooltip-bg)',
+  // ...
+} as const;
+```
+
+### 테마 전환 패턴
+```tsx
+// types/index.ts
+export type Theme = 'dark' | 'light';
+
+// store/useStore.ts
+theme: getInitialTheme(),  // localStorage에서 복원
+toggleTheme: () => {
+  const next = state.theme === 'dark' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = next;
+  localStorage.setItem('theme', next);
+  return { theme: next };
+},
+
+// main.tsx — 초기 적용
+document.documentElement.dataset.theme = useStore.getState().theme;
+```
+
+## 레이아웃 상수 패턴
+```tsx
+// src/constants/layout.ts
+export const DOCK_COLLAPSED_HEIGHT = 56;
+export const DOCK_MIN_HEIGHT = 220;
+export const DOCK_MAX_HEIGHT = 560;
+
+// Dock.tsx에서 import하여 사용
+const clampHeight = (h: number) => Math.max(DOCK_MIN_HEIGHT, Math.min(DOCK_MAX_HEIGHT, h));
+```
+
+## 버튼 유틸리티 클래스 패턴
+```css
+/* index.css */
+.btn-primary { @apply rounded-lg px-4 py-2 text-sm font-medium text-white transition-all; background-color: #4F8CFF; }
+.btn-secondary { @apply rounded-lg px-3 py-2 text-sm transition-all; color: var(--color-text-sub); }
+.btn-ghost { @apply rounded-lg px-3 py-2 text-sm transition-all; color: var(--color-text-sub); }
+/* hover에 color-mix 사용 — CSS 변수와 opacity 호환 */
+.btn-secondary:hover { background: color-mix(in srgb, var(--color-app-bg) 50%, transparent); }
 ```
 
 ## 데이터 흐름
