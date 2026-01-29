@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import type { SkillTreemapItem } from '../../types';
 
 interface SkillTreemapProps {
@@ -20,7 +20,6 @@ function layoutTreemap(items: SkillTreemapItem[], width: number, height: number)
     const remainTotal = sorted.slice(i).reduce((s, it) => s + it.value, 0);
     const areaScale = (remainW * remainH) / remainTotal;
 
-    // Greedily add items to current row
     const row: SkillTreemapItem[] = [];
     let rowArea = 0;
     let bestAspect = Infinity;
@@ -30,7 +29,6 @@ function layoutTreemap(items: SkillTreemapItem[], width: number, height: number)
       const newArea = rowArea + candidate.value * areaScale;
       const rowLen = newArea / sideLen;
 
-      // Check worst aspect ratio
       let worstAspect = 0;
       const tempRow = [...row, candidate];
       for (const r of tempRow) {
@@ -48,7 +46,6 @@ function layoutTreemap(items: SkillTreemapItem[], width: number, height: number)
       i++;
     }
 
-    // Position row items
     const rowLen = rowArea / sideLen;
     let offset = 0;
 
@@ -79,20 +76,36 @@ function layoutTreemap(items: SkillTreemapItem[], width: number, height: number)
 
 export function SkillTreemap({ data, title = '스킬 분포' }: SkillTreemapProps) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const svgRef = useRef<SVGSVGElement>(null);
 
   const width = 600;
   const height = 300;
   const rects = layoutTreemap(data, width, height);
   const total = data.reduce((s, i) => s + i.value, 0);
 
+  function handleMouseMove(e: React.MouseEvent<SVGSVGElement>) {
+    const svg = svgRef.current;
+    if (!svg) return;
+    const rect = svg.getBoundingClientRect();
+    const scaleX = width / rect.width;
+    const scaleY = height / rect.height;
+    setMousePos({
+      x: (e.clientX - rect.left) * scaleX,
+      y: (e.clientY - rect.top) * scaleY,
+    });
+  }
+
   return (
     <div className="rounded-xl glass-panel border border-neutralGray/20 p-5 space-y-3">
       <h3 className="text-sm font-semibold text-textMain">{title}</h3>
       <svg
+        ref={svgRef}
         viewBox={`0 0 ${width} ${height}`}
         className="w-full"
         role="img"
         aria-label={`${title} 트리맵`}
+        onMouseMove={handleMouseMove}
       >
         {rects.map((r, idx) => {
           const isHovered = hoveredIdx === idx;
@@ -113,7 +126,9 @@ export function SkillTreemap({ data, title = '스킬 분포' }: SkillTreemapProp
                 rx={4}
                 fill={r.item.color}
                 opacity={isHovered ? 1 : 0.75}
-                className="transition-opacity"
+                stroke={isHovered ? '#fff' : 'none'}
+                strokeWidth={isHovered ? 2 : 0}
+                className="transition-all duration-200"
               />
               {showLabel && (
                 <>
@@ -138,12 +153,29 @@ export function SkillTreemap({ data, title = '스킬 분포' }: SkillTreemapProp
                   </text>
                 </>
               )}
-              {isHovered && !showLabel && (
-                <title>{`${r.item.name}: ${r.item.value}명 (${pct}%)`}</title>
-              )}
             </g>
           );
         })}
+
+        {/* Floating tooltip */}
+        {hoveredIdx !== null && (() => {
+          const r = rects[hoveredIdx];
+          const pct = ((r.item.value / total) * 100).toFixed(1);
+          const tw = 130;
+          const th = 44;
+          let tx = mousePos.x + 14;
+          let ty = mousePos.y - th - 8;
+          if (tx + tw > width) tx = mousePos.x - tw - 10;
+          if (ty < 0) ty = mousePos.y + 14;
+
+          return (
+            <g>
+              <rect x={tx} y={ty} width={tw} height={th} rx={8} fill="rgba(17,26,46,0.92)" stroke="rgba(170,180,197,0.2)" strokeWidth={1} />
+              <text x={tx + 10} y={ty + 17} fill="#E6EAF2" fontSize={11} fontWeight="600">{r.item.name}</text>
+              <text x={tx + 10} y={ty + 34} fill="#AAB4C5" fontSize={10}>{r.item.value}명 · {pct}%</text>
+            </g>
+          );
+        })()}
       </svg>
     </div>
   );
