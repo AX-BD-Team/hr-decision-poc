@@ -20,7 +20,7 @@ export function PageNav() {
   const t = useT();
 
   return (
-    <nav className="flex items-center gap-1 border-b border-neutralGray/20 mb-3" aria-label={t('a11y.pageNav')}>
+    <nav className="flex items-center gap-1 border-b border-neutralGray/20 mb-2" aria-label={t('a11y.pageNav')}>
       {pageKeys.map((page) => {
         const Icon = page.icon;
         const isActive = activePage === page.id;
@@ -30,7 +30,7 @@ export function PageNav() {
             onClick={() => setActivePage(page.id)}
             aria-current={isActive ? 'page' : undefined}
             className={clsx(
-              'flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all border-b-2 -mb-px',
+              'flex items-center gap-2 px-3 py-1.5 text-sm font-medium transition-all border-b-2 -mb-px',
               isActive
                 ? 'border-decisionBlue text-decisionBlue'
                 : 'border-transparent text-textSub hover:text-textMain hover:border-neutralGray/40'

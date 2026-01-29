@@ -4,7 +4,30 @@ import { useStore } from '../../store/useStore';
 import { useT } from '../../i18n';
 import { clsx } from 'clsx';
 import { scenarioMetas } from '../../data/scenarios';
+import { tourSteps } from '../../data/tourSteps';
 import { PageNav } from './PageNav';
+
+/** demoProgress (1–4) → tourSteps index (id 4–7, array index 3–6) */
+const demoTourStepIndex: Record<number, number> = { 1: 3, 2: 4, 3: 5, 4: 6 };
+
+const zoneBorderColors: Record<number, string> = {
+  1: 'border-zoneIngest',
+  2: 'border-zoneStruct',
+  3: 'border-zoneGraph',
+  4: 'border-zonePath',
+};
+const zoneBgColors: Record<number, string> = {
+  1: 'bg-zoneIngest/10',
+  2: 'bg-zoneStruct/10',
+  3: 'bg-zoneGraph/10',
+  4: 'bg-zonePath/10',
+};
+const zoneTextColors: Record<number, string> = {
+  1: 'text-zoneIngest',
+  2: 'text-zoneStruct',
+  3: 'text-zoneGraph',
+  4: 'text-zonePath',
+};
 
 function scrollToId(id: string) {
   const el = document.getElementById(id);
@@ -65,6 +88,7 @@ export function Header() {
     setRecordTab,
     isContextSidebarOpen,
     toggleContextSidebar,
+    locale,
   } = useStore();
   const t = useT();
   const isWorkflow = activePage === 'workflow';
@@ -185,7 +209,7 @@ export function Header() {
                 if (step.num === 3) scrollToId('section-graph');
               }}
               className={clsx(
-                'flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-all',
+                'flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm transition-all',
                 isStepActive
                   ? `${classes.bg} ${classes.text}`
                   : 'text-textSub hover:bg-appBg hover:text-textMain'
@@ -193,7 +217,7 @@ export function Header() {
             >
               <span
                 className={clsx(
-                  'flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold transition-all',
+                  'flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold transition-all',
                   isStepActive
                     ? `${classes.badge} text-white`
                     : isCompleted
@@ -220,7 +244,7 @@ export function Header() {
   );
 
   return (
-    <header className="sticky top-0 z-50 glass-header border-b border-neutralGray/20 px-3 sm:px-6 py-3 sm:py-4">
+    <header className="sticky top-0 z-50 glass-header border-b border-neutralGray/20 px-3 sm:px-6 py-2 sm:py-3">
       {/* 페이지 네비게이션 */}
       <PageNav />
 
@@ -255,7 +279,7 @@ export function Header() {
         {stepNavigator}
 
         {/* 우측: 액션 버튼 */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           {isDemoRunning && (
             <span className="flex items-center gap-1.5 rounded-lg bg-decisionBlue/10 border border-decisionBlue/30 px-3 py-1.5 text-xs font-mono text-decisionBlue animate-glow-pulse">
               {t('common.demoProgress')} Step {demoProgress}/4
@@ -271,7 +295,7 @@ export function Header() {
             }}
             disabled={isDemoRunning}
             className={clsx(
-              'flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-all',
+              'flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium transition-all',
               isDemoRunning
                 ? 'opacity-40 cursor-not-allowed glass-panel text-textSub'
                 : isTourActive
@@ -294,7 +318,7 @@ export function Header() {
           <button
             onClick={handleStartDemo}
             className={clsx(
-              'flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white transition-all',
+              'flex items-center gap-2 rounded-lg px-4 py-1.5 text-sm font-medium text-white transition-all',
               isDemoRunning
                 ? 'bg-alertRed hover:bg-alertRed/80'
                 : 'bg-decisionBlue hover:bg-decisionBlue/80 hover:shadow-glow-blue'
@@ -322,7 +346,7 @@ export function Header() {
             aria-label={t('a11y.hrContextToggle')}
             aria-expanded={isContextSidebarOpen}
             className={clsx(
-              'flex items-center gap-2 rounded-lg glass-panel px-3 py-2 text-sm transition-all',
+              'flex items-center gap-2 rounded-lg glass-panel px-2.5 py-1.5 text-sm transition-all',
               isContextSidebarOpen
                 ? 'text-contextGreen border border-contextGreen/30 bg-contextGreen/10'
                 : 'text-textSub hover:bg-appBg/50 hover:text-textMain'
@@ -334,7 +358,7 @@ export function Header() {
           <button
             onClick={reset}
             aria-label={t('a11y.resetLabel')}
-            className="flex items-center gap-2 rounded-lg glass-panel px-3 py-2 text-sm text-textSub transition-all hover:bg-appBg/50 hover:text-textMain"
+            className="flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm text-textSub transition-all hover:bg-appBg/50 hover:text-textMain"
           >
             <RotateCcw className="h-4 w-4" aria-hidden="true" />
             <span className="hidden md:inline">Reset</span>
@@ -342,7 +366,7 @@ export function Header() {
           <button
             onClick={handleExport}
             aria-label={t('a11y.exportLabel')}
-            className="flex items-center gap-2 rounded-lg glass-panel px-3 py-2 text-sm text-textSub transition-all hover:bg-appBg/50 hover:text-textMain"
+            className="flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm text-textSub transition-all hover:bg-appBg/50 hover:text-textMain"
           >
             <Download className="h-4 w-4" aria-hidden="true" />
             <span className="hidden md:inline">Export</span>
@@ -479,9 +503,37 @@ export function Header() {
       </div>
       )}
 
+      {/* Demo 가이드 배너 */}
+      {isWorkflow && isDemoRunning && demoProgress >= 1 && (() => {
+        const step = tourSteps[demoTourStepIndex[demoProgress]];
+        if (!step) return null;
+        const title = locale === 'ko' ? step.titleKo : step.titleEn;
+        const content = locale === 'ko' ? step.contentKo : step.contentEn;
+        return (
+          <div
+            key={demoProgress}
+            className={clsx(
+              'mt-1.5 sm:mt-2 rounded-lg border-l-4 px-4 py-2.5 animate-[fadeIn_0.4s_ease-out]',
+              zoneBorderColors[demoProgress],
+              zoneBgColors[demoProgress],
+            )}
+          >
+            <div className="flex items-center justify-between">
+              <span className={clsx('text-sm font-semibold', zoneTextColors[demoProgress])}>
+                {title}
+              </span>
+              <span className="text-xs font-mono text-textSub">
+                Step {demoProgress}/4
+              </span>
+            </div>
+            <p className="mt-1 text-xs text-textSub leading-relaxed">{content}</p>
+          </div>
+        );
+      })()}
+
       {/* 핵심 질문 */}
       {isWorkflow && data.meta.keyQuestion && (
-        <div className="mt-2 sm:mt-3 flex items-center gap-2 rounded-lg bg-decisionBlue/10 border border-decisionBlue/20 px-3 py-2">
+        <div className="mt-1.5 sm:mt-2 flex items-center gap-2 rounded-lg bg-decisionBlue/10 border border-decisionBlue/20 px-3 py-2">
           <HelpCircle className="h-4 w-4 flex-shrink-0 text-decisionBlue" aria-hidden="true" />
           <span className="text-sm text-textMain">{data.meta.keyQuestion}</span>
         </div>
@@ -489,7 +541,7 @@ export function Header() {
 
       {/* 데이터 라벨 범례 */}
       {isWorkflow && (
-      <div className="mt-2 hidden md:flex items-center gap-4 text-xs opacity-60 hover:opacity-100 transition-opacity" data-tour="data-labels">
+      <div className={clsx("mt-1.5 items-center gap-4 text-xs opacity-60 hover:opacity-100 transition-opacity", isTourActive ? 'flex' : 'hidden md:flex')} data-tour="data-labels">
         <span className="text-textSub font-mono uppercase tracking-wider text-micro">{t('header.dataLabels')}</span>
         <span className="rounded bg-label-real/20 px-2 py-0.5 text-label-real font-mono">REAL</span>
         <span className="rounded bg-label-estimate/20 px-2 py-0.5 text-label-estimate font-mono">ESTIMATE</span>

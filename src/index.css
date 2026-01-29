@@ -457,3 +457,9 @@ body {
   --zone-pulse-shadow: 0 0 24px rgba(245,158,11,0.25), 0 2px 8px rgba(245,158,11,0.15);
   --zone-pulse-shadow-peak: 0 0 32px rgba(245,158,11,0.4), 0 2px 12px rgba(245,158,11,0.25);
 }
+
+/* === Demo Guide Banner Fade-in === */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
