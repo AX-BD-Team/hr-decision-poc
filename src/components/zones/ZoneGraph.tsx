@@ -187,7 +187,7 @@ export function ZoneGraph() {
         <div
           className="absolute bottom-3 right-3 flex flex-wrap gap-2 rounded-lg bg-surface-2/90 backdrop-blur-sm px-3 py-2 border border-neutralGray/20 shadow-elevation-2 max-w-[280px]"
           role="list"
-          aria-label="엔티티 타입 범례"
+          aria-label={t('a11y.entityTypeLegendAria')}
         >
           {Object.entries(ENTITY_COLORS).map(([type, color]) => (
             <div key={type} className="flex items-center gap-1" role="listitem">

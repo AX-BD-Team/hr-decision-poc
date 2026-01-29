@@ -4,6 +4,7 @@ import { clsx } from 'clsx';
 import type { DecisionPath } from '../../types';
 import { DataLabelBadge } from '../common/DataLabelBadge';
 import { LoadingZone4Paths } from '../loading/LoadingZone4Paths';
+import { useT } from '../../i18n';
 
 const riskDotColors = {
   high: 'bg-severity-high',
@@ -24,6 +25,7 @@ const effectBadgeStyles = {
 };
 
 export function ZoneDecisionPaths({ variant = 'zone' }: { variant?: 'zone' | 'dock' }) {
+  const t = useT();
   const { data, activeStep, selectedPathId, selectPath, loadingPhase } = useStore();
   const showSkeleton = loadingPhase >= 1 && loadingPhase < 5;
 
@@ -38,7 +40,7 @@ export function ZoneDecisionPaths({ variant = 'zone' }: { variant?: 'zone' | 'do
           key={path.id}
           onClick={() => selectPath(selectedPathId === path.id ? null : path.id)}
           aria-pressed={selectedPathId === path.id}
-          aria-label={`경로 ${path.name}, 리스크 ${path.riskLevel}, 효과 ${path.effectLevel}`}
+          aria-label={`${path.name}, ${t('zones.risk')} ${path.riskLevel}, ${t('zones.effect')} ${path.effectLevel}`}
           className={clsx(
             'relative rounded-lg border p-3 md:p-4 text-left transition-all overflow-hidden focus-ring',
             selectedPathId === path.id
@@ -61,11 +63,11 @@ export function ZoneDecisionPaths({ variant = 'zone' }: { variant?: 'zone' | 'do
             <span className={clsx('inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-mono text-tiny', riskBadgeStyles[path.riskLevel])}>
               <span className={clsx('h-1.5 w-1.5 rounded-full', riskDotColors[path.riskLevel], path.riskLevel === 'high' && 'animate-glow-pulse')} />
               <AlertTriangle className="h-3 w-3" aria-hidden="true" />
-              리스크 {path.riskLevel.toUpperCase()}
+              {t('zones.risk')} {path.riskLevel.toUpperCase()}
             </span>
             <span className={clsx('inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-mono text-tiny', effectBadgeStyles[path.effectLevel])}>
               <TrendingUp className="h-3 w-3" aria-hidden="true" />
-              효과 {path.effectLevel.toUpperCase()}
+              {t('zones.effect')} {path.effectLevel.toUpperCase()}
             </span>
           </div>
 
@@ -114,7 +116,7 @@ export function ZoneDecisionPaths({ variant = 'zone' }: { variant?: 'zone' | 'do
         <div className="mb-3 flex items-baseline justify-between">
           <div className="flex items-center gap-2">
             <h3 className="text-sm font-semibold text-textMain">Decision Paths</h3>
-            <span className="text-xs text-textSub">의사결정 대안 카드</span>
+            <span className="text-xs text-textSub">{t('zones.zone4DockSubtitle')}</span>
           </div>
           <span className="data-mono text-micro uppercase tracking-wider text-textSub">A/B/C Compare</span>
         </div>
@@ -144,7 +146,7 @@ export function ZoneDecisionPaths({ variant = 'zone' }: { variant?: 'zone' | 'do
           4
         </span>
         <h3 className="text-sm font-semibold text-textMain">Decision Paths</h3>
-        <span className="text-xs text-textSub">의사결정 대안</span>
+        <span className="text-xs text-textSub">{t('zones.zone4Subtitle')}</span>
       </div>
 
       {inner}
