@@ -157,7 +157,8 @@
 - [x] ESLint 설정
 - [x] Cloudflare Pages 배포 설정
 - [x] GitHub Actions CI/CD
-- [x] Vitest 테스트 프레임워크 (71 tests — 참조 무결성, Enum/범위 검증 포함)
+- [x] Vitest 테스트 프레임워크 (105 tests — 71 데이터 검증 + 34 UI 컴포넌트)
+- [x] vitest.config.ts + src/test/setup.ts + src/test/utils.tsx 테스트 인프라
 - [x] `/deploy` 스킬 — Cloudflare Pages 자동 배포 (lint → build → deploy)
 
 ---
@@ -168,10 +169,10 @@
 
 ### 미구현 — Low Priority
 
-- [ ] 국제화(i18n)
+- [x] ~~국제화(i18n)~~ → 완료 (경량 자체 구현, useT() hook, KO/EN 토글, 38개 컴포넌트 마이그레이션)
 - [x] ~~다크/라이트 테마 전환~~ → 완료 (CSS 변수 테마 + Zustand toggleTheme + localStorage)
 - [x] ~~번들 크기 최적화~~ → 완료 (React.lazy + manualChunks, 565KB→277KB)
-- [ ] UI 컴포넌트 테스트 (Vitest/Testing Library)
+- [x] ~~UI 컴포넌트 테스트~~ → 완료 (vitest + @testing-library/react, 34 컴포넌트 테스트, 총 105 tests)
 - [x] ~~recharts 패키지 제거~~ → 완료
 
 ---

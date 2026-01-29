@@ -331,7 +331,7 @@ export function Header() {
           </button>
           <button
             onClick={toggleTheme}
-            aria-label={theme === 'dark' ? '라이트 모드로 전환' : '다크 모드로 전환'}
+            aria-label={theme === 'dark' ? t('a11y.themeToLight') : t('a11y.themeToDark')}
             className="flex items-center gap-2 rounded-lg glass-panel px-3 py-2 text-sm text-textSub transition-all hover:bg-appBg/50 hover:text-textMain"
           >
             {theme === 'dark' ? <Sun className="h-4 w-4" aria-hidden="true" /> : <Moon className="h-4 w-4" aria-hidden="true" />}
@@ -426,7 +426,7 @@ export function Header() {
                     className="flex w-full items-center gap-2 px-3 py-2.5 text-sm text-textSub hover:text-textMain min-h-[44px]"
                   >
                     {theme === 'dark' ? <Sun className="h-4 w-4" aria-hidden="true" /> : <Moon className="h-4 w-4" aria-hidden="true" />}
-                    {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+                    {theme === 'dark' ? t('common.lightMode') : t('common.darkMode')}
                   </button>
                 </div>
               )}

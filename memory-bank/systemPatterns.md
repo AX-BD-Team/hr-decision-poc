@@ -289,6 +289,41 @@ toggleTheme: () => {
 document.documentElement.dataset.theme = useStore.getState().theme;
 ```
 
+## i18n 패턴 (경량 자체 구현)
+
+```typescript
+// src/i18n/ko.ts — 한국어 번역 (기본, 타입 정의 원천)
+export const ko = {
+  common: { appTitle: 'HR 의사결정 지원', reset: '초기화', ... },
+  dashboard: { title: 'HR 대시보드', ... },
+  zones: { zone1Title: '데이터 수집', ... },
+  // 11개 네임스페이스: common, a11y, pages, header, dataLabel, zones, dashboard, dock, record, context, tour, docs, loading
+} as const;
+
+// Widen<T> — 리터럴 타입을 string으로 확장 (영어 번역 할당 가능)
+type Widen<T> = { [K in keyof T]: T[K] extends string ? string : Widen<T[K]> };
+export type TranslationKeys = Widen<typeof ko>;
+
+// src/i18n/en.ts — 영어 번역 (TranslationKeys 타입 적용)
+export const en: TranslationKeys = { ... };
+
+// src/i18n/index.ts — useT() hook
+export function useT() {
+  const locale = useStore((s) => s.locale);
+  const dict = translations[locale];
+  return (key: string) => get(dict, key); // dot-path 해석: 'dashboard.title' → '대시보드'
+}
+
+// 컴포넌트에서 사용:
+const t = useT();
+<h1>{t('dashboard.title')}</h1>
+<button aria-label={t('a11y.resetLabel')}>{t('common.reset')}</button>
+```
+
+- Locale 상태: `useStore.locale` ('ko' | 'en'), `toggleLocale()`, localStorage 퍼시스턴스
+- KO|EN 토글: PageNav + Header 모바일 메뉴
+- 데이터 파일(JSON)의 한국어 콘텐츠는 i18n 범위 제외 (UI 라벨만 번역)
+
 ## 레이아웃 상수 패턴
 ```tsx
 // src/constants/layout.ts

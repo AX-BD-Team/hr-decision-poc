@@ -29,6 +29,10 @@
 | `typescript-eslint` | ^8.18.2 | TypeScript ESLint 통합 |
 | `globals` | ^15.14.0 | ESLint 전역 변수 정의 |
 | `vitest` | ^4.0.18 | 단위 테스트 프레임워크 |
+| `@testing-library/react` | ^16.x | React 컴포넌트 테스트 |
+| `@testing-library/user-event` | ^14.x | 사용자 이벤트 시뮬레이션 |
+| `@testing-library/jest-dom` | ^6.x | DOM 매처 확장 |
+| `jsdom` | ^26.x | 테스트용 DOM 환경 |
 | `wrangler` | ^3.99.0 | Cloudflare Pages 배포 |
 
 ## 설정 파일 요약
@@ -71,6 +75,10 @@ src/
 ├── vite-env.d.ts                     # Vite 타입 정의
 ├── types/index.ts                    # 전체 타입 정의
 ├── store/useStore.ts                 # Zustand 스토어
+├── i18n/
+│   ├── index.ts                      # useT() hook (dot-path 키 해석)
+│   ├── ko.ts                         # 한국어 번역 (기본)
+│   └── en.ts                         # 영어 번역
 ├── constants/
 │   ├── tokens.ts                     # 색상 상수 (ENTITY_COLORS, EDGE_COLORS, PANEL_BG, CHART_COLORS — CSS 변수 참조)
 │   └── layout.ts                     # 레이아웃 상수 (DOCK_COLLAPSED/MIN/MAX_HEIGHT)
@@ -85,6 +93,9 @@ src/
 │   ├── docs-meta.ts                  # 6개 문서 메타데이터
 │   └── __tests__/
 │       └── scenarios.test.ts         # Vitest 시나리오 데이터 검증 (71 tests)
+├── test/
+│   ├── setup.ts                      # jest-dom matchers 등록
+│   └── utils.tsx                     # 커스텀 render (resetStore + userEvent)
 ├── components/
 │   ├── common/
 │   │   ├── DataLabelBadge.tsx       # DataLabel 배지 공용 컴포넌트
@@ -156,8 +167,8 @@ npm run deploy:preview  # 빌드 후 preview 브랜치 배포
 - 백엔드 API 없음 — 정적 JSON + scenarios.ts 데이터만 사용
 - 라우팅: Zustand `activePage` 기반 조건부 렌더링 (React Router 미사용, 3페이지: workflow/dashboard/docs)
 - 다크/라이트 테마: CSS 변수 기반 (`data-theme` 속성), Zustand `theme` 상태, localStorage 퍼시스턴스
-- 국제화(i18n) 없음 — 한국어 하드코딩
+- 국제화(i18n): 경량 자체 구현 (`src/i18n/`), useT() hook, KO/EN 토글, localStorage 퍼시스턴스
 - 접근성(a11y) 기본 구현 — ARIA roles/labels, 키보드 nav, screen reader 지원
 - TypeScript strict 모드 활성화
 - ESLint 코드 품질 검사 활성화
-- Vitest 시나리오 데이터 검증 71 tests (참조 무결성, Enum/범위 검증 포함, UI 컴포넌트 테스트는 미구현)
+- Vitest 105 tests (71 데이터 검증 + 34 UI 컴포넌트 — @testing-library/react, jsdom)
