@@ -91,6 +91,7 @@ export const en: TranslationKeys = {
       low: 'Low',
     },
     affectedScope: 'Affected Scope',
+    fieldsIncluded: 'Included Fields',
   },
   dashboard: {
     title: 'HR Dashboard',

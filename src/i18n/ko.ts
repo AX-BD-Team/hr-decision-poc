@@ -89,6 +89,7 @@ export const ko = {
       low: '낮음',
     },
     affectedScope: '영향 범위',
+    fieldsIncluded: '포함 필드',
   },
   dashboard: {
     title: 'HR 대시보드',

@@ -106,6 +106,9 @@ export function Header() {
       return;
     }
 
+    // Trigger skeleton → reveal animation sequence
+    setScenario(scenarioId);
+
     startTour();
     setDemoProgress(1);
     setRecordTab('evidence');

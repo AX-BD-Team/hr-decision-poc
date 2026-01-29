@@ -92,7 +92,7 @@ function PatternCard({ pattern, variant }: { pattern: AnalysisPattern; variant: 
 
 export function ZoneStructuring({ variant = 'zone' }: { variant?: 'zone' | 'dock' }) {
   const t = useT();
-  const { data, activeStep, loadingPhase } = useStore();
+  const { data, activeStep, loadingPhase, isTourActive } = useStore();
   const showSkeleton = loadingPhase >= 1 && loadingPhase < 3;
 
   if (showSkeleton) return <LoadingZone2Structuring />;
@@ -136,7 +136,7 @@ export function ZoneStructuring({ variant = 'zone' }: { variant?: 'zone' | 'dock
         'relative flex min-h-0 flex-col h-full rounded-xl border p-4 transition-all',
         justRevealed && 'animate-phase-reveal',
         isActive
-          ? 'border-zoneStruct/50 bg-zoneStruct/5 shadow-glow-violet'
+          ? clsx('border-zoneStruct/70 bg-zoneStruct/10 shadow-glow-violet', isTourActive && 'zone-pulse-violet')
           : 'border-neutralGray/20 bg-panelBg/50'
       )}
       data-tour="zone-2"

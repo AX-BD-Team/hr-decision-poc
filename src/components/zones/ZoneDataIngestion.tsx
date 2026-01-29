@@ -1,4 +1,5 @@
-import { Database, Users, FileText, Briefcase } from 'lucide-react';
+import { useState, useCallback } from 'react';
+import { Database, Users, FileText, Briefcase, ChevronDown } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { clsx } from 'clsx';
 import type { DataSource } from '../../types';
@@ -17,7 +18,11 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 
 export function ZoneDataIngestion() {
   const t = useT();
-  const { data, activeStep, loadingPhase } = useStore();
+  const { data, activeStep, loadingPhase, isTourActive } = useStore();
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const toggleExpand = useCallback((id: string) => {
+    setExpandedId((prev) => (prev === id ? null : id));
+  }, []);
   const showSkeleton = loadingPhase === 1;
 
   if (showSkeleton) return <LoadingZone1Ingestion />;
@@ -30,7 +35,7 @@ export function ZoneDataIngestion() {
         'flex flex-1 min-h-0 flex-col rounded-xl border p-4 transition-all',
         justRevealed && 'animate-phase-reveal',
         isActive
-          ? 'border-zoneIngest/50 bg-zoneIngest/5 shadow-glow-blue'
+          ? clsx('border-zoneIngest/70 bg-zoneIngest/10 shadow-glow-blue', isTourActive && 'zone-pulse-blue')
           : 'border-neutralGray/20 bg-panelBg/50'
       )}
       style={{ '--zone-accent': '#3B82F6' } as React.CSSProperties}
@@ -52,32 +57,88 @@ export function ZoneDataIngestion() {
       <div className="flex-1 overflow-y-auto grid gap-2">
         {data.dataSources.map((ds: DataSource) => {
           const Icon = iconMap[ds.type] || Database;
+          const isExpanded = expandedId === ds.id;
           return (
             <div
               key={ds.id}
-              className="zone-card flex items-center justify-between rounded-lg bg-surface-1 p-3 hover:bg-surface-3 hover:shadow-elevation-2 transition-all group"
+              className="zone-card rounded-lg bg-surface-1 transition-all group"
               style={{ '--zone-accent': '#3B82F6', '--zone-accent-rgb': '59,130,246' } as React.CSSProperties}
             >
-              <div className="flex items-center gap-3">
-                <Icon className="h-4 w-4 text-zoneIngest" aria-hidden="true" />
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-textMain">{ds.name}</span>
-                    <DataLabelBadge label={ds.label} />
+              <div
+                role="button"
+                tabIndex={0}
+                aria-expanded={isExpanded}
+                className={clsx(
+                  'flex items-center justify-between p-3 cursor-pointer rounded-lg transition-all',
+                  isExpanded
+                    ? 'bg-surface-2 border border-zoneIngest/40'
+                    : 'hover:bg-surface-3 hover:shadow-elevation-2'
+                )}
+                onClick={() => toggleExpand(ds.id)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleExpand(ds.id);
+                  }
+                }}
+              >
+                <div className="flex items-center gap-3">
+                  <Icon className="h-4 w-4 text-zoneIngest" aria-hidden="true" />
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium text-textMain">{ds.name}</span>
+                      <DataLabelBadge label={ds.label} />
+                    </div>
+                    <p className="text-xs text-textSub">{ds.description}</p>
                   </div>
-                  <p className="text-xs text-textSub">{ds.description}</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="text-right">
+                    <div className="text-sm font-mono font-medium text-textMain">{ds.coverage}%</div>
+                    <div className="mt-1 h-1.5 w-16 rounded-full bg-neutralGray/20 overflow-hidden">
+                      <div
+                        className={clsx(
+                          'h-full rounded-full transition-all coverage-bar',
+                          ds.coverage >= 80 && 'high'
+                        )}
+                        style={{ width: `${ds.coverage}%` }}
+                      />
+                    </div>
+                  </div>
+                  <ChevronDown
+                    className={clsx(
+                      'h-3.5 w-3.5 text-textSub transition-transform duration-200',
+                      isExpanded && 'rotate-180'
+                    )}
+                    aria-hidden="true"
+                  />
                 </div>
               </div>
-              <div className="text-right">
-                <div className="text-sm font-mono font-medium text-textMain">{ds.coverage}%</div>
-                <div className="mt-1 h-1.5 w-16 rounded-full bg-neutralGray/20 overflow-hidden">
-                  <div
-                    className={clsx(
-                      'h-full rounded-full transition-all coverage-bar',
-                      ds.coverage >= 80 && 'high'
-                    )}
-                    style={{ width: `${ds.coverage}%` }}
-                  />
+
+              {/* Expandable detail area */}
+              <div
+                className={clsx(
+                  'overflow-hidden transition-all duration-200 ease-in-out',
+                  isExpanded ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
+                )}
+              >
+                <div className="px-3 pb-3 pt-2 border-t border-neutralGray/10">
+                  <p className="text-xs font-medium text-textSub mb-2">
+                    {t('zones.fieldsIncluded')} ({ds.fields.length})
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {ds.fields.map((field) => (
+                      <span
+                        key={field}
+                        className="inline-block rounded bg-surface-2 px-2 py-0.5 font-mono text-micro text-textSub"
+                      >
+                        {field}
+                      </span>
+                    ))}
+                  </div>
+                  <p className="mt-2 text-micro text-textSub">
+                    {ds.fields.length} {t('zones.fieldsCount')} · {t('zones.coverage')} {ds.coverage}%
+                  </p>
                 </div>
               </div>
             </div>

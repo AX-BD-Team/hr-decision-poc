@@ -180,10 +180,10 @@ export default {
         'path-ready-pulse': 'path-ready-pulse 1s ease-in-out 2',
       },
       boxShadow: {
-        'glow-blue': '0 0 20px rgba(59, 130, 246, 0.3)',
-        'glow-violet': '0 0 20px rgba(139, 92, 246, 0.3)',
-        'glow-cyan': '0 0 20px rgba(6, 182, 212, 0.3)',
-        'glow-amber': '0 0 20px rgba(245, 158, 11, 0.3)',
+        'glow-blue': '0 0 24px rgba(59, 130, 246, 0.5), 0 0 8px rgba(59, 130, 246, 0.3)',
+        'glow-violet': '0 0 24px rgba(139, 92, 246, 0.5), 0 0 8px rgba(139, 92, 246, 0.3)',
+        'glow-cyan': '0 0 24px rgba(6, 182, 212, 0.5), 0 0 8px rgba(6, 182, 212, 0.3)',
+        'glow-amber': '0 0 24px rgba(245, 158, 11, 0.5), 0 0 8px rgba(245, 158, 11, 0.3)',
         // Elevation shadows
         'elevation-1': '0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3)',
         'elevation-2': '0 4px 6px rgba(0,0,0,0.4), 0 2px 4px rgba(0,0,0,0.3)',
