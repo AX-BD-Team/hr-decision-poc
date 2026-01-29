@@ -84,7 +84,7 @@ export function ZoneStructuring({ variant = 'zone' }: { variant?: 'zone' | 'dock
           2
         </span>
         <h3 className="text-sm font-semibold text-textMain">Structuring & Analysis</h3>
-        <span className="text-xs text-textSub">구조화/분석</span>
+        <span className="text-xs text-textSub">{t('zones.zone2Title')}</span>
       </div>
 
       {inner}

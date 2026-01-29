@@ -14,6 +14,7 @@ import { useStore } from '../../store/useStore';
 import { clsx } from 'clsx';
 import type { Entity, Edge } from '../../types';
 import { RotateCcw } from 'lucide-react';
+import { useT } from '../../i18n';
 import { ENTITY_COLORS, EDGE_COLORS, PANEL_BG, CHART_COLORS } from '../../constants/tokens';
 import { LoadingZone3Graph } from '../loading/LoadingZone3Graph';
 import { EntityNode } from '../graph/EntityNode';
@@ -22,6 +23,7 @@ import { layoutGraph } from '../../utils/layoutGraph';
 const nodeTypes = { entity: EntityNode };
 
 export function ZoneGraph() {
+  const t = useT();
   const { data, activeStep, selectedEntityId, selectedPathId, selectEntity, setActiveStep, loadingPhase } = useStore();
   const isActive = activeStep === 3;
   const showSkeleton = loadingPhase >= 1 && loadingPhase < 4;
@@ -129,7 +131,7 @@ export function ZoneGraph() {
           : 'border-neutralGray/20 bg-panelBg/50'
       )}
       data-tour="zone-3"
-      aria-label="온톨로지 관계 그래프"
+      aria-label={t('a11y.ontologyGraphAria')}
     >
       <div className="flex items-center justify-between gap-3 border-b border-neutralGray/20 px-4 py-3">
         <div className="flex items-center gap-2">
@@ -143,7 +145,7 @@ export function ZoneGraph() {
           </span>
           <div className="min-w-0">
             <h3 className="text-sm font-semibold text-textMain">Ontology Relationship Core</h3>
-            <p className="text-xs text-textSub">Person/Role/Task/Org/Risk 관계 기반 경로 탐색</p>
+            <p className="text-xs text-textSub">{t('zones.zone3Description')}</p>
           </div>
         </div>
         <button
@@ -151,7 +153,7 @@ export function ZoneGraph() {
             selectEntity(null);
             setActiveStep(1);
           }}
-          aria-label="그래프 초기화 및 오버뷰로 이동"
+          aria-label={t('a11y.resetGraphAria')}
           className="flex items-center gap-2 rounded-lg border border-neutralGray/20 bg-appBg/40 px-3 py-2 text-xs text-textSub transition-all hover:bg-appBg/70 hover:text-textMain focus-ring"
         >
           <RotateCcw className="h-4 w-4" aria-hidden="true" />
