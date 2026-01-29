@@ -1,4 +1,4 @@
-import { GitBranch, LayoutDashboard, FileText } from 'lucide-react';
+import { GitBranch, LayoutDashboard, FileText, Moon, Sun } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { clsx } from 'clsx';
 import type { PageId } from '../../types';
@@ -12,6 +12,8 @@ const pages: { id: PageId; label: string; icon: typeof GitBranch }[] = [
 export function PageNav() {
   const activePage = useStore((s) => s.activePage);
   const setActivePage = useStore((s) => s.setActivePage);
+  const theme = useStore((s) => s.theme);
+  const toggleTheme = useStore((s) => s.toggleTheme);
 
   return (
     <nav className="flex items-center gap-1 border-b border-neutralGray/20 mb-3" aria-label="페이지 네비게이션">
@@ -35,6 +37,15 @@ export function PageNav() {
           </button>
         );
       })}
+      <div className="ml-auto">
+        <button
+          onClick={toggleTheme}
+          aria-label={theme === 'dark' ? '라이트 모드로 전환' : '다크 모드로 전환'}
+          className="rounded-lg p-2 text-textSub transition-all hover:text-textMain"
+        >
+          {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+        </button>
+      </div>
     </nav>
   );
 }

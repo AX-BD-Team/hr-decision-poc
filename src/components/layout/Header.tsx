@@ -401,6 +401,13 @@ export function Header() {
                     {isContextSidebarOpen ? <PanelRightClose className="h-4 w-4" aria-hidden="true" /> : <PanelRightOpen className="h-4 w-4" aria-hidden="true" />}
                     HR Context
                   </button>
+                  <button
+                    onClick={() => { toggleTheme(); setIsMobileMenuOpen(false); }}
+                    className="flex w-full items-center gap-2 px-3 py-2.5 text-sm text-textSub hover:text-textMain min-h-[44px]"
+                  >
+                    {theme === 'dark' ? <Sun className="h-4 w-4" aria-hidden="true" /> : <Moon className="h-4 w-4" aria-hidden="true" />}
+                    {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+                  </button>
                 </div>
               )}
             </div>
