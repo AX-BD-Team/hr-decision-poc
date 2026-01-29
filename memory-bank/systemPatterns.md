@@ -153,23 +153,28 @@ Dock
 ## 시나리오 데이터 패턴
 
 ```typescript
-// src/data/scenarios.ts — 독립 JSON import 방식
+// src/data/scenarios.ts — 독립 JSON import 방식 (4개 시나리오)
 import demoS1 from './demo-s1.json';
 import demoS2 from './demo-s2.json';
 import demoS3 from './demo-s3.json';
+import demoS4 from './demo-s4.json';
 
 const s1 = demoS1 as DemoData;
 const s2 = demoS2 as DemoData;
 const s3 = demoS3 as DemoData;
+const s4 = demoS4 as DemoData;
 
 export const scenarioDataById: Record<string, DemoData> = {
-  [s1.meta.id]: s1, [s2.meta.id]: s2, [s3.meta.id]: s3,
+  [s1.meta.id]: s1, [s2.meta.id]: s2, [s3.meta.id]: s3, [s4.meta.id]: s4,
 };
-export const scenarioMetas = [s1.meta, s2.meta, s3.meta];
+export const scenarioMetas = [s1.meta, s2.meta, s3.meta, s4.meta];
 validateAllScenarios(scenarioDataById);
 
-// 이전: structuredClone + mutation 방식 (165줄) → 현재: JSON import (20줄)
-// 비개발자가 JSON 파일을 직접 검토/수정 가능
+// 시나리오 목록:
+// S1: TO 추가 요청 [TO] — 인력 충원 구조적 분석
+// S2: 상시 조직 변경 / R&R [R&R] — 조직 구조 vs 역할 재정의
+// S3: 솔루션 사업화 내부 체계 [Phase-2] — PoC→Pilot→Scale
+// S4: 역량 강화 [HRD] — 역량 갭 분석 및 개발 수단
 ```
 
 ## 시나리오 데이터 무결성 검증 패턴
@@ -189,11 +194,12 @@ export function validateAllScenarios(scenarios: Record<string, DemoData>): void 
   // 개발 모드에서 console.warn으로 무결성 오류 출력
 }
 
-// Vitest 테스트 (71 tests):
+// Vitest 테스트 (117 데이터 검증 + 74 UI = 191 tests):
 // - 구조 완전성, DataLabel 유효성, 메타 고유성, decisionPaths 일관성
 // - 참조 무결성 (relatedPaths, relatedEntityIds)
 // - Enum 유효성 (EntityType, EdgeType, severity, category, etc.)
 // - 값 범위 유효성 (coverage, dependency, weight)
+// - DecisionCriteria 5개 검증, badge 검증 (S1=TO, S2=R&R, S3=Phase-2, S4=HRD)
 ```
 
 ## 아이콘 맵 패턴
@@ -354,7 +360,7 @@ const clampHeight = (h: number) => Math.max(DOCK_MIN_HEIGHT, Math.min(DOCK_MAX_H
 ## 데이터 흐름
 
 ```
-src/data/demo-s1.json, demo-s2.json, demo-s3.json
+src/data/demo-s1.json, demo-s2.json, demo-s3.json, demo-s4.json
   ↓ (import)
 src/data/scenarios.ts  (JSON import + type cast + validateAllScenarios)
   ↓ (import)
@@ -538,16 +544,19 @@ createPortal(<div className="fixed inset-0 z-[9999]">...</div>, document.body);
 
 - SVG mask 기반 dark overlay + 타겟 요소 cutout
 - 타겟 위치: `querySelector('[data-tour="..."]')` + `getBoundingClientRect()`
-- `scrollIntoView` 후 400ms 대기로 위치 측정
+- `scrollIntoView({ block: 'center' })` 후 500ms 대기로 위치 측정 (sidebar 애니메이션 고려)
 - 키보드: ESC(종료), ←(이전), →(다음)
 - 액션 실행: `HIGHLIGHT_ZONE`, `SELECT_PATH`, `OPEN_DOCK_TAB`, `SHOW_REPORT`
 - resize/scroll 이벤트 리스너로 재측정
+- **Fallback**: 타겟 요소 부재 시 spotlight 없이 화면 중앙에 tooltip 표시
+- **사전 조건**: `startTour()`에서 `isContextSidebarOpen: true` (Step 8 hr-context 보장)
+- **Step 8 OPEN_DOCK_TAB context**: sidebar를 열어 hr-context 타겟이 DOM에 존재하도록 보장
 
 ### Tour 데이터 구조
 ```typescript
 // src/data/tourSteps.ts — 9개 스텝
 // target 값은 data-tour 속성과 매칭:
-// step-navigator, start-demo, data-labels, zone-1~4, hr-context, dock
+// step-navigator, start-demo, data-labels, zone-1~4, hr-context, decision-record
 ```
 
 ## Phased Loading 패턴

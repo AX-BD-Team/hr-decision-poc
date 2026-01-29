@@ -68,10 +68,15 @@
 - [x] 탭별 콘텐츠 렌더링
 
 #### 시나리오 데이터
-- [x] S1: 조직 인력 OPEX 유지/조정 (기본)
-- [x] S2: 조직 인력 OPEX 절감(안)
-- [x] S3: 핵심 인력 병목 완화
+- [x] **S1**: TO 추가 요청 — 인력 충원 구조적 분석 (JSON 전면 교체)
+- [x] **S2**: 상시 조직 변경 / R&R — 조직 구조 vs 역할 재정의 (JSON 전면 교체)
+- [x] **S3**: 솔루션 사업화 내부 체계 [Phase-2] — PoC→Pilot→Scale (JSON 전면 교체)
+- [x] **S4**: 역량 강화 [HRD] — 역량 갭 분석 및 개발 수단 (신규)
 - [x] **S2/S3 독립 JSON 파일** (`demo-s2.json`, `demo-s3.json`)
+- [x] **타입 시스템 확장** — DataSource/EntityType/EdgeType/AnalysisPattern/DecisionCriterion/ScenarioMeta 확장
+- [x] **S4 시나리오 데이터** — `demo-s4.json` 작성 + scenarios.ts 등록
+- [x] **DecisionCriteria** — 시나리오별 5개 의사결정 기준 + badge (Phase-2/HRD)
+- [x] **readiness 시스템** — DataSource 준비도 (available/recommended/missing/undefined_rules) + readinessNote
 - [x] `scenarios.ts` 리팩토링 — structuredClone 제거, JSON import 방식
 - [x] `scenarioDataById` / `scenarioMetas` export
 - [x] Header에 시나리오 선택 드롭다운
@@ -116,6 +121,9 @@
 - [x] **Guided Tour UI** — TourOverlay (portal, SVG mask, 키보드 nav, dialog a11y)
 - [x] 9개 투어 스텝
 - [x] Tour 액션: HIGHLIGHT_ZONE, SELECT_PATH, OPEN_DOCK_TAB, SHOW_REPORT
+- [x] **Tour 스텝 수정** — Step 8 sidebar 강제 열기, Step 9 target decision-record로 변경
+- [x] **Fallback tooltip** — 타겟 부재 시 화면 중앙 tooltip (spotlight 없음)
+- [x] **Scroll 개선** — block:'center' + 500ms 지연 (sidebar 애니메이션 고려)
 
 #### Zone별 극적 로딩 애니메이션
 - [x] `LoadingZone1Ingestion.tsx` — 행 슬라이드인 + 파란 스캔바 + 프로그레스바
@@ -162,7 +170,7 @@
 - [x] ESLint 설정
 - [x] Cloudflare Pages 배포 설정
 - [x] GitHub Actions CI/CD
-- [x] Vitest 테스트 프레임워크 (157 tests — 83 데이터 검증 + 74 UI 컴포넌트)
+- [x] Vitest 테스트 프레임워크 (191 tests — 117 데이터 검증 + 74 UI 컴포넌트)
 - [x] vitest.config.ts + src/test/setup.ts + src/test/utils.tsx 테스트 인프라
 - [x] `/deploy` 스킬 — Cloudflare Pages 자동 배포 (lint → build → deploy)
 
@@ -196,3 +204,5 @@
 | 8 | ~~recharts 미사용 패키지 잔존~~ | Low | 해결 (제거됨) |
 | 9 | ~~DashboardPage.tsx 누락 (TS2307)~~ | High | 해결 (파일 생성) |
 | 10 | ~~SkillTreemap 미사용 변수 (TS6133)~~ | Low | 해결 (제거) |
+| 11 | ~~EntityNode.tsx iconMap에 새 EntityType 누락~~ | Medium | 해결 (c330d1a 아이콘 추가) |
+| 12 | ~~useStore.ts `decisionCriteria` 참조 빌드 에러~~ | Medium | 해결 (c330d1a optional + nullish coalescing) |
