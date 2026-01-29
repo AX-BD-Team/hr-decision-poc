@@ -12,39 +12,38 @@ import {
 import '@xyflow/react/dist/style.css';
 import { useStore } from '../../store/useStore';
 import { clsx } from 'clsx';
-import type { Entity, Edge, EntityType } from '../../types';
+import type { Entity, Edge } from '../../types';
 import { RotateCcw } from 'lucide-react';
-
-const nodeColors: Record<EntityType, string> = {
-  org: '#4F8CFF',
-  role: '#10B981',
-  person: '#F59E0B',
-  project: '#8B5CF6',
-  task: '#6366F1',
-  risk: '#FF4D4F',
-  cost: '#EC4899',
-};
-
-const edgeColors: Record<string, string> = {
-  depends_on: '#F59E0B',
-  covers: '#10B981',
-  assigned_to: '#4F8CFF',
-  risk_of: '#FF4D4F',
-  cost_supports: '#EC4899',
-  bottleneck: '#FF4D4F',
-  overlap: '#8B5CF6',
-  belongs_to: '#6366F1',
-};
+import { ENTITY_COLORS, EDGE_COLORS, PANEL_BG } from '../../constants/tokens';
 
 export function ZoneGraph() {
-  const { data, activeStep, selectedEntityId, selectEntity, setActiveStep } = useStore();
+  const { data, activeStep, selectedEntityId, selectedPathId, selectEntity, setActiveStep } = useStore();
   const isActive = activeStep === 3;
+
+  const pathRelatedEntityIds = useMemo(() => {
+    if (!selectedPathId) return new Set<string>();
+    const ids = new Set<string>();
+    // Direct relatedEntityIds from the path
+    const path = data.decisionPaths.find((p) => p.id === selectedPathId);
+    if (path?.relatedEntityIds) {
+      for (const eid of path.relatedEntityIds) ids.add(eid);
+    }
+    // Also include entities from related risk signals
+    for (const rs of data.riskSignals) {
+      if (rs.relatedPaths.includes(selectedPathId)) {
+        for (const eid of rs.relatedEntityIds) ids.add(eid);
+      }
+    }
+    return ids;
+  }, [data.decisionPaths, data.riskSignals, selectedPathId]);
 
   const initialNodes: Node[] = useMemo(
     () =>
       data.entities.map((entity: Entity) => {
-        const baseColor = nodeColors[entity.type] || '#666';
+        const baseColor = ENTITY_COLORS[entity.type] || '#666';
         const isSelected = selectedEntityId === entity.id;
+        const isPathRelated = pathRelatedEntityIds.has(entity.id);
+        const isDimmed = !!selectedPathId && !isPathRelated && !isSelected;
         return {
           id: entity.id,
           position: entity.position || { x: 0, y: 0 },
@@ -52,48 +51,74 @@ export function ZoneGraph() {
           style: {
             background: `linear-gradient(135deg, ${baseColor}, ${baseColor}CC)`,
             color: '#fff',
-            border: isSelected ? '2px solid #fff' : `1px solid ${baseColor}66`,
+            border: isPathRelated
+              ? `2px solid ${baseColor}`
+              : isSelected
+              ? '2px solid #fff'
+              : `1px solid ${baseColor}66`,
             borderRadius: '8px',
             padding: '8px 12px',
             fontSize: '12px',
             fontWeight: 500,
             fontFamily: '"Pretendard", sans-serif',
-            boxShadow: isSelected
+            boxShadow: isPathRelated
+              ? `0 0 28px ${baseColor}AA`
+              : isSelected
               ? `0 0 24px ${baseColor}80`
               : `0 0 12px ${baseColor}30`,
+            opacity: isDimmed ? 0.35 : 1,
+            transition: 'all 0.3s ease',
           },
         };
       }),
-    [data.entities, selectedEntityId]
+    [data.entities, selectedEntityId, selectedPathId, pathRelatedEntityIds]
   );
 
   const initialEdges: FlowEdge[] = useMemo(
     () =>
-      data.edges.map((edge: Edge) => ({
-        id: edge.id,
-        source: edge.source,
-        target: edge.target,
-        label: edge.type.replace('_', ' '),
-        labelStyle: { fontSize: '11px', fill: '#AAB4C5', fontFamily: '"JetBrains Mono", monospace' },
-        style: {
-          stroke: edgeColors[edge.type] || '#666',
-          strokeWidth: edge.weight ? edge.weight * 3 : 2,
-        },
-        markerEnd: {
-          type: MarkerType.ArrowClosed,
-          color: edgeColors[edge.type] || '#666',
-        },
-        animated: edge.type === 'risk_of' || edge.type === 'bottleneck',
-      })),
-    [data.edges]
+      data.edges.map((edge: Edge) => {
+        const bothLinked =
+          pathRelatedEntityIds.size > 0 &&
+          pathRelatedEntityIds.has(edge.source) &&
+          pathRelatedEntityIds.has(edge.target);
+        const isDimmed = pathRelatedEntityIds.size > 0 && !bothLinked;
+        const color = EDGE_COLORS[edge.type] || '#666';
+        return {
+          id: edge.id,
+          source: edge.source,
+          target: edge.target,
+          label: edge.type.replace('_', ' '),
+          labelStyle: {
+            fontSize: '11px',
+            fill: isDimmed ? '#AAB4C530' : '#AAB4C5',
+            fontFamily: '"JetBrains Mono", monospace',
+          },
+          style: {
+            stroke: color,
+            strokeWidth: edge.weight ? edge.weight * 3 : 2,
+            opacity: isDimmed ? 0.15 : 1,
+            transition: 'opacity 0.3s ease',
+          },
+          markerEnd: {
+            type: MarkerType.ArrowClosed,
+            color,
+          },
+          animated: edge.type === 'risk_of' || edge.type === 'bottleneck',
+        };
+      }),
+    [data.edges, pathRelatedEntityIds]
   );
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, , onEdgesChange] = useEdgesState(initialEdges);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
   useEffect(() => {
     setNodes(initialNodes);
   }, [initialNodes, setNodes]);
+
+  useEffect(() => {
+    setEdges(initialEdges);
+  }, [initialEdges, setEdges]);
 
   const onNodeClick = useCallback(
     (_: React.MouseEvent, node: Node) => {
@@ -152,7 +177,7 @@ export function ZoneGraph() {
           <Background color="#1a2744" gap={20} />
           <Controls
             style={{
-              background: '#111A2E',
+              background: PANEL_BG,
               borderRadius: '8px',
               border: '1px solid rgba(170, 180, 197, 0.2)',
             }}
@@ -161,13 +186,13 @@ export function ZoneGraph() {
 
         {/* Floating Legend Overlay */}
         <div className="absolute bottom-3 right-3 flex flex-wrap gap-2 rounded-lg bg-surface-2/90 backdrop-blur-sm px-3 py-2 border border-neutralGray/20 shadow-elevation-2 max-w-[280px]">
-          {Object.entries(nodeColors).map(([type, color]) => (
+          {Object.entries(ENTITY_COLORS).map(([type, color]) => (
             <div key={type} className="flex items-center gap-1">
               <span
                 className="h-2.5 w-2.5 rounded"
                 style={{ backgroundColor: color }}
               />
-              <span className="text-[10px] text-textSub font-mono uppercase">{type}</span>
+              <span className="text-micro text-textSub font-mono uppercase">{type}</span>
             </div>
           ))}
         </div>
