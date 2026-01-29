@@ -8,4 +8,13 @@ export default defineConfig({
       '@': '/src',
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-xyflow': ['@xyflow/react', 'dagre'],
+        },
+      },
+    },
+  },
 })

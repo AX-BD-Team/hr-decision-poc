@@ -1,16 +1,24 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, lazy, Suspense } from 'react';
 import { Header } from './components/layout/Header';
 import { ZoneDataIngestion } from './components/zones/ZoneDataIngestion';
-import { ZoneGraph } from './components/zones/ZoneGraph';
 import { ZoneStructuring } from './components/zones/ZoneStructuring';
 import { ZoneDecisionPaths } from './components/zones/ZoneDecisionPaths';
 import { DecisionRecordSection } from './components/record/DecisionRecordSection';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
-import { TourOverlay } from './components/tour/TourOverlay';
-import { HRContextView } from './components/context/HRContextView';
+import { LoadingZone3Graph } from './components/loading/LoadingZone3Graph';
 import { useStore } from './store/useStore';
 import { clsx } from 'clsx';
 import { scenarioDataById } from './data/scenarios';
+
+const ZoneGraph = lazy(() =>
+  import('./components/zones/ZoneGraph').then(m => ({ default: m.ZoneGraph }))
+);
+const TourOverlay = lazy(() =>
+  import('./components/tour/TourOverlay').then(m => ({ default: m.TourOverlay }))
+);
+const HRContextView = lazy(() =>
+  import('./components/context/HRContextView').then(m => ({ default: m.HRContextView }))
+);
 
 function App() {
   const isContextSidebarOpen = useStore((s) => s.isContextSidebarOpen);
@@ -35,7 +43,9 @@ function App() {
       </a>
       <div ref={announcementRef} aria-live="polite" className="sr-only" />
       <Header />
-      <TourOverlay />
+      <Suspense fallback={null}>
+        <TourOverlay />
+      </Suspense>
       <div className="flex">
         <main
           id="main-content"
@@ -54,7 +64,9 @@ function App() {
 
             <section id="section-graph" className="min-h-[280px] lg:min-h-0 overflow-hidden animate-stagger-2 scroll-mt-32">
               <ErrorBoundary fallbackTitle="온톨로지 그래프 영역 오류">
-                <ZoneGraph />
+                <Suspense fallback={<LoadingZone3Graph />}>
+                  <ZoneGraph />
+                </Suspense>
               </ErrorBoundary>
             </section>
           </div>
@@ -88,7 +100,9 @@ function App() {
         >
           {isContextSidebarOpen && (
             <ErrorBoundary fallbackTitle="HR Context 오류">
-              <HRContextView variant="panel" />
+              <Suspense fallback={<div className="p-4 text-textSub text-sm">불러오는 중...</div>}>
+                <HRContextView variant="panel" />
+              </Suspense>
             </ErrorBoundary>
           )}
         </aside>
