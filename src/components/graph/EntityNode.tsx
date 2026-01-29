@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { Handle, Position, type NodeProps } from '@xyflow/react';
 import { Users, Briefcase, ClipboardList, Building2, AlertTriangle, DollarSign, FolderKanban } from 'lucide-react';
-import { ENTITY_COLORS } from '../../constants/tokens';
+import { ENTITY_COLORS, CHART_COLORS } from '../../constants/tokens';
 import { DataLabelBadge } from '../common/DataLabelBadge';
 import type { Entity, EntityType } from '../../types';
 
@@ -57,7 +57,7 @@ export const EntityNode = memo(function EntityNode({ data }: NodeProps) {
           border: isPathRelated
             ? `2px solid ${color}`
             : isSelected
-            ? '2px solid #fff'
+            ? `2px solid ${CHART_COLORS.white}`
             : `1px solid ${color}44`,
           boxShadow: isPathRelated
             ? `0 0 20px ${color}66`

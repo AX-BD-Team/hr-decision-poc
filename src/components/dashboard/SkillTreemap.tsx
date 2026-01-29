@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import type { SkillTreemapItem } from '../../types';
+import { CHART_COLORS } from '../../constants/tokens';
 
 interface SkillTreemapProps {
   data: SkillTreemapItem[];
@@ -126,7 +127,7 @@ export function SkillTreemap({ data, title = '스킬 분포' }: SkillTreemapProp
                 rx={4}
                 fill={r.item.color}
                 opacity={isHovered ? 1 : 0.75}
-                stroke={isHovered ? '#fff' : 'none'}
+                stroke={isHovered ? CHART_COLORS.white : 'none'}
                 strokeWidth={isHovered ? 2 : 0}
                 className="transition-all duration-200"
               />
@@ -136,7 +137,7 @@ export function SkillTreemap({ data, title = '스킬 분포' }: SkillTreemapProp
                     x={r.x + r.w / 2}
                     y={r.y + r.h / 2 - 6}
                     textAnchor="middle"
-                    fill="#fff"
+                    fill={CHART_COLORS.white}
                     fontSize={r.w > 80 ? 11 : 9}
                     fontWeight="600"
                   >
@@ -146,7 +147,7 @@ export function SkillTreemap({ data, title = '스킬 분포' }: SkillTreemapProp
                     x={r.x + r.w / 2}
                     y={r.y + r.h / 2 + 10}
                     textAnchor="middle"
-                    fill="rgba(255,255,255,0.7)"
+                    fill={CHART_COLORS.whiteAlpha70}
                     fontSize={r.w > 80 ? 10 : 8}
                   >
                     {r.item.value}명 ({pct}%)
@@ -170,9 +171,9 @@ export function SkillTreemap({ data, title = '스킬 분포' }: SkillTreemapProp
 
           return (
             <g>
-              <rect x={tx} y={ty} width={tw} height={th} rx={8} fill="rgba(17,26,46,0.92)" stroke="rgba(170,180,197,0.2)" strokeWidth={1} />
-              <text x={tx + 10} y={ty + 17} fill="#E6EAF2" fontSize={11} fontWeight="600">{r.item.name}</text>
-              <text x={tx + 10} y={ty + 34} fill="#AAB4C5" fontSize={10}>{r.item.value}명 · {pct}%</text>
+              <rect x={tx} y={ty} width={tw} height={th} rx={8} fill={CHART_COLORS.tooltipBg} stroke={CHART_COLORS.tooltipBorder} strokeWidth={1} />
+              <text x={tx + 10} y={ty + 17} fill={CHART_COLORS.textMain} fontSize={11} fontWeight="600">{r.item.name}</text>
+              <text x={tx + 10} y={ty + 34} fill={CHART_COLORS.textSub} fontSize={10}>{r.item.value}명 · {pct}%</text>
             </g>
           );
         })()}

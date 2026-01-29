@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { MonthlyWorkforceData } from '../../types';
+import { CHART_COLORS } from '../../constants/tokens';
 
 interface WorkforceFlowChartProps {
   data: MonthlyWorkforceData[];
@@ -83,8 +84,8 @@ export function WorkforceFlowChart({ data }: WorkforceFlowChartProps) {
             const y = scaleY(v, maxBar);
             return (
               <g key={v}>
-                <line x1={CHART.PAD_L} y1={y} x2={CHART.W - CHART.PAD_R} y2={y} stroke="#334155" strokeWidth={0.5} strokeDasharray="4 4" />
-                <text x={CHART.PAD_L - 8} y={y + 4} textAnchor="end" fill="#AAB4C5" fontSize={9}>{v}</text>
+                <line x1={CHART.PAD_L} y1={y} x2={CHART.W - CHART.PAD_R} y2={y} stroke={CHART_COLORS.gridDark} strokeWidth={0.5} strokeDasharray="4 4" />
+                <text x={CHART.PAD_L - 8} y={y + 4} textAnchor="end" fill={CHART_COLORS.textSub} fontSize={9}>{v}</text>
               </g>
             );
           })}
@@ -113,11 +114,11 @@ export function WorkforceFlowChart({ data }: WorkforceFlowChartProps) {
                   fill="transparent"
                 />
                 {/* In bar */}
-                <rect x={bx} y={baseY - inH} width={barW} height={inH} fill="#34D399" rx={2} opacity={hoverIdx === idx ? 1 : 0.75} className="transition-opacity" />
+                <rect x={bx} y={baseY - inH} width={barW} height={inH} fill={CHART_COLORS.success} rx={2} opacity={hoverIdx === idx ? 1 : 0.75} className="transition-opacity" />
                 {/* Out bar */}
-                <rect x={bx + barW + gap} y={baseY - outH} width={barW} height={outH} fill="#FF4D4F" rx={2} opacity={hoverIdx === idx ? 1 : 0.75} className="transition-opacity" />
+                <rect x={bx + barW + gap} y={baseY - outH} width={barW} height={outH} fill={CHART_COLORS.alert} rx={2} opacity={hoverIdx === idx ? 1 : 0.75} className="transition-opacity" />
                 {/* Month label */}
-                <text x={cx} y={CHART.H - CHART.PAD_B + 16} textAnchor="middle" fill="#AAB4C5" fontSize={10}>
+                <text x={cx} y={CHART.H - CHART.PAD_B + 16} textAnchor="middle" fill={CHART_COLORS.textSub} fontSize={10}>
                   {monthLabel}월
                 </text>
               </g>
@@ -128,25 +129,25 @@ export function WorkforceFlowChart({ data }: WorkforceFlowChartProps) {
           <polyline
             points={actualPoints}
             fill="none"
-            stroke="#4F8CFF"
+            stroke={CHART_COLORS.blue}
             strokeWidth={2}
             strokeLinejoin="round"
           />
           {data.map((d, i) => (
-            <circle key={`a-${i}`} cx={scaleX(i, data.length)} cy={lineY(d.totalHeadcount)} r={hoverIdx === i ? 4 : 2.5} fill="#4F8CFF" className="transition-all" />
+            <circle key={`a-${i}`} cx={scaleX(i, data.length)} cy={lineY(d.totalHeadcount)} r={hoverIdx === i ? 4 : 2.5} fill={CHART_COLORS.blue} className="transition-all" />
           ))}
 
           {/* Forecast line (dashed) */}
           <polyline
             points={forecastPoints}
             fill="none"
-            stroke="#F59E0B"
+            stroke={CHART_COLORS.warning}
             strokeWidth={1.5}
             strokeDasharray="6 4"
             strokeLinejoin="round"
           />
           {data.map((d, i) => (
-            <circle key={`f-${i}`} cx={scaleX(i, data.length)} cy={lineY(d.forecast)} r={hoverIdx === i ? 3.5 : 2} fill="#F59E0B" className="transition-all" />
+            <circle key={`f-${i}`} cx={scaleX(i, data.length)} cy={lineY(d.forecast)} r={hoverIdx === i ? 3.5 : 2} fill={CHART_COLORS.warning} className="transition-all" />
           ))}
 
           {/* Hover crosshair + tooltip */}
@@ -161,13 +162,13 @@ export function WorkforceFlowChart({ data }: WorkforceFlowChartProps) {
 
             return (
               <g>
-                <line x1={cx} y1={CHART.PAD_T} x2={cx} y2={CHART.H - CHART.PAD_B} stroke="#4F8CFF" strokeWidth={1} strokeDasharray="3 3" opacity={0.5} />
-                <rect x={tx} y={ty} width={tooltipW} height={tooltipH} rx={8} fill="rgba(17,26,46,0.95)" stroke="rgba(79,140,255,0.3)" strokeWidth={1} />
-                <text x={tx + 10} y={ty + 18} fill="#E6EAF2" fontSize={11} fontWeight="600">{m.month}</text>
-                <text x={tx + 10} y={ty + 35} fill="#34D399" fontSize={10}>유입: +{m.in}</text>
-                <text x={tx + 10} y={ty + 50} fill="#FF4D4F" fontSize={10}>유출: -{m.out}</text>
-                <text x={tx + 10} y={ty + 65} fill="#4F8CFF" fontSize={10}>총인원: {m.totalHeadcount.toLocaleString()}</text>
-                <text x={tx + 10} y={ty + 80} fill="#F59E0B" fontSize={10}>예측: {m.forecast.toLocaleString()}</text>
+                <line x1={cx} y1={CHART.PAD_T} x2={cx} y2={CHART.H - CHART.PAD_B} stroke={CHART_COLORS.blue} strokeWidth={1} strokeDasharray="3 3" opacity={0.5} />
+                <rect x={tx} y={ty} width={tooltipW} height={tooltipH} rx={8} fill={CHART_COLORS.tooltipBg} stroke={CHART_COLORS.tooltipBorderBlue} strokeWidth={1} />
+                <text x={tx + 10} y={ty + 18} fill={CHART_COLORS.textMain} fontSize={11} fontWeight="600">{m.month}</text>
+                <text x={tx + 10} y={ty + 35} fill={CHART_COLORS.success} fontSize={10}>유입: +{m.in}</text>
+                <text x={tx + 10} y={ty + 50} fill={CHART_COLORS.alert} fontSize={10}>유출: -{m.out}</text>
+                <text x={tx + 10} y={ty + 65} fill={CHART_COLORS.blue} fontSize={10}>총인원: {m.totalHeadcount.toLocaleString()}</text>
+                <text x={tx + 10} y={ty + 80} fill={CHART_COLORS.warning} fontSize={10}>예측: {m.forecast.toLocaleString()}</text>
               </g>
             );
           })()}

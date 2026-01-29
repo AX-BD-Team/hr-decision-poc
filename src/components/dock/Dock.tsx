@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { clsx } from 'clsx';
+import { DOCK_COLLAPSED_HEIGHT, DOCK_MIN_HEIGHT, DOCK_MAX_HEIGHT } from '../../constants/layout';
 import { DockContent } from './DockContent';
 import { ZoneDecisionPaths } from '../zones/ZoneDecisionPaths';
 import { ZoneStructuring } from '../zones/ZoneStructuring';
@@ -44,7 +45,7 @@ export function Dock() {
     setDockExpanded,
   } = useStore();
 
-  const clampHeight = (h: number) => Math.max(220, Math.min(560, h));
+  const clampHeight = (h: number) => Math.max(DOCK_MIN_HEIGHT, Math.min(DOCK_MAX_HEIGHT, h));
 
   const onStartResize = (e: React.PointerEvent) => {
     if (!isDockExpanded) {
@@ -78,7 +79,7 @@ export function Dock() {
   return (
     <div
       className={clsx('border-t border-neutralGray/20 bg-panelBg/80 backdrop-blur-md transition-[height] duration-200 ease-out')}
-      style={{ height: isDockExpanded ? dockHeight : 56 }}
+      style={{ height: isDockExpanded ? dockHeight : DOCK_COLLAPSED_HEIGHT }}
       data-tour="dock"
     >
       <div
@@ -88,8 +89,8 @@ export function Dock() {
         role="separator"
         aria-orientation="horizontal"
         aria-valuenow={dockHeight}
-        aria-valuemin={220}
-        aria-valuemax={560}
+        aria-valuemin={DOCK_MIN_HEIGHT}
+        aria-valuemax={DOCK_MAX_HEIGHT}
         aria-label="독 높이 조절"
         onKeyDown={(e) => {
           if (e.key === 'ArrowUp') {

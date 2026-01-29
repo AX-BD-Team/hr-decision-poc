@@ -2,6 +2,120 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ===== Theme CSS Variables ===== */
+:root,
+:root[data-theme="dark"] {
+  --zone-accent: #4F8CFF;
+  --zone-accent-rgb: 79, 140, 255;
+  /* Core */
+  --color-app-bg: #0B1220;
+  --color-panel-bg: #111A2E;
+  --color-text-main: #E6EAF2;
+  --color-text-sub: #AAB4C5;
+  --color-neutral-gray: #AAB4C5;
+  /* Surface elevation */
+  --color-surface-0: #0B1220;
+  --color-surface-1: #0F1829;
+  --color-surface-2: #111A2E;
+  --color-surface-3: #162034;
+  --color-surface-4: #1A2640;
+  /* Glass */
+  --glass-panel-bg: linear-gradient(135deg, rgba(17,26,46,0.75), rgba(17,26,46,0.65));
+  --glass-panel-border: rgba(170, 180, 197, 0.15);
+  --glass-panel-shadow: 0 4px 6px -1px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.03);
+  --glass-header-bg: linear-gradient(135deg, rgba(11,18,32,0.94), rgba(17,26,46,0.92));
+  --glass-header-border: rgba(170, 180, 197, 0.18);
+  --glass-header-shadow: 0 10px 24px rgba(0,0,0,0.45);
+  /* Scrollbar */
+  --scrollbar-track: rgba(11, 18, 32, 0.5);
+  --scrollbar-thumb: rgba(170, 180, 197, 0.2);
+  --scrollbar-thumb-hover: rgba(170, 180, 197, 0.35);
+  /* Grid bg */
+  --dot-grid-color: rgba(170, 180, 197, 0.08);
+  /* Scroll fade */
+  --scroll-fade: rgba(11,18,32,0.8);
+  /* ReactFlow */
+  --rf-bg: rgba(11, 18, 32, 0.5);
+  --rf-controls-bg: rgba(17, 26, 46, 0.8);
+  --rf-controls-border: rgba(170, 180, 197, 0.2);
+  --rf-btn-border: rgba(170, 180, 197, 0.1);
+  --rf-btn-color: #AAB4C5;
+  --rf-btn-hover-bg: rgba(79, 140, 255, 0.15);
+  /* Chart */
+  --chart-text-main: #E6EAF2;
+  --chart-text-sub: #AAB4C5;
+  --chart-panel-bg: #111A2E;
+  --chart-rf-bg: #1a2744;
+  --chart-white: #FFFFFF;
+  --chart-white-alpha70: rgba(255,255,255,0.7);
+  --chart-grid-line: rgba(170,180,197,0.08);
+  --chart-axis: rgba(170,180,197,0.2);
+  --chart-tick: rgba(170,180,197,0.3);
+  --chart-tooltip-bg: rgba(17,26,46,0.95);
+  --chart-tooltip-border: rgba(170,180,197,0.2);
+  --chart-tooltip-border-blue: rgba(79,140,255,0.3);
+  --chart-grid-dark: #334155;
+  /* Shimmer */
+  --shimmer-from: rgba(170, 180, 197, 0.06);
+  --shimmer-mid: rgba(170, 180, 197, 0.12);
+}
+
+:root[data-theme="light"] {
+  --zone-accent: #4F8CFF;
+  --zone-accent-rgb: 79, 140, 255;
+  /* Core */
+  --color-app-bg: #F8FAFC;
+  --color-panel-bg: #FFFFFF;
+  --color-text-main: #1E293B;
+  --color-text-sub: #64748B;
+  --color-neutral-gray: #94A3B8;
+  /* Surface elevation */
+  --color-surface-0: #F8FAFC;
+  --color-surface-1: #F1F5F9;
+  --color-surface-2: #E2E8F0;
+  --color-surface-3: #CBD5E1;
+  --color-surface-4: #94A3B8;
+  /* Glass */
+  --glass-panel-bg: linear-gradient(135deg, rgba(255,255,255,0.85), rgba(248,250,252,0.75));
+  --glass-panel-border: rgba(148, 163, 184, 0.25);
+  --glass-panel-shadow: 0 4px 6px -1px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.5);
+  --glass-header-bg: linear-gradient(135deg, rgba(248,250,252,0.96), rgba(241,245,249,0.94));
+  --glass-header-border: rgba(148, 163, 184, 0.3);
+  --glass-header-shadow: 0 10px 24px rgba(0,0,0,0.08);
+  /* Scrollbar */
+  --scrollbar-track: rgba(241, 245, 249, 0.5);
+  --scrollbar-thumb: rgba(148, 163, 184, 0.35);
+  --scrollbar-thumb-hover: rgba(148, 163, 184, 0.55);
+  /* Grid bg */
+  --dot-grid-color: rgba(148, 163, 184, 0.12);
+  /* Scroll fade */
+  --scroll-fade: rgba(248,250,252,0.8);
+  /* ReactFlow */
+  --rf-bg: rgba(248, 250, 252, 0.5);
+  --rf-controls-bg: rgba(255, 255, 255, 0.9);
+  --rf-controls-border: rgba(148, 163, 184, 0.3);
+  --rf-btn-border: rgba(148, 163, 184, 0.15);
+  --rf-btn-color: #64748B;
+  --rf-btn-hover-bg: rgba(79, 140, 255, 0.1);
+  /* Chart */
+  --chart-text-main: #1E293B;
+  --chart-text-sub: #64748B;
+  --chart-panel-bg: #FFFFFF;
+  --chart-rf-bg: #E2E8F0;
+  --chart-white: #1E293B;
+  --chart-white-alpha70: rgba(30,41,59,0.7);
+  --chart-grid-line: rgba(148,163,184,0.12);
+  --chart-axis: rgba(148,163,184,0.3);
+  --chart-tick: rgba(148,163,184,0.4);
+  --chart-tooltip-bg: rgba(255,255,255,0.95);
+  --chart-tooltip-border: rgba(148,163,184,0.3);
+  --chart-tooltip-border-blue: rgba(79,140,255,0.2);
+  --chart-grid-dark: #CBD5E1;
+  /* Shimmer */
+  --shimmer-from: rgba(148, 163, 184, 0.08);
+  --shimmer-mid: rgba(148, 163, 184, 0.15);
+}
+
 body {
   margin: 0;
   font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
@@ -11,25 +125,36 @@ body {
 
 /* Command Center dot-grid background */
 .cmd-grid-bg {
-  background-image: radial-gradient(circle, rgba(170, 180, 197, 0.08) 1px, transparent 1px);
+  background-image: radial-gradient(circle, var(--dot-grid-color) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 
 /* Glassmorphism panel */
 .glass-panel {
-  background: linear-gradient(135deg, rgba(17,26,46,0.75), rgba(17,26,46,0.65));
+  background: var(--glass-panel-bg);
   backdrop-filter: blur(16px) saturate(150%);
   -webkit-backdrop-filter: blur(16px) saturate(150%);
-  border: 1px solid rgba(170, 180, 197, 0.15);
-  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.03);
+  border: 1px solid var(--glass-panel-border);
+  box-shadow: var(--glass-panel-shadow);
 }
 
 .glass-header {
-  background: linear-gradient(135deg, rgba(11,18,32,0.94), rgba(17,26,46,0.92));
+  background: var(--glass-header-bg);
   backdrop-filter: blur(16px) saturate(160%);
   -webkit-backdrop-filter: blur(16px) saturate(160%);
-  border: 1px solid rgba(170, 180, 197, 0.18);
-  box-shadow: 0 10px 24px rgba(0,0,0,0.45);
+  border: 1px solid var(--glass-header-border);
+  box-shadow: var(--glass-header-shadow);
+}
+
+/* Button variants */
+.btn-primary {
+  @apply rounded-lg bg-decisionBlue px-4 py-2 text-sm font-medium text-white transition-all hover:bg-decisionBlue/80;
+}
+.btn-secondary {
+  @apply rounded-lg glass-panel px-3 py-2 text-sm text-textSub transition-all hover:bg-appBg/50 hover:text-textMain;
+}
+.btn-ghost {
+  @apply rounded-lg px-3 py-2 text-sm text-textSub transition-all hover:bg-appBg/50 hover:text-textMain;
 }
 
 /* Zone card with left accent border */
@@ -78,38 +203,38 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(11, 18, 32, 0.5);
+  background: var(--scrollbar-track);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(170, 180, 197, 0.2);
+  background: var(--scrollbar-thumb);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(170, 180, 197, 0.35);
+  background: var(--scrollbar-thumb-hover);
 }
 
-/* ReactFlow dark theme overrides */
+/* ReactFlow theme overrides */
 .react-flow__background {
-  background-color: rgba(11, 18, 32, 0.5) !important;
+  background-color: var(--rf-bg) !important;
 }
 .react-flow__controls {
-  background: rgba(17, 26, 46, 0.8) !important;
+  background: var(--rf-controls-bg) !important;
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(170, 180, 197, 0.2) !important;
+  border: 1px solid var(--rf-controls-border) !important;
   border-radius: 8px !important;
 }
 .react-flow__controls-button {
   background: transparent !important;
-  border-bottom: 1px solid rgba(170, 180, 197, 0.1) !important;
-  color: #AAB4C5 !important;
-  fill: #AAB4C5 !important;
+  border-bottom: 1px solid var(--rf-btn-border) !important;
+  color: var(--rf-btn-color) !important;
+  fill: var(--rf-btn-color) !important;
 }
 .react-flow__controls-button:hover {
-  background: rgba(79, 140, 255, 0.15) !important;
+  background: var(--rf-btn-hover-bg) !important;
 }
 .react-flow__controls-button svg {
-  fill: #AAB4C5 !important;
+  fill: var(--rf-btn-color) !important;
 }
 
 /* ReactFlow controls position adjustment */
@@ -142,11 +267,11 @@ body {
 }
 .scroll-fade-x::before {
   left: 0;
-  background: linear-gradient(to right, rgba(11,18,32,0.8), transparent);
+  background: linear-gradient(to right, var(--scroll-fade), transparent);
 }
 .scroll-fade-x::after {
   right: 0;
-  background: linear-gradient(to left, rgba(11,18,32,0.8), transparent);
+  background: linear-gradient(to left, var(--scroll-fade), transparent);
 }
 
 /* Coverage bar gradient */
@@ -162,9 +287,9 @@ body {
 .shimmer-bg {
   background: linear-gradient(
     90deg,
-    rgba(170, 180, 197, 0.06) 25%,
-    rgba(170, 180, 197, 0.12) 50%,
-    rgba(170, 180, 197, 0.06) 75%
+    var(--shimmer-from) 25%,
+    var(--shimmer-mid) 50%,
+    var(--shimmer-from) 75%
   );
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;

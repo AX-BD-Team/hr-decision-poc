@@ -1,5 +1,6 @@
 import { clsx } from 'clsx';
 import type { MonthlyWorkforceData } from '../../types';
+import { CHART_COLORS } from '../../constants/tokens';
 
 interface WorkforceDetailTableProps {
   data: MonthlyWorkforceData[];
@@ -20,7 +21,7 @@ function MiniSparkline({ data, width = 60, height = 16 }: { data: number[]; widt
 
   return (
     <svg width={width} height={height} className="inline-block align-middle ml-2" aria-hidden="true">
-      <polyline points={points} fill="none" stroke="#4F8CFF" strokeWidth={1.5} strokeLinejoin="round" />
+      <polyline points={points} fill="none" stroke={CHART_COLORS.blue} strokeWidth={1.5} strokeLinejoin="round" />
     </svg>
   );
 }

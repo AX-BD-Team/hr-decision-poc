@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { ProjectStatusItem } from '../../types';
+import { CHART_COLORS } from '../../constants/tokens';
 
 interface ProjectStatusChartProps {
   data: ProjectStatusItem[];
@@ -57,10 +58,10 @@ export function ProjectStatusChart({ data }: ProjectStatusChartProps) {
           })}
 
           {/* Center text */}
-          <text x={cx} y={hoveredItem ? cy - 2 : cy - 3} textAnchor="middle" fill="#E6EAF2" fontSize={hoveredItem ? 14 : 18} fontWeight="bold" className="transition-all">
+          <text x={cx} y={hoveredItem ? cy - 2 : cy - 3} textAnchor="middle" fill={CHART_COLORS.textMain} fontSize={hoveredItem ? 14 : 18} fontWeight="bold" className="transition-all">
             {hoveredItem ? hoveredItem.count : total}
           </text>
-          <text x={cx} y={hoveredItem ? cy + 12 : cy + 12} textAnchor="middle" fill="#AAB4C5" fontSize={8}>
+          <text x={cx} y={hoveredItem ? cy + 12 : cy + 12} textAnchor="middle" fill={CHART_COLORS.textSub} fontSize={8}>
             {hoveredItem ? hoveredItem.status : '전체 프로젝트'}
           </text>
         </svg>

@@ -84,7 +84,7 @@ function App() {
             </div>
 
             <div className="mt-2 sm:mt-4 grid grid-cols-1 gap-2 sm:gap-4 lg:grid-cols-[360px_1fr]">
-              <section id="section-structuring" className="min-h-0 overflow-hidden scroll-mt-32">
+              <section id="section-structuring" className="min-h-0 overflow-hidden scroll-mt-32 h-full">
                 <ErrorBoundary fallbackTitle="분석 패턴 영역 오류">
                   <ZoneStructuring />
                 </ErrorBoundary>

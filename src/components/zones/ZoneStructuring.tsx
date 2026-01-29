@@ -62,7 +62,7 @@ export function ZoneStructuring({ variant = 'zone' }: { variant?: 'zone' | 'dock
   return (
     <div
       className={clsx(
-        'relative flex min-h-0 flex-col rounded-xl border p-4 transition-all',
+        'relative flex min-h-0 flex-col h-full rounded-xl border p-4 transition-all',
         justRevealed && 'animate-phase-reveal',
         isActive
           ? 'border-zoneStruct/50 bg-zoneStruct/5 shadow-glow-violet'

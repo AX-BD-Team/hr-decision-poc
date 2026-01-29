@@ -13,12 +13,12 @@ export default {
       colors: {
         decisionBlue: '#4F8CFF',
         alertRed: '#FF4D4F',
-        neutralGray: '#AAB4C5',
+        neutralGray: 'var(--color-neutral-gray)',
         contextGreen: '#10B981',
-        appBg: '#0B1220',
-        panelBg: '#111A2E',
-        textMain: '#E6EAF2',
-        textSub: '#AAB4C5',
+        appBg: 'var(--color-app-bg)',
+        panelBg: 'var(--color-panel-bg)',
+        textMain: 'var(--color-text-main)',
+        textSub: 'var(--color-text-sub)',
         // Zone accent colors
         zoneIngest: '#3B82F6',
         zoneStruct: '#8B5CF6',
@@ -54,7 +54,7 @@ export default {
         },
         // Severity colors
         severity: {
-          critical: '#FF4D4F',
+          critical: '#DC2626',
           high: '#FF4D4F',
           medium: '#FBBF24',
           low: '#34D399',
@@ -62,11 +62,11 @@ export default {
         },
         // Surface elevation scale
         surface: {
-          0: '#0B1220',
-          1: '#0F1829',
-          2: '#111A2E',
-          3: '#162034',
-          4: '#1A2640',
+          0: 'var(--color-surface-0)',
+          1: 'var(--color-surface-1)',
+          2: 'var(--color-surface-2)',
+          3: 'var(--color-surface-3)',
+          4: 'var(--color-surface-4)',
         },
       },
       fontSize: {

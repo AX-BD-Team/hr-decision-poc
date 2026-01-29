@@ -110,13 +110,13 @@ export function UtilizationScatterChart({ data, selectedEntityId, onSelectEntity
         {X_TICKS.map((t) => (
           <g key={`xt-${t}`}>
             <line x1={scaleX(t)} y1={MARGIN.top + PLOT_H} x2={scaleX(t)} y2={MARGIN.top + PLOT_H + 4} stroke={CHART_COLORS.tick} />
-            <text x={scaleX(t)} y={MARGIN.top + PLOT_H + 14} fill="#AAB4C5" fontSize={8} textAnchor="middle" fontFamily="monospace">
+            <text x={scaleX(t)} y={MARGIN.top + PLOT_H + 14} fill={CHART_COLORS.textSub} fontSize={8} textAnchor="middle" fontFamily="monospace">
               {t}%
             </text>
           </g>
         ))}
         {/* X-axis label */}
-        <text x={MARGIN.left + PLOT_W / 2} y={VB_H - 4} fill="#AAB4C5" fontSize={9} textAnchor="middle" fontFamily="monospace">
+        <text x={MARGIN.left + PLOT_W / 2} y={VB_H - 4} fill={CHART_COLORS.textSub} fontSize={9} textAnchor="middle" fontFamily="monospace">
           Utilization
         </text>
 
@@ -124,7 +124,7 @@ export function UtilizationScatterChart({ data, selectedEntityId, onSelectEntity
         {Y_TICKS.map((t) => (
           <g key={`yt-${t}`}>
             <line x1={MARGIN.left - 4} y1={scaleY(t)} x2={MARGIN.left} y2={scaleY(t)} stroke={CHART_COLORS.tick} />
-            <text x={MARGIN.left - 7} y={scaleY(t) + 3} fill="#AAB4C5" fontSize={8} textAnchor="end" fontFamily="monospace">
+            <text x={MARGIN.left - 7} y={scaleY(t) + 3} fill={CHART_COLORS.textSub} fontSize={8} textAnchor="end" fontFamily="monospace">
               {t}%
             </text>
           </g>
@@ -133,7 +133,7 @@ export function UtilizationScatterChart({ data, selectedEntityId, onSelectEntity
         <text
           x={10}
           y={MARGIN.top + PLOT_H / 2}
-          fill="#AAB4C5"
+          fill={CHART_COLORS.textSub}
           fontSize={9}
           textAnchor="middle"
           fontFamily="monospace"
@@ -146,7 +146,7 @@ export function UtilizationScatterChart({ data, selectedEntityId, onSelectEntity
         {points.map((pt) => {
           const isSelected = selectedEntityId === pt.entityId;
           const isDanger = pt.utilization > 1 && pt.dependency > 0.7;
-          const fill = isSelected ? '#4F8CFF' : isDanger ? '#FF4D4F' : '#10B981';
+          const fill = isSelected ? CHART_COLORS.blue : isDanger ? CHART_COLORS.alert : CHART_COLORS.success;
           const r = isSelected ? 7 : 5;
           return (
             <circle
@@ -155,7 +155,7 @@ export function UtilizationScatterChart({ data, selectedEntityId, onSelectEntity
               cy={pt.cy}
               r={r}
               fill={fill}
-              stroke={isSelected ? '#fff' : 'none'}
+              stroke={isSelected ? CHART_COLORS.white : 'none'}
               strokeWidth={isSelected ? 1.5 : 0}
               style={{ cursor: 'pointer', transition: 'r 0.15s ease' }}
               onMouseEnter={() => setHoveredId(pt.id)}
@@ -179,14 +179,14 @@ export function UtilizationScatterChart({ data, selectedEntityId, onSelectEntity
           if (ty < 4) ty = hoveredPoint.cy + 10;
           return (
             <g>
-              <rect x={tx} y={ty} width={tw} height={th} rx={6} fill="#111A2E" stroke={CHART_COLORS.axis} strokeWidth={1} />
-              <text x={tx + 8} y={ty + 14} fill="#E6EAF2" fontSize={9} fontWeight="600">
+              <rect x={tx} y={ty} width={tw} height={th} rx={6} fill={CHART_COLORS.panelBg} stroke={CHART_COLORS.tooltipBorder} strokeWidth={1} />
+              <text x={tx + 8} y={ty + 14} fill={CHART_COLORS.textMain} fontSize={9} fontWeight="600">
                 {hoveredPoint.name}
               </text>
-              <text x={tx + 8} y={ty + 27} fill="#AAB4C5" fontSize={8} fontFamily="monospace">
+              <text x={tx + 8} y={ty + 27} fill={CHART_COLORS.textSub} fontSize={8} fontFamily="monospace">
                 가동률: {(hoveredPoint.utilization * 100).toFixed(0)}%
               </text>
-              <text x={tx + 8} y={ty + 39} fill="#AAB4C5" fontSize={8} fontFamily="monospace">
+              <text x={tx + 8} y={ty + 39} fill={CHART_COLORS.textSub} fontSize={8} fontFamily="monospace">
                 의존도: {(hoveredPoint.dependency * 100).toFixed(0)}%
               </text>
             </g>

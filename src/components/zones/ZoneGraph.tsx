@@ -14,7 +14,7 @@ import { useStore } from '../../store/useStore';
 import { clsx } from 'clsx';
 import type { Entity, Edge } from '../../types';
 import { RotateCcw } from 'lucide-react';
-import { ENTITY_COLORS, EDGE_COLORS, PANEL_BG } from '../../constants/tokens';
+import { ENTITY_COLORS, EDGE_COLORS, PANEL_BG, CHART_COLORS } from '../../constants/tokens';
 import { LoadingZone3Graph } from '../loading/LoadingZone3Graph';
 import { EntityNode } from '../graph/EntityNode';
 import { layoutGraph } from '../../utils/layoutGraph';
@@ -80,7 +80,7 @@ export function ZoneGraph() {
           label: edge.type.replace('_', ' '),
           labelStyle: {
             fontSize: '11px',
-            fill: isDimmed ? '#AAB4C530' : '#AAB4C5',
+            fill: isDimmed ? `${CHART_COLORS.textSub}30` : CHART_COLORS.textSub,
             fontFamily: '"JetBrains Mono", monospace',
           },
           style: {
@@ -170,7 +170,7 @@ export function ZoneGraph() {
           fitView
           proOptions={{ hideAttribution: true }}
         >
-          <Background color="#1a2744" gap={20} />
+          <Background color={CHART_COLORS.reactFlowBg} gap={20} />
           <Controls
             className="hidden sm:flex"
             style={{
