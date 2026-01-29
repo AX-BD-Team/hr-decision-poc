@@ -17,12 +17,15 @@ import { RotateCcw } from 'lucide-react';
 import { ENTITY_COLORS, EDGE_COLORS, PANEL_BG } from '../../constants/tokens';
 import { SkeletonZone } from '../common/SkeletonZone';
 import { EntityNode } from '../graph/EntityNode';
+import { layoutGraph } from '../../utils/layoutGraph';
 
 const nodeTypes = { entity: EntityNode };
 
 export function ZoneGraph() {
-  const { data, activeStep, selectedEntityId, selectedPathId, selectEntity, setActiveStep, isLoading } = useStore();
+  const { data, activeStep, selectedEntityId, selectedPathId, selectEntity, setActiveStep, loadingPhase } = useStore();
   const isActive = activeStep === 3;
+  const showSkeleton = loadingPhase >= 1 && loadingPhase < 4;
+  const justRevealed = loadingPhase >= 4 && loadingPhase <= 5;
 
   const pathRelatedEntityIds = useMemo(() => {
     if (!selectedPathId) return new Set<string>();
@@ -39,20 +42,26 @@ export function ZoneGraph() {
     return ids;
   }, [data.decisionPaths, data.riskSignals, selectedPathId]);
 
+  const dagrePositions = useMemo(
+    () => layoutGraph(data.entities, data.edges).positions,
+    [data.entities, data.edges]
+  );
+
   const initialNodes: Node[] = useMemo(
     () =>
       data.entities.map((entity: Entity) => {
         const isSelected = selectedEntityId === entity.id;
         const isPathRelated = pathRelatedEntityIds.has(entity.id);
         const isDimmed = !!selectedPathId && !isPathRelated && !isSelected;
+        const autoPos = dagrePositions.get(entity.id);
         return {
           id: entity.id,
           type: 'entity',
-          position: entity.position || { x: 0, y: 0 },
+          position: autoPos || entity.position || { x: 0, y: 0 },
           data: { label: entity.name, entity, isSelected, isPathRelated, isDimmed },
         };
       }),
-    [data.entities, selectedEntityId, selectedPathId, pathRelatedEntityIds]
+    [data.entities, selectedEntityId, selectedPathId, pathRelatedEntityIds, dagrePositions]
   );
 
   const initialEdges: FlowEdge[] = useMemo(
@@ -108,12 +117,13 @@ export function ZoneGraph() {
     [selectEntity, selectedEntityId]
   );
 
-  if (isLoading) return <SkeletonZone variant="graph" />;
+  if (showSkeleton) return <SkeletonZone variant="graph" processingLabel="온톨로지 그래프 생성 중..." />;
 
   return (
     <div
       className={clsx(
         'scan-line-overlay flex h-full min-h-0 flex-col rounded-xl border transition-all',
+        justRevealed && 'animate-phase-reveal',
         isActive
           ? 'border-zoneGraph/50 bg-zoneGraph/5 shadow-glow-cyan'
           : 'border-neutralGray/20 bg-panelBg/50'

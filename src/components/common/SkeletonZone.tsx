@@ -2,13 +2,27 @@ import { clsx } from 'clsx';
 
 interface SkeletonZoneProps {
   variant?: 'default' | 'graph' | 'paths';
+  processingLabel?: string;
 }
 
 function ShimmerBlock({ className }: { className?: string }) {
   return <div className={clsx('shimmer-bg rounded', className)} />;
 }
 
-export function SkeletonZone({ variant = 'default' }: SkeletonZoneProps) {
+function ProcessingIndicator({ label }: { label?: string }) {
+  if (!label) return null;
+  return (
+    <div className="mt-3 flex items-center gap-2 px-1">
+      <span className="relative flex h-2 w-2">
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-decisionBlue opacity-75" />
+        <span className="relative inline-flex h-2 w-2 rounded-full bg-decisionBlue" />
+      </span>
+      <span className="text-xs text-textSub animate-pulse">{label}</span>
+    </div>
+  );
+}
+
+export function SkeletonZone({ variant = 'default', processingLabel }: SkeletonZoneProps) {
   if (variant === 'graph') {
     return (
       <div className="flex h-full min-h-[300px] flex-col rounded-xl border border-neutralGray/20 bg-panelBg/50" aria-busy="true" aria-label="그래프 로딩 중">
@@ -29,6 +43,7 @@ export function SkeletonZone({ variant = 'default' }: SkeletonZoneProps) {
               <ShimmerBlock className="h-8 w-20 rounded-lg" />
               <ShimmerBlock className="h-8 w-18 rounded-lg" />
             </div>
+            <ProcessingIndicator label={processingLabel} />
           </div>
         </div>
       </div>
@@ -58,6 +73,7 @@ export function SkeletonZone({ variant = 'default' }: SkeletonZoneProps) {
             </div>
           ))}
         </div>
+        <ProcessingIndicator label={processingLabel} />
       </div>
     );
   }
@@ -83,6 +99,7 @@ export function SkeletonZone({ variant = 'default' }: SkeletonZoneProps) {
           </div>
         ))}
       </div>
+      <ProcessingIndicator label={processingLabel} />
     </div>
   );
 }

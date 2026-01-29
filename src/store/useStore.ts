@@ -6,7 +6,8 @@ interface AppState {
   // 데이터
   data: DemoData;
   scenarioId: string;
-  isLoading: boolean;
+  loadingPhase: number; // 0=idle, 1~4=zone skeleton, 5=all reveal
+  _loadingAbortId: number;
 
   // UI 상태
   mode: AppMode;
@@ -47,7 +48,8 @@ interface AppState {
 const initialState = {
   scenarioId: 's1',
   data: scenarioDataById.s1,
-  isLoading: false,
+  loadingPhase: 0,
+  _loadingAbortId: 0,
   mode: 'OVERVIEW' as AppMode,
   activeStep: 1,
   selectedEntityId: null,
@@ -65,9 +67,12 @@ export const useStore = create<AppState>((set) => ({
   ...initialState,
 
   setScenario: (scenarioId) => {
+    const abortId = Date.now();
     set(() => ({
       scenarioId,
-      isLoading: true,
+      data: scenarioDataById[scenarioId] || scenarioDataById.s1,
+      loadingPhase: 1,
+      _loadingAbortId: abortId,
       mode: 'OVERVIEW',
       activeStep: 1,
       selectedEntityId: null,
@@ -75,12 +80,24 @@ export const useStore = create<AppState>((set) => ({
       recordTab: 'evidence',
       isDockExpanded: false,
     }));
+
+    const PHASE_DELAY = 600;
+    for (let phase = 2; phase <= 5; phase++) {
+      setTimeout(() => {
+        const state = useStore.getState();
+        if (state._loadingAbortId !== abortId) return;
+        set({
+          loadingPhase: phase,
+          activeStep: Math.min(phase, 4),
+        });
+      }, PHASE_DELAY * (phase - 1));
+    }
+    // Return to idle after phase 5
     setTimeout(() => {
-      set(() => ({
-        data: scenarioDataById[scenarioId] || scenarioDataById.s1,
-        isLoading: false,
-      }));
-    }, 400);
+      const state = useStore.getState();
+      if (state._loadingAbortId !== abortId) return;
+      set({ loadingPhase: 0 });
+    }, PHASE_DELAY * 5);
   },
 
   setMode: (mode) => set({ mode }),
@@ -115,6 +132,7 @@ export const useStore = create<AppState>((set) => ({
       activeStep: 1,
       selectedEntityId: null,
       selectedPathId: null,
+      loadingPhase: 0,
     }),
 
   nextTourStep: () =>
@@ -143,5 +161,7 @@ export const useStore = create<AppState>((set) => ({
       ...initialState,
       scenarioId: state.scenarioId,
       data: scenarioDataById[state.scenarioId] || scenarioDataById.s1,
+      loadingPhase: 0,
+      _loadingAbortId: Date.now(),
     })),
 }));
