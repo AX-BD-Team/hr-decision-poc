@@ -131,6 +131,15 @@
 - [x] dashboard-data.json, docs-meta.ts 데이터 소스
 - [x] App.tsx lazy import (`DashboardPage`, `DocsPage`)
 
+#### 대시보드 재설계 (인터랙션 + 컴포넌트 추출)
+- [x] TalentTable 추출 (정렬, 부서 필터, 역량/평가 뱃지 색상 분기)
+- [x] WorkforceFlowChart 추출 (그룹 바차트 + headcount/forecast 라인 + 호버 툴팁)
+- [x] WorkforceDetailTable 추출 (음수 surplus 빨간 border + 스파크라인)
+- [x] KpiCardGrid 개선 (stagger 애니메이션, hover 리프트, accent bar, pill 뱃지)
+- [x] ProjectStatusChart 개선 (stroke 도넛, 범례↔arc 호버 연동)
+- [x] SkillTreemap 개선 (플로팅 툴팁, white stroke 하이라이트)
+- [x] DashboardPage 재작성 (탭 아이콘, fade-in-up 전환, 인라인 코드 제거)
+
 #### 인프라
 - [x] Vite 빌드 설정
 - [x] TypeScript strict 설정

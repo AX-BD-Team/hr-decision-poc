@@ -95,9 +95,12 @@ src/
 │   │   └── PageNav.tsx              # 페이지 네비게이션 (workflow/dashboard/docs)
 │   ├── dashboard/
 │   │   ├── DashboardPage.tsx        # 대시보드 메인 (3탭: 자원배분/인재/인력예측)
-│   │   ├── KpiCardGrid.tsx          # KPI 카드 그리드
-│   │   ├── ProjectStatusChart.tsx   # SVG 도넛 차트
-│   │   └── SkillTreemap.tsx         # Squarified treemap
+│   │   ├── KpiCardGrid.tsx          # KPI 카드 그리드 (stagger 애니메이션, accent bar)
+│   │   ├── ProjectStatusChart.tsx   # SVG stroke 도넛 차트 (호버 연동)
+│   │   ├── SkillTreemap.tsx         # Squarified treemap (플로팅 툴팁)
+│   │   ├── TalentTable.tsx          # 인재 테이블 (정렬/필터/뱃지)
+│   │   ├── WorkforceFlowChart.tsx   # 그룹 바 + 라인 차트 (호버 툴팁)
+│   │   └── WorkforceDetailTable.tsx # 인력 상세 테이블 (스파크라인)
 │   ├── docs/
 │   │   ├── DocsPage.tsx             # 문서 페이지 (카테고리 필터)
 │   │   └── DocCard.tsx              # 문서 카드
@@ -140,7 +143,7 @@ npm run deploy:preview  # 빌드 후 preview 브랜치 배포
 ## 빌드 출력
 - JS 메인: ~277KB (gzip ~78KB) — React.lazy + manualChunks 적용
 - JS vendor-xyflow: ~284KB (gzip ~95KB) — @xyflow/react + dagre
-- JS lazy 청크: DashboardPage ~16KB, TourOverlay ~8KB, HRContextView ~8KB, ZoneGraph ~7KB, DocsPage ~6KB
+- JS lazy 청크: DashboardPage ~24KB, TourOverlay ~8KB, HRContextView ~8KB, ZoneGraph ~7KB, DocsPage ~6KB
 - CSS: ~52KB (gzip ~10KB)
 
 ## 배포 환경

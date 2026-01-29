@@ -22,9 +22,13 @@ setActivePage: (page: PageId) => void;
 ## 대시보드 SVG 차트 패턴
 
 외부 차트 라이브러리 없이 순수 SVG로 구현:
-- **도넛 차트** (`ProjectStatusChart.tsx`) — SVG `<path>` arc 계산, center hole `<circle>`
-- **트리맵** (`SkillTreemap.tsx`) — Squarified treemap 알고리즘, hover 인터랙션
-- **바 차트** (`DashboardPage.tsx` 인라인) — 월별 유입/유출 쌍 바, Y축 기준선
+- **도넛 차트** (`ProjectStatusChart.tsx`) — stroke 기반 도넛 (`<circle>` strokeDasharray/offset), 범례↔arc 호버 dim/highlight 연동, 중앙 텍스트 동적 업데이트
+- **트리맵** (`SkillTreemap.tsx`) — Squarified treemap, 커서 추적 플로팅 툴팁 (SVG rect+text), white stroke 하이라이트
+- **그룹 바 + 라인 차트** (`WorkforceFlowChart.tsx`) — 유입/유출 그룹 바 + totalHeadcount polyline + forecast 점선, 호버 크로스헤어 + glass 툴팁
+
+### 대시보드 테이블 패턴
+- **TalentTable** — 로컬 state 정렬 (sortKey/sortDir), 드롭다운 필터, 역량수준/평가등급 뱃지 색상 분기
+- **WorkforceDetailTable** — surplus 음수 행에 `border-l-2 border-l-alertRed`, 인라인 미니 스파크라인 (SVG polyline, 60x16)
 
 ## 레이아웃 구조
 
