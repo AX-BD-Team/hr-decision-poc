@@ -8,15 +8,17 @@ export type DataLabel = 'REAL' | 'MOCK' | 'ESTIMATE' | 'SYNTH';
 export interface DataSource {
   id: string;
   name: string;
-  type: 'hr_master' | 'tms' | 'rr' | 'bizforce' | 'vrb' | 'opex';
+  type: 'hr_master' | 'tms' | 'rr' | 'bizforce' | 'vrb' | 'opex' | 'assignment_history' | 'to_request' | 'training_history' | 'competency_model' | 'work_allocation';
   label: DataLabel;
   description: string;
   coverage: number; // 0-100%
   fields: string[];
+  readiness?: 'available' | 'recommended' | 'missing' | 'undefined_rules';
+  readinessNote?: string;
 }
 
 // 엔티티 타입
-export type EntityType = 'person' | 'role' | 'task' | 'org' | 'risk' | 'cost' | 'project';
+export type EntityType = 'person' | 'role' | 'task' | 'org' | 'risk' | 'cost' | 'project' | 'capability' | 'stage' | 'training_program';
 
 // 엔티티 (Ontology Graph 노드)
 export interface Entity {
@@ -38,7 +40,11 @@ export type EdgeType =
   | 'cost_supports'
   | 'risk_of'
   | 'belongs_to'
-  | 'assigned_to';
+  | 'assigned_to'
+  | 'requires_capability'
+  | 'trains_for'
+  | 'part_of_stage'
+  | 'duplicates';
 
 // 엣지 (관계)
 export interface Edge {
@@ -94,6 +100,7 @@ export interface DecisionPath {
   }[];
   highlights: string[];
   relatedEntityIds?: string[];
+  limitations?: string;
 }
 
 // KPI 카드
@@ -139,12 +146,20 @@ export interface AnalysisPattern {
   id: string;
   name: string;
   description: string;
-  type: 'gap_analysis' | 'dependency' | 'bottleneck' | 'cost_impact';
+  type: 'gap_analysis' | 'dependency' | 'bottleneck' | 'cost_impact' | 'role_overlap' | 'capability_gap' | 'stage_readiness';
   label: DataLabel;
   severity: 'critical' | 'high' | 'medium' | 'low';
   metric: { name: string; value: string; label: DataLabel };
   findings: string[];
   affectedScope: { count: number; unit: string };
+}
+
+// 의사결정 기준
+export interface DecisionCriterion {
+  id: string;
+  text: string;
+  description: string;
+  evidenceCount: number;
 }
 
 // 데모 시나리오 메타데이터
@@ -153,6 +168,8 @@ export interface ScenarioMeta {
   name: string;
   description: string;
   keyQuestion: string;
+  badge?: 'Phase-2' | 'HRD';
+  decisionCriteria: DecisionCriterion[];
 }
 
 // 전체 데모 데이터
