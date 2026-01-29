@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import type { UtilizationPoint } from '../../types';
+import { CHART_COLORS } from '../../constants/tokens';
 
 interface UtilizationScatterChartProps {
   data: UtilizationPoint[];
@@ -57,7 +58,7 @@ export function UtilizationScatterChart({ data, selectedEntityId, onSelectEntity
     <div role="img" aria-label="인력 가동률 및 의존도 산점도" className="h-full w-full">
       <svg viewBox={`0 0 ${VB_W} ${VB_H}`} className="h-full w-full" preserveAspectRatio="xMidYMid meet">
         {/* Risk zone highlight */}
-        <rect x={riskX} y={riskY} width={riskW} height={riskH} fill="#FF4D4F" opacity={0.06} rx={4} />
+        <rect x={riskX} y={riskY} width={riskW} height={riskH} fill={CHART_COLORS.alert} opacity={0.06} rx={4} />
 
         {/* Grid lines */}
         {X_TICKS.map((t) => (
@@ -67,7 +68,7 @@ export function UtilizationScatterChart({ data, selectedEntityId, onSelectEntity
             y1={MARGIN.top}
             x2={scaleX(t)}
             y2={MARGIN.top + PLOT_H}
-            stroke="rgba(170,180,197,0.08)"
+            stroke={CHART_COLORS.gridLine}
             strokeDasharray="3 3"
           />
         ))}
@@ -78,7 +79,7 @@ export function UtilizationScatterChart({ data, selectedEntityId, onSelectEntity
             y1={scaleY(t)}
             x2={MARGIN.left + PLOT_W}
             y2={scaleY(t)}
-            stroke="rgba(170,180,197,0.08)"
+            stroke={CHART_COLORS.gridLine}
             strokeDasharray="3 3"
           />
         ))}
@@ -87,28 +88,28 @@ export function UtilizationScatterChart({ data, selectedEntityId, onSelectEntity
         <line
           x1={scaleX(OVERLOAD_X)} y1={MARGIN.top}
           x2={scaleX(OVERLOAD_X)} y2={MARGIN.top + PLOT_H}
-          stroke="#FF4D4F" strokeDasharray="4 3" strokeWidth={1}
+          stroke={CHART_COLORS.alert} strokeDasharray="4 3" strokeWidth={1}
         />
-        <text x={scaleX(OVERLOAD_X) + 3} y={MARGIN.top + 10} fill="#FF4D4F" fontSize={8} fontFamily="monospace">
+        <text x={scaleX(OVERLOAD_X) + 3} y={MARGIN.top + 10} fill={CHART_COLORS.alert} fontSize={8} fontFamily="monospace">
           과부하
         </text>
         <line
           x1={MARGIN.left} y1={scaleY(HIGH_DEP_Y)}
           x2={MARGIN.left + PLOT_W} y2={scaleY(HIGH_DEP_Y)}
-          stroke="#FBBF24" strokeDasharray="4 3" strokeWidth={1}
+          stroke={CHART_COLORS.warning} strokeDasharray="4 3" strokeWidth={1}
         />
-        <text x={MARGIN.left + PLOT_W - 28} y={scaleY(HIGH_DEP_Y) - 4} fill="#FBBF24" fontSize={8} fontFamily="monospace">
+        <text x={MARGIN.left + PLOT_W - 28} y={scaleY(HIGH_DEP_Y) - 4} fill={CHART_COLORS.warning} fontSize={8} fontFamily="monospace">
           고의존
         </text>
 
         {/* Axes */}
-        <line x1={MARGIN.left} y1={MARGIN.top + PLOT_H} x2={MARGIN.left + PLOT_W} y2={MARGIN.top + PLOT_H} stroke="rgba(170,180,197,0.2)" />
-        <line x1={MARGIN.left} y1={MARGIN.top} x2={MARGIN.left} y2={MARGIN.top + PLOT_H} stroke="rgba(170,180,197,0.2)" />
+        <line x1={MARGIN.left} y1={MARGIN.top + PLOT_H} x2={MARGIN.left + PLOT_W} y2={MARGIN.top + PLOT_H} stroke={CHART_COLORS.axis} />
+        <line x1={MARGIN.left} y1={MARGIN.top} x2={MARGIN.left} y2={MARGIN.top + PLOT_H} stroke={CHART_COLORS.axis} />
 
         {/* X-axis ticks + labels */}
         {X_TICKS.map((t) => (
           <g key={`xt-${t}`}>
-            <line x1={scaleX(t)} y1={MARGIN.top + PLOT_H} x2={scaleX(t)} y2={MARGIN.top + PLOT_H + 4} stroke="rgba(170,180,197,0.3)" />
+            <line x1={scaleX(t)} y1={MARGIN.top + PLOT_H} x2={scaleX(t)} y2={MARGIN.top + PLOT_H + 4} stroke={CHART_COLORS.tick} />
             <text x={scaleX(t)} y={MARGIN.top + PLOT_H + 14} fill="#AAB4C5" fontSize={8} textAnchor="middle" fontFamily="monospace">
               {t}%
             </text>
@@ -122,7 +123,7 @@ export function UtilizationScatterChart({ data, selectedEntityId, onSelectEntity
         {/* Y-axis ticks + labels */}
         {Y_TICKS.map((t) => (
           <g key={`yt-${t}`}>
-            <line x1={MARGIN.left - 4} y1={scaleY(t)} x2={MARGIN.left} y2={scaleY(t)} stroke="rgba(170,180,197,0.3)" />
+            <line x1={MARGIN.left - 4} y1={scaleY(t)} x2={MARGIN.left} y2={scaleY(t)} stroke={CHART_COLORS.tick} />
             <text x={MARGIN.left - 7} y={scaleY(t) + 3} fill="#AAB4C5" fontSize={8} textAnchor="end" fontFamily="monospace">
               {t}%
             </text>
@@ -178,7 +179,7 @@ export function UtilizationScatterChart({ data, selectedEntityId, onSelectEntity
           if (ty < 4) ty = hoveredPoint.cy + 10;
           return (
             <g>
-              <rect x={tx} y={ty} width={tw} height={th} rx={6} fill="#111A2E" stroke="rgba(170,180,197,0.2)" strokeWidth={1} />
+              <rect x={tx} y={ty} width={tw} height={th} rx={6} fill="#111A2E" stroke={CHART_COLORS.axis} strokeWidth={1} />
               <text x={tx + 8} y={ty + 14} fill="#E6EAF2" fontSize={9} fontWeight="600">
                 {hoveredPoint.name}
               </text>

@@ -6,264 +6,60 @@
     "keyQuestion": "현재 인력 구성으로 Q2 프로젝트 수행이 가능한가? 불가능하다면 어떤 대안이 있는가?"
   },
   "dataSources": [
-    {
-      "id": "ds-hr-master",
-      "name": "HR Master",
-      "type": "hr_master",
-      "label": "REAL",
-      "description": "HRIS 기반 인사 데이터 · 갱신: 2026-01-15",
-      "coverage": 95,
-      "fields": ["emp_id", "org_id", "grade", "tenure_months", "skills"]
-    },
-    {
-      "id": "ds-project-task",
-      "name": "Project / Task",
-      "type": "tms",
-      "label": "ESTIMATE",
-      "description": "PM 툴 기반 과제/작업 · 갱신: 2026-01-10",
-      "coverage": 78,
-      "fields": ["proj_id", "task_id", "role", "effort", "deadline"]
-    },
-    {
-      "id": "ds-org-role-map",
-      "name": "Org Role Map",
-      "type": "rr",
-      "label": "REAL",
-      "description": "조직-역할 매핑 · 갱신: 2026-01-05",
-      "coverage": 88,
-      "fields": ["org_id", "role_id", "responsibility", "owner"]
-    },
-    {
-      "id": "ds-opex-range",
-      "name": "OPEX Range",
-      "type": "opex",
-      "label": "ESTIMATE",
-      "description": "운영비용 범위 · as of: 2026-01-01",
-      "coverage": 66,
-      "fields": ["org_id", "category", "min", "max"]
-    }
+    {"id": "ds-hr-master", "name": "HR Master", "type": "hr_master", "label": "REAL", "description": "HRIS 기반 인사 데이터 · 갱신: 2026-01-15", "coverage": 95, "fields": ["emp_id", "org_id", "grade", "tenure_months", "skills"]},
+    {"id": "ds-project-task", "name": "Project / Task", "type": "tms", "label": "ESTIMATE", "description": "PM 툴 기반 과제/작업 · 갱신: 2026-01-10", "coverage": 78, "fields": ["proj_id", "task_id", "role", "effort", "deadline"]},
+    {"id": "ds-org-role-map", "name": "Org Role Map", "type": "rr", "label": "REAL", "description": "조직-역할 매핑 · 갱신: 2026-01-05", "coverage": 88, "fields": ["org_id", "role_id", "responsibility", "owner"]},
+    {"id": "ds-opex-range", "name": "OPEX Range", "type": "opex", "label": "ESTIMATE", "description": "운영비용 범위 · as of: 2026-01-01", "coverage": 66, "fields": ["org_id", "category", "min", "max"]}
   ],
   "analysisPatterns": [
-    {
-      "id": "ap-1",
-      "name": "역할 커버리지 분석",
-      "description": "필수 역할 대비 현재 인력 매핑 상태 분석",
-      "type": "gap_analysis",
-      "label": "REAL"
-    },
-    {
-      "id": "ap-2",
-      "name": "의존도 집중 분석",
-      "description": "특정 인력에 업무가 집중된 병목 식별",
-      "type": "dependency",
-      "label": "REAL"
-    },
-    {
-      "id": "ap-3",
-      "name": "가동률 과밀 분석",
-      "description": "투입률 100% 초과 인력 식별",
-      "type": "bottleneck",
-      "label": "ESTIMATE"
-    },
-    {
-      "id": "ap-4",
-      "name": "비용 영향 시뮬레이션",
-      "description": "대안별 OPEX 변동 추정",
-      "type": "cost_impact",
-      "label": "SYNTH"
-    }
+    {"id": "ap-1", "name": "역할 커버리지 분석", "description": "필수 역할 대비 현재 인력 매핑 상태 분석", "type": "gap_analysis", "label": "REAL"},
+    {"id": "ap-2", "name": "의존도 집중 분석", "description": "특정 인력에 업무가 집중된 병목 식별", "type": "dependency", "label": "REAL"},
+    {"id": "ap-3", "name": "가동률 과밀 분석", "description": "투입률 100% 초과 인력 식별", "type": "bottleneck", "label": "ESTIMATE"},
+    {"id": "ap-4", "name": "비용 영향 시뮬레이션", "description": "대안별 OPEX 변동 추정", "type": "cost_impact", "label": "SYNTH"}
   ],
   "entities": [
-    {
-      "id": "org-dev",
-      "type": "org",
-      "name": "개발팀",
-      "label": "REAL",
-      "properties": { "headcount": 12, "budget": "1.2B" },
-      "position": { "x": 100, "y": 200 }
-    },
-    {
-      "id": "role-arch",
-      "type": "role",
-      "name": "아키텍트",
-      "label": "REAL",
-      "properties": { "required": 2, "current": 1 },
-      "position": { "x": 300, "y": 100 }
-    },
-    {
-      "id": "role-dev-sr",
-      "type": "role",
-      "name": "시니어 개발자",
-      "label": "REAL",
-      "properties": { "required": 4, "current": 3 },
-      "position": { "x": 300, "y": 200 }
-    },
-    {
-      "id": "role-dev-jr",
-      "type": "role",
-      "name": "주니어 개발자",
-      "label": "REAL",
-      "properties": { "required": 4, "current": 5 },
-      "position": { "x": 300, "y": 300 }
-    },
-    {
-      "id": "person-a",
-      "type": "person",
-      "name": "김A (아키텍트)",
-      "label": "REAL",
-      "properties": { "tenure": 84, "utilization": 1.2, "skills": ["설계", "리뷰", "멘토링"] },
-      "position": { "x": 500, "y": 100 }
-    },
-    {
-      "id": "person-b",
-      "type": "person",
-      "name": "이B (시니어)",
-      "label": "REAL",
-      "properties": { "tenure": 48, "utilization": 0.95, "skills": ["백엔드", "DB"] },
-      "position": { "x": 500, "y": 180 }
-    },
-    {
-      "id": "person-c",
-      "type": "person",
-      "name": "박C (시니어)",
-      "label": "REAL",
-      "properties": { "tenure": 36, "utilization": 0.88, "skills": ["프론트엔드", "UX"] },
-      "position": { "x": 500, "y": 260 }
-    },
-    {
-      "id": "person-d",
-      "type": "person",
-      "name": "최D (시니어)",
-      "label": "REAL",
-      "properties": { "tenure": 24, "utilization": 0.92, "skills": ["백엔드", "인프라"] },
-      "position": { "x": 500, "y": 340 }
-    },
-    {
-      "id": "proj-q2",
-      "type": "project",
-      "name": "Q2 신규 프로젝트",
-      "label": "ESTIMATE",
-      "properties": { "start": "2026-04", "duration": "6M", "probability": 0.8 },
-      "position": { "x": 700, "y": 200 }
-    },
-    {
-      "id": "risk-bottleneck",
-      "type": "risk",
-      "name": "아키텍트 병목 리스크",
-      "label": "MOCK",
-      "properties": { "severity": "high", "probability": 0.85 },
-      "position": { "x": 500, "y": 420 }
-    },
-    {
-      "id": "cost-hiring",
-      "type": "cost",
-      "name": "신규 채용 비용",
-      "label": "ESTIMATE",
-      "properties": { "amount": "180M", "type": "one-time" },
-      "position": { "x": 700, "y": 350 }
-    }
+    {"id": "org-dev", "type": "org", "name": "개발팀", "label": "REAL", "properties": {"headcount": 12, "budget": "1.2B"}, "position": {"x": 100, "y": 200}},
+    {"id": "role-arch", "type": "role", "name": "아키텍트", "label": "REAL", "properties": {"required": 2, "current": 1}, "position": {"x": 300, "y": 100}},
+    {"id": "role-dev-sr", "type": "role", "name": "시니어 개발자", "label": "REAL", "properties": {"required": 4, "current": 3}, "position": {"x": 300, "y": 200}},
+    {"id": "role-dev-jr", "type": "role", "name": "주니어 개발자", "label": "REAL", "properties": {"required": 4, "current": 5}, "position": {"x": 300, "y": 300}},
+    {"id": "person-a", "type": "person", "name": "김A (아키텍트)", "label": "REAL", "properties": {"tenure": 84, "utilization": 1.2, "skills": ["설계", "리뷰", "멘토링"]}, "position": {"x": 500, "y": 100}},
+    {"id": "person-b", "type": "person", "name": "이B (시니어)", "label": "REAL", "properties": {"tenure": 48, "utilization": 0.95, "skills": ["백엔드", "DB"]}, "position": {"x": 500, "y": 180}},
+    {"id": "person-c", "type": "person", "name": "박C (시니어)", "label": "REAL", "properties": {"tenure": 36, "utilization": 0.88, "skills": ["프론트엔드", "UX"]}, "position": {"x": 500, "y": 260}},
+    {"id": "person-d", "type": "person", "name": "최D (시니어)", "label": "REAL", "properties": {"tenure": 24, "utilization": 0.92, "skills": ["백엔드", "인프라"]}, "position": {"x": 500, "y": 340}},
+    {"id": "proj-q2", "type": "project", "name": "Q2 신규 프로젝트", "label": "ESTIMATE", "properties": {"start": "2026-04", "duration": "6M", "probability": 0.8}, "position": {"x": 700, "y": 200}},
+    {"id": "risk-bottleneck", "type": "risk", "name": "아키텍트 병목 리스크", "label": "MOCK", "properties": {"severity": "high", "probability": 0.85}, "position": {"x": 500, "y": 420}},
+    {"id": "cost-hiring", "type": "cost", "name": "신규 채용 비용", "label": "ESTIMATE", "properties": {"amount": "180M", "type": "one-time"}, "position": {"x": 700, "y": 350}}
   ],
   "edges": [
-    { "id": "e1", "source": "org-dev", "target": "role-arch", "type": "covers", "label": "REAL" },
-    { "id": "e2", "source": "org-dev", "target": "role-dev-sr", "type": "covers", "label": "REAL" },
-    { "id": "e3", "source": "org-dev", "target": "role-dev-jr", "type": "covers", "label": "REAL" },
-    { "id": "e4", "source": "role-arch", "target": "person-a", "type": "assigned_to", "label": "REAL" },
-    { "id": "e5", "source": "role-dev-sr", "target": "person-b", "type": "assigned_to", "label": "REAL" },
-    { "id": "e6", "source": "role-dev-sr", "target": "person-c", "type": "assigned_to", "label": "REAL" },
-    { "id": "e7", "source": "role-dev-sr", "target": "person-d", "type": "assigned_to", "label": "REAL" },
-    { "id": "e8", "source": "proj-q2", "target": "role-arch", "type": "depends_on", "label": "ESTIMATE", "weight": 0.9 },
-    { "id": "e9", "source": "proj-q2", "target": "role-dev-sr", "type": "depends_on", "label": "ESTIMATE", "weight": 0.7 },
-    { "id": "e10", "source": "person-a", "target": "risk-bottleneck", "type": "risk_of", "label": "MOCK" },
-    { "id": "e11", "source": "cost-hiring", "target": "role-arch", "type": "cost_supports", "label": "ESTIMATE" }
+    {"id": "e1", "source": "org-dev", "target": "role-arch", "type": "covers", "label": "REAL"},
+    {"id": "e2", "source": "org-dev", "target": "role-dev-sr", "type": "covers", "label": "REAL"},
+    {"id": "e3", "source": "org-dev", "target": "role-dev-jr", "type": "covers", "label": "REAL"},
+    {"id": "e4", "source": "role-arch", "target": "person-a", "type": "assigned_to", "label": "REAL"},
+    {"id": "e5", "source": "role-dev-sr", "target": "person-b", "type": "assigned_to", "label": "REAL"},
+    {"id": "e6", "source": "role-dev-sr", "target": "person-c", "type": "assigned_to", "label": "REAL"},
+    {"id": "e7", "source": "role-dev-sr", "target": "person-d", "type": "assigned_to", "label": "REAL"},
+    {"id": "e8", "source": "proj-q2", "target": "role-arch", "type": "depends_on", "label": "ESTIMATE", "weight": 0.9},
+    {"id": "e9", "source": "proj-q2", "target": "role-dev-sr", "type": "depends_on", "label": "ESTIMATE", "weight": 0.7},
+    {"id": "e10", "source": "person-a", "target": "risk-bottleneck", "type": "risk_of", "label": "MOCK"},
+    {"id": "e11", "source": "cost-hiring", "target": "role-arch", "type": "cost_supports", "label": "ESTIMATE"}
   ],
   "assumptions": [
-    {
-      "id": "asm-1",
-      "text": "Q2 프로젝트 착수 확률 80%를 기준으로 분석",
-      "category": "scope",
-      "relatedPaths": ["path-a", "path-b", "path-c"]
-    },
-    {
-      "id": "asm-2",
-      "text": "현재 가동률은 TMS 4주 평균 기준",
-      "category": "data",
-      "relatedPaths": ["path-a", "path-b", "path-c"]
-    },
-    {
-      "id": "asm-3",
-      "text": "신규 채용 시 온보딩 기간 3개월 가정",
-      "category": "logic",
-      "relatedPaths": ["path-a"]
-    },
-    {
-      "id": "asm-4",
-      "text": "내부 이동 인력은 즉시 투입 가능 가정",
-      "category": "logic",
-      "relatedPaths": ["path-b"]
-    }
+    {"id": "asm-1", "text": "Q2 프로젝트 착수 확률 80%를 기준으로 분석", "category": "scope", "relatedPaths": ["path-a", "path-b", "path-c"]},
+    {"id": "asm-2", "text": "현재 가동률은 TMS 4주 평균 기준", "category": "data", "relatedPaths": ["path-a", "path-b", "path-c"]},
+    {"id": "asm-3", "text": "신규 채용 시 온보딩 기간 3개월 가정", "category": "logic", "relatedPaths": ["path-a"]},
+    {"id": "asm-4", "text": "내부 이동 인력은 즉시 투입 가능 가정", "category": "logic", "relatedPaths": ["path-b"]}
   ],
   "evidence": [
-    {
-      "id": "evd-1",
-      "text": "김A 아키텍트 가동률 120% (TMS 4주 평균)",
-      "source": "TMS",
-      "label": "REAL",
-      "relatedPaths": ["path-a", "path-b", "path-c"]
-    },
-    {
-      "id": "evd-2",
-      "text": "아키텍트 역할 필요 인원 2명, 현재 1명",
-      "source": "HR Master + R&R",
-      "label": "REAL",
-      "relatedPaths": ["path-a", "path-b"]
-    },
-    {
-      "id": "evd-3",
-      "text": "Q2 프로젝트 요구 역량: 아키텍트 1명 이상",
-      "source": "BizForce",
-      "label": "ESTIMATE",
-      "relatedPaths": ["path-a", "path-b", "path-c"]
-    },
-    {
-      "id": "evd-4",
-      "text": "시니어 개발자 평균 가동률 92%",
-      "source": "TMS",
-      "label": "REAL",
-      "relatedPaths": ["path-a", "path-b", "path-c"]
-    },
-    {
-      "id": "evd-5",
-      "text": "유사 직군 채용 평균 소요기간 2.5개월",
-      "source": "HR 채용 데이터",
-      "label": "ESTIMATE",
-      "relatedPaths": ["path-a"]
-    }
+    {"id": "evd-1", "text": "김A 아키텍트 가동률 120% (TMS 4주 평균)", "source": "TMS", "label": "REAL", "relatedPaths": ["path-a", "path-b", "path-c"]},
+    {"id": "evd-2", "text": "아키텍트 역할 필요 인원 2명, 현재 1명", "source": "HR Master + R&R", "label": "REAL", "relatedPaths": ["path-a", "path-b"]},
+    {"id": "evd-3", "text": "Q2 프로젝트 요구 역량: 아키텍트 1명 이상", "source": "BizForce", "label": "ESTIMATE", "relatedPaths": ["path-a", "path-b", "path-c"]},
+    {"id": "evd-4", "text": "시니어 개발자 평균 가동률 92%", "source": "TMS", "label": "REAL", "relatedPaths": ["path-a", "path-b", "path-c"]},
+    {"id": "evd-5", "text": "유사 직군 채용 평균 소요기간 2.5개월", "source": "HR 채용 데이터", "label": "ESTIMATE", "relatedPaths": ["path-a"]}
   ],
   "riskSignals": [
-    {
-      "id": "risk-1",
-      "text": "아키텍트 병목으로 프로젝트 지연 가능성",
-      "severity": "high",
-      "label": "MOCK",
-      "relatedEntityIds": ["person-a", "risk-bottleneck"],
-      "relatedPaths": ["path-a", "path-b", "path-c"]
-    },
-    {
-      "id": "risk-2",
-      "text": "Q2 착수 시점에 채용 완료 불확실",
-      "severity": "medium",
-      "label": "ESTIMATE",
-      "relatedEntityIds": ["cost-hiring"],
-      "relatedPaths": ["path-a"]
-    },
-    {
-      "id": "risk-3",
-      "text": "내부 이동 시 기존 업무 공백 발생",
-      "severity": "medium",
-      "label": "MOCK",
-      "relatedEntityIds": [],
-      "relatedPaths": ["path-b"]
-    }
+    {"id": "risk-1", "text": "아키텍트 병목으로 프로젝트 지연 가능성", "severity": "high", "label": "MOCK", "relatedEntityIds": ["person-a", "risk-bottleneck"], "relatedPaths": ["path-a", "path-b", "path-c"]},
+    {"id": "risk-2", "text": "Q2 착수 시점에 채용 완료 불확실", "severity": "medium", "label": "ESTIMATE", "relatedEntityIds": ["cost-hiring"], "relatedPaths": ["path-a"]},
+    {"id": "risk-3", "text": "내부 이동 시 기존 업무 공백 발생", "severity": "medium", "label": "MOCK", "relatedEntityIds": [], "relatedPaths": ["path-b"]}
   ],
   "decisionPaths": [
     {
@@ -274,9 +70,9 @@
       "riskLevel": "low",
       "effectLevel": "medium",
       "keyMetrics": [
-        { "name": "Score", "value": "76/100", "label": "SYNTH" },
-        { "name": "예상 비용", "value": "0~30M", "label": "ESTIMATE" },
-        { "name": "소요 기간", "value": "즉시~2주", "label": "ESTIMATE" }
+        {"name": "Score", "value": "76/100", "label": "SYNTH"},
+        {"name": "예상 비용", "value": "0~30M", "label": "ESTIMATE"},
+        {"name": "소요 기간", "value": "즉시~2주", "label": "ESTIMATE"}
       ],
       "highlights": ["현재 리소스 분배 유지", "변경 리스크 낮음", "빠른 적용"],
       "relatedEntityIds": ["org-dev", "role-arch", "person-a", "proj-q2"]
@@ -289,9 +85,9 @@
       "riskLevel": "medium",
       "effectLevel": "high",
       "keyMetrics": [
-        { "name": "Score", "value": "82/100", "label": "SYNTH" },
-        { "name": "예상 비용", "value": "30~80M", "label": "ESTIMATE" },
-        { "name": "소요 기간", "value": "2~6주", "label": "ESTIMATE" }
+        {"name": "Score", "value": "82/100", "label": "SYNTH"},
+        {"name": "예상 비용", "value": "30~80M", "label": "ESTIMATE"},
+        {"name": "소요 기간", "value": "2~6주", "label": "ESTIMATE"}
       ],
       "highlights": ["PM 1인 보강 제안", "백로그 정리 + 지원 강화", "업무량 균형 개선"],
       "relatedEntityIds": ["role-arch", "role-dev-sr", "person-a", "person-b", "risk-bottleneck", "cost-hiring"]
@@ -304,9 +100,9 @@
       "riskLevel": "high",
       "effectLevel": "medium",
       "keyMetrics": [
-        { "name": "Score", "value": "67/100", "label": "SYNTH" },
-        { "name": "예상 비용", "value": "80~180M", "label": "ESTIMATE" },
-        { "name": "소요 기간", "value": "6~12주", "label": "ESTIMATE" }
+        {"name": "Score", "value": "67/100", "label": "SYNTH"},
+        {"name": "예상 비용", "value": "80~180M", "label": "ESTIMATE"},
+        {"name": "소요 기간", "value": "6~12주", "label": "ESTIMATE"}
       ],
       "highlights": ["역할/직무 재정의", "단계적 추진 권장", "변경 비용 큼"],
       "relatedEntityIds": ["org-dev", "role-arch", "role-dev-sr", "role-dev-jr", "person-a", "person-b", "person-c", "person-d", "proj-q2", "cost-hiring"]
@@ -317,21 +113,21 @@
       "id": "ctx-default",
       "scope": "개발팀 전체",
       "kpis": [
-        { "id": "kpi-1", "name": "Headcount", "value": 12, "unit": "명", "label": "REAL" },
-        { "id": "kpi-2", "name": "평균 가동률", "value": 94, "unit": "%", "change": "+5%", "higherIsBetter": false, "label": "REAL" },
-        { "id": "kpi-3", "name": "평균 근속", "value": 38, "unit": "개월", "label": "REAL" },
-        { "id": "kpi-4", "name": "역할 충족률", "value": 75, "unit": "%", "change": "-10%", "higherIsBetter": true, "label": "ESTIMATE" }
+        {"id": "kpi-1", "name": "Headcount", "value": 12, "unit": "명", "label": "REAL"},
+        {"id": "kpi-2", "name": "평균 가동률", "value": 94, "unit": "%", "change": "+5%", "higherIsBetter": false, "label": "REAL"},
+        {"id": "kpi-3", "name": "평균 근속", "value": 38, "unit": "개월", "label": "REAL"},
+        {"id": "kpi-4", "name": "역할 충족률", "value": 75, "unit": "%", "change": "-10%", "higherIsBetter": true, "label": "ESTIMATE"}
       ],
       "utilizationMap": [
-        { "id": "um-1", "name": "김A", "dependency": 0.9, "utilization": 1.2, "label": "REAL", "entityId": "person-a" },
-        { "id": "um-2", "name": "이B", "dependency": 0.5, "utilization": 0.95, "label": "REAL", "entityId": "person-b" },
-        { "id": "um-3", "name": "박C", "dependency": 0.4, "utilization": 0.88, "label": "REAL", "entityId": "person-c" },
-        { "id": "um-4", "name": "최D", "dependency": 0.6, "utilization": 0.92, "label": "REAL", "entityId": "person-d" }
+        {"id": "um-1", "name": "김A", "dependency": 0.9, "utilization": 1.2, "label": "REAL", "entityId": "person-a"},
+        {"id": "um-2", "name": "이B", "dependency": 0.5, "utilization": 0.95, "label": "REAL", "entityId": "person-b"},
+        {"id": "um-3", "name": "박C", "dependency": 0.4, "utilization": 0.88, "label": "REAL", "entityId": "person-c"},
+        {"id": "um-4", "name": "최D", "dependency": 0.6, "utilization": 0.92, "label": "REAL", "entityId": "person-d"}
       ],
       "insights": [
-        { "id": "ins-1", "text": "아키텍트 역할 1명 부족 (필요 2명, 현재 1명)", "severity": "critical", "label": "REAL" },
-        { "id": "ins-2", "text": "김A 가동률 120% - 병목 위험", "severity": "warning", "label": "REAL" },
-        { "id": "ins-3", "text": "Q2 프로젝트 대응 인력 검토 필요", "severity": "info", "label": "ESTIMATE" }
+        {"id": "ins-1", "text": "아키텍트 역할 1명 부족 (필요 2명, 현재 1명)", "severity": "critical", "label": "REAL"},
+        {"id": "ins-2", "text": "김A 가동률 120% - 병목 위험", "severity": "warning", "label": "REAL"},
+        {"id": "ins-3", "text": "Q2 프로젝트 대응 인력 검토 필요", "severity": "info", "label": "ESTIMATE"}
       ]
     }
   ]
