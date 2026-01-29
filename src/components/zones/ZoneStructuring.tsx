@@ -4,6 +4,7 @@ import { clsx } from 'clsx';
 import type { AnalysisPattern } from '../../types';
 import { DataLabelBadge } from '../common/DataLabelBadge';
 import { LoadingZone2Structuring } from '../loading/LoadingZone2Structuring';
+import { useT } from '../../i18n';
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   gap_analysis: GitBranch,
@@ -13,6 +14,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 export function ZoneStructuring({ variant = 'zone' }: { variant?: 'zone' | 'dock' }) {
+  const t = useT();
   const { data, activeStep, loadingPhase } = useStore();
   const showSkeleton = loadingPhase >= 1 && loadingPhase < 3;
 
@@ -50,7 +52,7 @@ export function ZoneStructuring({ variant = 'zone' }: { variant?: 'zone' | 'dock
         <div className="mb-3 flex items-baseline justify-between">
           <div className="flex items-center gap-2">
             <h3 className="text-sm font-semibold text-textMain">Structuring & Analysis</h3>
-            <span className="text-xs text-textSub">구조화/분석 패턴</span>
+            <span className="text-xs text-textSub">{t('zones.zone2DockSubtitle')}</span>
           </div>
           <span className="data-mono text-micro uppercase tracking-wider text-textSub">Patterns</span>
         </div>

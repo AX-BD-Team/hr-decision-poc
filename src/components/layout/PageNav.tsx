@@ -1,12 +1,13 @@
 import { GitBranch, LayoutDashboard, FileText, Moon, Sun } from 'lucide-react';
 import { useStore } from '../../store/useStore';
+import { useT } from '../../i18n';
 import { clsx } from 'clsx';
 import type { PageId } from '../../types';
 
-const pages: { id: PageId; label: string; icon: typeof GitBranch }[] = [
-  { id: 'workflow', label: '의사결정 워크플로우', icon: GitBranch },
-  { id: 'dashboard', label: '대시보드', icon: LayoutDashboard },
-  { id: 'docs', label: '문서', icon: FileText },
+const pageKeys: { id: PageId; labelKey: string; icon: typeof GitBranch }[] = [
+  { id: 'workflow', labelKey: 'pages.workflow', icon: GitBranch },
+  { id: 'dashboard', labelKey: 'pages.dashboard', icon: LayoutDashboard },
+  { id: 'docs', labelKey: 'pages.docs', icon: FileText },
 ];
 
 export function PageNav() {
@@ -14,10 +15,13 @@ export function PageNav() {
   const setActivePage = useStore((s) => s.setActivePage);
   const theme = useStore((s) => s.theme);
   const toggleTheme = useStore((s) => s.toggleTheme);
+  const locale = useStore((s) => s.locale);
+  const toggleLocale = useStore((s) => s.toggleLocale);
+  const t = useT();
 
   return (
-    <nav className="flex items-center gap-1 border-b border-neutralGray/20 mb-3" aria-label="페이지 네비게이션">
-      {pages.map((page) => {
+    <nav className="flex items-center gap-1 border-b border-neutralGray/20 mb-3" aria-label={t('a11y.pageNav')}>
+      {pageKeys.map((page) => {
         const Icon = page.icon;
         const isActive = activePage === page.id;
         return (
@@ -33,14 +37,22 @@ export function PageNav() {
             )}
           >
             <Icon className="h-4 w-4" aria-hidden="true" />
-            <span className="hidden sm:inline">{page.label}</span>
+            <span className="hidden sm:inline">{t(page.labelKey)}</span>
           </button>
         );
       })}
-      <div className="ml-auto">
+      <div className="ml-auto flex items-center gap-1">
+        <button
+          onClick={toggleLocale}
+          className="flex items-center gap-1 rounded-lg px-2 py-1 text-sm text-textSub transition-all hover:text-textMain"
+        >
+          <span className={locale === 'ko' ? 'text-decisionBlue font-bold' : ''}>KO</span>
+          <span className="text-neutralGray/50">|</span>
+          <span className={locale === 'en' ? 'text-decisionBlue font-bold' : ''}>EN</span>
+        </button>
         <button
           onClick={toggleTheme}
-          aria-label={theme === 'dark' ? '라이트 모드로 전환' : '다크 모드로 전환'}
+          aria-label={theme === 'dark' ? t('a11y.themeToLight') : t('a11y.themeToDark')}
           className="rounded-lg p-2 text-textSub transition-all hover:text-textMain"
         >
           {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { ProjectStatusItem } from '../../types';
 import { CHART_COLORS } from '../../constants/tokens';
+import { useT } from '../../i18n';
 
 interface ProjectStatusChartProps {
   data: ProjectStatusItem[];
@@ -8,6 +9,7 @@ interface ProjectStatusChartProps {
 
 export function ProjectStatusChart({ data }: ProjectStatusChartProps) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const t = useT();
   const total = data.reduce((sum, d) => sum + d.count, 0);
 
   // Stroke-based donut params
@@ -31,10 +33,10 @@ export function ProjectStatusChart({ data }: ProjectStatusChartProps) {
 
   return (
     <div className="rounded-xl glass-panel border border-neutralGray/20 p-5 space-y-4">
-      <h3 className="text-sm font-semibold text-textMain">프로젝트 현황</h3>
+      <h3 className="text-sm font-semibold text-textMain">{t('dashboard.projectStatusTitle')}</h3>
 
       <div className="flex items-center gap-6">
-        <svg viewBox="0 0 120 120" className="w-28 h-28 flex-shrink-0" aria-label="프로젝트 현황 도넛 차트">
+        <svg viewBox="0 0 120 120" className="w-28 h-28 flex-shrink-0" aria-label={t('dashboard.projectStatusTitle')}>
           {segments.map((seg) => {
             const dimmed = hoveredIdx !== null && hoveredIdx !== seg.idx;
             return (
@@ -62,7 +64,7 @@ export function ProjectStatusChart({ data }: ProjectStatusChartProps) {
             {hoveredItem ? hoveredItem.count : total}
           </text>
           <text x={cx} y={hoveredItem ? cy + 12 : cy + 12} textAnchor="middle" fill={CHART_COLORS.textSub} fontSize={8}>
-            {hoveredItem ? hoveredItem.status : '전체 프로젝트'}
+            {hoveredItem ? hoveredItem.status : t('dashboard.totalProjects')}
           </text>
         </svg>
 

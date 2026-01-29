@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { clsx } from 'clsx';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import type { TalentRow } from '../../types';
+import { useT } from '../../i18n';
 
 interface TalentTableProps {
   data: TalentRow[];
@@ -37,19 +38,20 @@ function getEvalBadgeClass(grade: string) {
   return 'bg-warning/15 text-warning';
 }
 
-const columns: { key: SortKey; label: string }[] = [
-  { key: 'name', label: '이름' },
-  { key: 'rank', label: '직급' },
-  { key: 'role', label: '역할' },
-  { key: 'skillLevel', label: '역량수준' },
-  { key: 'evalGrade', label: '평가등급' },
-  { key: 'department', label: '부서' },
+const columnKeys: { key: SortKey; labelKey: string }[] = [
+  { key: 'name', labelKey: 'dashboard.colName' },
+  { key: 'rank', labelKey: 'dashboard.colRank' },
+  { key: 'role', labelKey: 'dashboard.colRole' },
+  { key: 'skillLevel', labelKey: 'dashboard.colSkillLevel' },
+  { key: 'evalGrade', labelKey: 'dashboard.colEvalGrade' },
+  { key: 'department', labelKey: 'dashboard.colDepartment' },
 ];
 
 export function TalentTable({ data }: TalentTableProps) {
   const [sortKey, setSortKey] = useState<SortKey>('name');
   const [sortDir, setSortDir] = useState<SortDir>('asc');
   const [filterDept, setFilterDept] = useState<string>('all');
+  const t = useT();
 
   const departments = useMemo(() => {
     const depts = [...new Set(data.map((r) => r.department))].sort();
@@ -91,7 +93,7 @@ export function TalentTable({ data }: TalentTableProps) {
   return (
     <div className="rounded-xl glass-panel border border-neutralGray/20 p-5 space-y-3">
       <div className="flex items-center justify-between gap-3 flex-wrap">
-        <h3 className="text-sm font-semibold text-textMain">핵심 인재 목록</h3>
+        <h3 className="text-sm font-semibold text-textMain">{t('dashboard.talentTableTitle')}</h3>
         <select
           value={filterDept}
           onChange={(e) => setFilterDept(e.target.value)}
@@ -99,7 +101,7 @@ export function TalentTable({ data }: TalentTableProps) {
         >
           {departments.map((d) => (
             <option key={d} value={d}>
-              {d === 'all' ? '전체 부서' : d}
+              {d === 'all' ? t('dashboard.allDepartments') : d}
             </option>
           ))}
         </select>
@@ -109,14 +111,14 @@ export function TalentTable({ data }: TalentTableProps) {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-neutralGray/20 text-left text-xs text-textSub">
-              {columns.map((col) => (
+              {columnKeys.map((col) => (
                 <th
                   key={col.key}
                   className="py-2 pr-3 cursor-pointer select-none hover:text-textMain transition-colors"
                   onClick={() => handleSort(col.key)}
                 >
                   <span className="inline-flex items-center gap-1">
-                    {col.label}
+                    {t(col.labelKey)}
                     {sortKey === col.key && (
                       sortDir === 'asc'
                         ? <ChevronUp className="h-3 w-3" />
@@ -152,7 +154,7 @@ export function TalentTable({ data }: TalentTableProps) {
           </tbody>
         </table>
         {filtered.length === 0 && (
-          <p className="py-6 text-center text-xs text-textSub">해당 부서의 인재 데이터가 없습니다.</p>
+          <p className="py-6 text-center text-xs text-textSub">{t('dashboard.emptyTalent')}</p>
         )}
       </div>
     </div>

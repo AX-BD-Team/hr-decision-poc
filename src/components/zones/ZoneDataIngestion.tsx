@@ -4,6 +4,7 @@ import { clsx } from 'clsx';
 import type { DataSource } from '../../types';
 import { DataLabelBadge } from '../common/DataLabelBadge';
 import { LoadingZone1Ingestion } from '../loading/LoadingZone1Ingestion';
+import { useT } from '../../i18n';
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   hr_master: Users,
@@ -15,6 +16,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 export function ZoneDataIngestion() {
+  const t = useT();
   const { data, activeStep, loadingPhase } = useStore();
   const showSkeleton = loadingPhase === 1;
 
@@ -43,8 +45,8 @@ export function ZoneDataIngestion() {
         >
           1
         </span>
-        <h3 className="text-sm font-semibold text-textMain">Data Ingestion</h3>
-        <span className="text-xs text-textSub">데이터 수집</span>
+        <h3 className="text-sm font-semibold text-textMain">{t('zones.zone1Subtitle')}</h3>
+        <span className="text-xs text-textSub">{t('zones.zone1Title')}</span>
       </div>
 
       <div className="flex-1 overflow-y-auto grid gap-2">

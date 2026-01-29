@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Play, Square, RotateCcw, Download, HelpCircle, BookOpen, PanelRightOpen, PanelRightClose, MoreVertical, Moon, Sun } from 'lucide-react';
 import { useStore } from '../../store/useStore';
+import { useT } from '../../i18n';
 import { clsx } from 'clsx';
 import { scenarioMetas } from '../../data/scenarios';
 import { PageNav } from './PageNav';
@@ -63,7 +64,10 @@ export function Header() {
     toggleContextSidebar,
     theme,
     toggleTheme,
+    locale,
+    toggleLocale,
   } = useStore();
+  const t = useT();
   const isWorkflow = activePage === 'workflow';
   const [demoProgress, setDemoProgress] = useState(0); // 0 = not running, 1-4 = current demo step
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -157,7 +161,7 @@ export function Header() {
   };
 
   const stepNavigator = (
-    <nav className="flex items-center gap-1" data-tour="step-navigator" role="navigation" aria-label="워크플로우 단계 네비게이터">
+    <nav className="flex items-center gap-1" data-tour="step-navigator" role="navigation" aria-label={t('a11y.stepNav')}>
       {steps.map((step, idx) => {
         const isStepActive = activeStep === step.num;
         const classes = stepActiveClasses[step.color];
@@ -223,12 +227,12 @@ export function Header() {
         {/* 좌측: 타이틀 + 시나리오 */}
         <div className="flex items-center gap-6">
           <div>
-            <h1 className="text-lg font-semibold text-textMain">HR 의사결정 지원</h1>
+            <h1 className="text-lg font-semibold text-textMain">{t('common.appTitle')}</h1>
             <p className="text-xs text-textSub font-mono uppercase tracking-wider">Decision Workflow Canvas</p>
           </div>
           <div className="rounded-lg glass-panel px-3 py-1.5">
             <div className="flex items-center gap-2">
-              <span className="text-xs text-textSub">시나리오</span>
+              <span className="text-xs text-textSub">{t('common.scenario')}</span>
               <select
                 value={scenarioId}
                 onChange={(e) => setScenario(e.target.value)}
@@ -251,7 +255,7 @@ export function Header() {
         <div className="flex items-center gap-2">
           {isTourActive && (
             <span className="flex items-center gap-1.5 rounded-lg bg-decisionBlue/10 border border-decisionBlue/30 px-3 py-1.5 text-xs font-mono text-decisionBlue animate-glow-pulse">
-              데모 진행 중… Step {demoProgress}/4
+              {t('common.demoProgress')} Step {demoProgress}/4
             </span>
           )}
           <button
@@ -272,7 +276,7 @@ export function Header() {
             {isTourActive ? (
               <>
                 <Square className="h-4 w-4" aria-hidden="true" />
-                투어 종료
+                {t('common.tourEnd')}
               </>
             ) : (
               <>
@@ -305,7 +309,7 @@ export function Header() {
           </button>
           <button
             onClick={toggleContextSidebar}
-            aria-label="HR Context 패널 토글"
+            aria-label={t('a11y.hrContextToggle')}
             aria-expanded={isContextSidebarOpen}
             className={clsx(
               'flex items-center gap-2 rounded-lg glass-panel px-3 py-2 text-sm transition-all',
@@ -318,6 +322,14 @@ export function Header() {
             <span className="hidden md:inline">HR Context</span>
           </button>
           <button
+            onClick={toggleLocale}
+            className="flex items-center gap-1 rounded-lg glass-panel px-3 py-2 text-sm text-textSub transition-all hover:text-textMain"
+          >
+            <span className={locale === 'ko' ? 'text-decisionBlue font-bold' : ''}>KO</span>
+            <span className="text-neutralGray/50">|</span>
+            <span className={locale === 'en' ? 'text-decisionBlue font-bold' : ''}>EN</span>
+          </button>
+          <button
             onClick={toggleTheme}
             aria-label={theme === 'dark' ? '라이트 모드로 전환' : '다크 모드로 전환'}
             className="flex items-center gap-2 rounded-lg glass-panel px-3 py-2 text-sm text-textSub transition-all hover:bg-appBg/50 hover:text-textMain"
@@ -326,7 +338,7 @@ export function Header() {
           </button>
           <button
             onClick={reset}
-            aria-label="초기화"
+            aria-label={t('a11y.resetLabel')}
             className="flex items-center gap-2 rounded-lg glass-panel px-3 py-2 text-sm text-textSub transition-all hover:bg-appBg/50 hover:text-textMain"
           >
             <RotateCcw className="h-4 w-4" aria-hidden="true" />
@@ -334,7 +346,7 @@ export function Header() {
           </button>
           <button
             onClick={handleExport}
-            aria-label="보고서 내보내기"
+            aria-label={t('a11y.exportLabel')}
             className="flex items-center gap-2 rounded-lg glass-panel px-3 py-2 text-sm text-textSub transition-all hover:bg-appBg/50 hover:text-textMain"
           >
             <Download className="h-4 w-4" aria-hidden="true" />
@@ -350,7 +362,7 @@ export function Header() {
         {/* Row 1: 타이틀 + 시나리오 셀렉터 + 오버플로 메뉴(⋮) */}
         <div className="flex items-center justify-between gap-2">
           <div className="min-w-0">
-            <h1 className="text-base font-semibold text-textMain truncate">HR 의사결정 지원</h1>
+            <h1 className="text-base font-semibold text-textMain truncate">{t('common.appTitle')}</h1>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
             <select
@@ -367,7 +379,7 @@ export function Header() {
             <div className="relative" ref={menuRef}>
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                aria-label="더보기 메뉴"
+                aria-label={t('a11y.moreMenu')}
                 aria-expanded={isMobileMenuOpen}
                 className="rounded-lg glass-panel p-2 text-textSub hover:bg-appBg/50 hover:text-textMain min-h-[44px] min-w-[44px] flex items-center justify-center"
               >
@@ -400,6 +412,14 @@ export function Header() {
                   >
                     {isContextSidebarOpen ? <PanelRightClose className="h-4 w-4" aria-hidden="true" /> : <PanelRightOpen className="h-4 w-4" aria-hidden="true" />}
                     HR Context
+                  </button>
+                  <button
+                    onClick={() => { toggleLocale(); setIsMobileMenuOpen(false); }}
+                    className="flex w-full items-center gap-2 px-3 py-2.5 text-sm text-textSub hover:text-textMain min-h-[44px]"
+                  >
+                    <span className={locale === 'ko' ? 'text-decisionBlue font-bold' : ''}>KO</span>
+                    <span className="text-neutralGray/50">|</span>
+                    <span className={locale === 'en' ? 'text-decisionBlue font-bold' : ''}>EN</span>
                   </button>
                   <button
                     onClick={() => { toggleTheme(); setIsMobileMenuOpen(false); }}
@@ -463,7 +483,7 @@ export function Header() {
             {isTourActive ? (
               <>
                 <Square className="h-4 w-4" aria-hidden="true" />
-                종료
+                {t('common.end')}
               </>
             ) : (
               <>
@@ -487,12 +507,12 @@ export function Header() {
       {/* 데이터 라벨 범례 */}
       {isWorkflow && (
       <div className="mt-2 hidden md:flex items-center gap-4 text-xs opacity-60 hover:opacity-100 transition-opacity" data-tour="data-labels">
-        <span className="text-textSub font-mono uppercase tracking-wider text-micro">Data Labels:</span>
+        <span className="text-textSub font-mono uppercase tracking-wider text-micro">{t('header.dataLabels')}</span>
         <span className="rounded bg-label-real/20 px-2 py-0.5 text-label-real font-mono">REAL</span>
         <span className="rounded bg-label-estimate/20 px-2 py-0.5 text-label-estimate font-mono">ESTIMATE</span>
         <span className="rounded bg-label-mock/20 px-2 py-0.5 text-label-mock font-mono">MOCK</span>
         <span className="rounded bg-label-synth/20 px-2 py-0.5 text-label-synth font-mono">SYNTH</span>
-        <span className="ml-2 text-textSub">| 이 화면은 평가/인사관리 목적이 아닙니다</span>
+        <span className="ml-2 text-textSub">{t('header.dataLabelDisclaimer')}</span>
       </div>
       )}
     </header>

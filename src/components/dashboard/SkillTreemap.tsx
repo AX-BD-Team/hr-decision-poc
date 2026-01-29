@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import type { SkillTreemapItem } from '../../types';
 import { CHART_COLORS } from '../../constants/tokens';
+import { useT } from '../../i18n';
 
 interface SkillTreemapProps {
   data: SkillTreemapItem[];
@@ -75,37 +76,41 @@ function layoutTreemap(items: SkillTreemapItem[], width: number, height: number)
   return rects;
 }
 
-export function SkillTreemap({ data, title = '스킬 분포' }: SkillTreemapProps) {
+export function SkillTreemap({ data, title }: SkillTreemapProps) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const svgRef = useRef<SVGSVGElement>(null);
+  const t = useT();
+
+  const resolvedTitle = title ?? t('dashboard.skillTreemapDefault');
 
   const width = 600;
   const height = 300;
   const rects = layoutTreemap(data, width, height);
   const total = data.reduce((s, i) => s + i.value, 0);
+  const unit = t('dashboard.personUnit');
 
   function handleMouseMove(e: React.MouseEvent<SVGSVGElement>) {
     const svg = svgRef.current;
     if (!svg) return;
     const rect = svg.getBoundingClientRect();
-    const scaleX = width / rect.width;
-    const scaleY = height / rect.height;
+    const sx = width / rect.width;
+    const sy = height / rect.height;
     setMousePos({
-      x: (e.clientX - rect.left) * scaleX,
-      y: (e.clientY - rect.top) * scaleY,
+      x: (e.clientX - rect.left) * sx,
+      y: (e.clientY - rect.top) * sy,
     });
   }
 
   return (
     <div className="rounded-xl glass-panel border border-neutralGray/20 p-5 space-y-3">
-      <h3 className="text-sm font-semibold text-textMain">{title}</h3>
+      <h3 className="text-sm font-semibold text-textMain">{resolvedTitle}</h3>
       <svg
         ref={svgRef}
         viewBox={`0 0 ${width} ${height}`}
         className="w-full"
         role="img"
-        aria-label={`${title} 트리맵`}
+        aria-label={`${resolvedTitle} ${t('dashboard.treemapAriaLabel')}`}
         onMouseMove={handleMouseMove}
       >
         {rects.map((r, idx) => {
@@ -150,7 +155,7 @@ export function SkillTreemap({ data, title = '스킬 분포' }: SkillTreemapProp
                     fill={CHART_COLORS.whiteAlpha70}
                     fontSize={r.w > 80 ? 10 : 8}
                   >
-                    {r.item.value}명 ({pct}%)
+                    {r.item.value}{unit} ({pct}%)
                   </text>
                 </>
               )}
@@ -173,7 +178,7 @@ export function SkillTreemap({ data, title = '스킬 분포' }: SkillTreemapProp
             <g>
               <rect x={tx} y={ty} width={tw} height={th} rx={8} fill={CHART_COLORS.tooltipBg} stroke={CHART_COLORS.tooltipBorder} strokeWidth={1} />
               <text x={tx + 10} y={ty + 17} fill={CHART_COLORS.textMain} fontSize={11} fontWeight="600">{r.item.name}</text>
-              <text x={tx + 10} y={ty + 34} fill={CHART_COLORS.textSub} fontSize={10}>{r.item.value}명 · {pct}%</text>
+              <text x={tx + 10} y={ty + 34} fill={CHART_COLORS.textSub} fontSize={10}>{r.item.value}{unit} · {pct}%</text>
             </g>
           );
         })()}

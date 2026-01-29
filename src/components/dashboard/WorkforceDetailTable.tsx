@@ -1,6 +1,7 @@
 import { clsx } from 'clsx';
 import type { MonthlyWorkforceData } from '../../types';
 import { CHART_COLORS } from '../../constants/tokens';
+import { useT } from '../../i18n';
 
 interface WorkforceDetailTableProps {
   data: MonthlyWorkforceData[];
@@ -28,21 +29,22 @@ function MiniSparkline({ data, width = 60, height = 16 }: { data: number[]; widt
 
 export function WorkforceDetailTable({ data }: WorkforceDetailTableProps) {
   const headcountSeries = data.map((m) => m.totalHeadcount);
+  const t = useT();
 
   return (
     <div className="rounded-xl glass-panel border border-neutralGray/20 p-5 space-y-3">
-      <h3 className="text-sm font-semibold text-textMain">월별 상세 데이터</h3>
+      <h3 className="text-sm font-semibold text-textMain">{t('dashboard.detailTableTitle')}</h3>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-neutralGray/20 text-left text-xs text-textSub">
-              <th className="py-2 pr-3">월</th>
-              <th className="py-2 pr-3">유입</th>
-              <th className="py-2 pr-3">유출</th>
-              <th className="py-2 pr-3">총 인원</th>
-              <th className="py-2 pr-3">예측</th>
-              <th className="py-2 pr-3">수급 차이</th>
-              <th className="py-2">파이프라인</th>
+              <th className="py-2 pr-3">{t('dashboard.month')}</th>
+              <th className="py-2 pr-3">{t('dashboard.inflow')}</th>
+              <th className="py-2 pr-3">{t('dashboard.outflow')}</th>
+              <th className="py-2 pr-3">{t('dashboard.totalHeadcount')}</th>
+              <th className="py-2 pr-3">{t('dashboard.forecast')}</th>
+              <th className="py-2 pr-3">{t('dashboard.surplusDiff')}</th>
+              <th className="py-2">{t('dashboard.pipeline')}</th>
             </tr>
           </thead>
           <tbody>

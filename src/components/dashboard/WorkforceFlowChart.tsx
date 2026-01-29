@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { MonthlyWorkforceData } from '../../types';
 import { CHART_COLORS } from '../../constants/tokens';
+import { useT } from '../../i18n';
 
 interface WorkforceFlowChartProps {
   data: MonthlyWorkforceData[];
@@ -29,6 +30,7 @@ function scaleX(idx: number, count: number) {
 
 export function WorkforceFlowChart({ data }: WorkforceFlowChartProps) {
   const [hoverIdx, setHoverIdx] = useState<number | null>(null);
+  const t = useT();
 
   const maxBar = CHART.MAX_BAR;
   const barW = 14;
@@ -54,19 +56,19 @@ export function WorkforceFlowChart({ data }: WorkforceFlowChartProps) {
   return (
     <div className="rounded-xl glass-panel border border-neutralGray/20 p-5 space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-textMain">월별 인력 흐름</h3>
+        <h3 className="text-sm font-semibold text-textMain">{t('dashboard.workforceTitle')}</h3>
         <div className="flex items-center gap-4 text-micro text-textSub">
           <span className="flex items-center gap-1.5">
-            <span className="inline-block w-3 h-3 rounded-sm bg-success/80" /> 유입
+            <span className="inline-block w-3 h-3 rounded-sm bg-success/80" /> {t('dashboard.inflow')}
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="inline-block w-3 h-3 rounded-sm bg-alertRed/80" /> 유출
+            <span className="inline-block w-3 h-3 rounded-sm bg-alertRed/80" /> {t('dashboard.outflow')}
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="inline-block w-6 h-0.5 bg-decisionBlue" /> 총인원
+            <span className="inline-block w-6 h-0.5 bg-decisionBlue" /> {t('dashboard.totalHeadcount')}
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="inline-block w-6 h-0.5 border-t-2 border-dashed border-warning" /> 예측
+            <span className="inline-block w-6 h-0.5 border-t-2 border-dashed border-warning" /> {t('dashboard.forecast')}
           </span>
         </div>
       </div>
@@ -76,7 +78,7 @@ export function WorkforceFlowChart({ data }: WorkforceFlowChartProps) {
           viewBox={`0 0 ${CHART.W} ${CHART.H}`}
           className="w-full min-w-[600px]"
           role="img"
-          aria-label="월별 인력 흐름 차트"
+          aria-label={t('dashboard.workforceChartAria')}
           onMouseLeave={() => setHoverIdx(null)}
         >
           {/* Y axis grid */}
@@ -119,7 +121,7 @@ export function WorkforceFlowChart({ data }: WorkforceFlowChartProps) {
                 <rect x={bx + barW + gap} y={baseY - outH} width={barW} height={outH} fill={CHART_COLORS.alert} rx={2} opacity={hoverIdx === idx ? 1 : 0.75} className="transition-opacity" />
                 {/* Month label */}
                 <text x={cx} y={CHART.H - CHART.PAD_B + 16} textAnchor="middle" fill={CHART_COLORS.textSub} fontSize={10}>
-                  {monthLabel}월
+                  {monthLabel}{t('dashboard.monthSuffix')}
                 </text>
               </g>
             );
@@ -165,10 +167,10 @@ export function WorkforceFlowChart({ data }: WorkforceFlowChartProps) {
                 <line x1={cx} y1={CHART.PAD_T} x2={cx} y2={CHART.H - CHART.PAD_B} stroke={CHART_COLORS.blue} strokeWidth={1} strokeDasharray="3 3" opacity={0.5} />
                 <rect x={tx} y={ty} width={tooltipW} height={tooltipH} rx={8} fill={CHART_COLORS.tooltipBg} stroke={CHART_COLORS.tooltipBorderBlue} strokeWidth={1} />
                 <text x={tx + 10} y={ty + 18} fill={CHART_COLORS.textMain} fontSize={11} fontWeight="600">{m.month}</text>
-                <text x={tx + 10} y={ty + 35} fill={CHART_COLORS.success} fontSize={10}>유입: +{m.in}</text>
-                <text x={tx + 10} y={ty + 50} fill={CHART_COLORS.alert} fontSize={10}>유출: -{m.out}</text>
-                <text x={tx + 10} y={ty + 65} fill={CHART_COLORS.blue} fontSize={10}>총인원: {m.totalHeadcount.toLocaleString()}</text>
-                <text x={tx + 10} y={ty + 80} fill={CHART_COLORS.warning} fontSize={10}>예측: {m.forecast.toLocaleString()}</text>
+                <text x={tx + 10} y={ty + 35} fill={CHART_COLORS.success} fontSize={10}>{t('dashboard.inflowPrefix')}{m.in}</text>
+                <text x={tx + 10} y={ty + 50} fill={CHART_COLORS.alert} fontSize={10}>{t('dashboard.outflowPrefix')}{m.out}</text>
+                <text x={tx + 10} y={ty + 65} fill={CHART_COLORS.blue} fontSize={10}>{t('dashboard.totalHeadcountPrefix')}{m.totalHeadcount.toLocaleString()}</text>
+                <text x={tx + 10} y={ty + 80} fill={CHART_COLORS.warning} fontSize={10}>{t('dashboard.forecastPrefix')}{m.forecast.toLocaleString()}</text>
               </g>
             );
           })()}
