@@ -19,8 +19,15 @@ const TourOverlay = lazy(() =>
 const HRContextView = lazy(() =>
   import('./components/context/HRContextView').then(m => ({ default: m.HRContextView }))
 );
+const DashboardPage = lazy(() =>
+  import('./components/dashboard/DashboardPage').then(m => ({ default: m.DashboardPage }))
+);
+const DocsPage = lazy(() =>
+  import('./components/docs/DocsPage').then(m => ({ default: m.DocsPage }))
+);
 
 function App() {
+  const activePage = useStore((s) => s.activePage);
   const isContextSidebarOpen = useStore((s) => s.isContextSidebarOpen);
   const scenarioId = useStore((s) => s.scenarioId);
   const announcementRef = useRef<HTMLDivElement>(null);
@@ -43,70 +50,92 @@ function App() {
       </a>
       <div ref={announcementRef} aria-live="polite" className="sr-only" />
       <Header />
-      <Suspense fallback={null}>
-        <TourOverlay />
-      </Suspense>
-      <div className="flex">
-        <main
-          id="main-content"
-          className={clsx(
-            'mx-auto w-full px-2 sm:px-4 pb-10 sm:pb-10 transition-all safe-area-bottom',
-            isContextSidebarOpen ? 'max-w-[1440px]' : 'max-w-[1440px]'
-          )}
-          style={{ flex: '1 1 0%', minWidth: 0 }}
-        >
-          <div className="grid grid-cols-1 gap-2 sm:gap-4 pt-4 lg:grid-cols-[360px_1fr]">
-            <section id="section-ingestion" className="min-h-0 overflow-hidden animate-stagger-1 scroll-mt-32">
-              <ErrorBoundary fallbackTitle="데이터 수집 영역 오류">
-                <ZoneDataIngestion />
+
+      {activePage === 'workflow' && (
+        <Suspense fallback={null}>
+          <TourOverlay />
+        </Suspense>
+      )}
+
+      {activePage === 'workflow' && (
+        <div className="flex">
+          <main
+            id="main-content"
+            className={clsx(
+              'mx-auto w-full px-2 sm:px-4 pb-10 sm:pb-10 transition-all safe-area-bottom',
+              isContextSidebarOpen ? 'max-w-[1440px]' : 'max-w-[1440px]'
+            )}
+            style={{ flex: '1 1 0%', minWidth: 0 }}
+          >
+            <div className="grid grid-cols-1 gap-2 sm:gap-4 pt-4 lg:grid-cols-[360px_1fr]">
+              <section id="section-ingestion" className="min-h-0 overflow-hidden animate-stagger-1 scroll-mt-32">
+                <ErrorBoundary fallbackTitle="데이터 수집 영역 오류">
+                  <ZoneDataIngestion />
+                </ErrorBoundary>
+              </section>
+
+              <section id="section-graph" className="min-h-[280px] lg:min-h-0 overflow-hidden animate-stagger-2 scroll-mt-32">
+                <ErrorBoundary fallbackTitle="온톨로지 그래프 영역 오류">
+                  <Suspense fallback={<LoadingZone3Graph />}>
+                    <ZoneGraph />
+                  </Suspense>
+                </ErrorBoundary>
+              </section>
+            </div>
+
+            <div className="mt-2 sm:mt-4 grid grid-cols-1 gap-2 sm:gap-4 lg:grid-cols-[360px_1fr]">
+              <section id="section-structuring" className="min-h-0 overflow-hidden scroll-mt-32">
+                <ErrorBoundary fallbackTitle="분석 패턴 영역 오류">
+                  <ZoneStructuring />
+                </ErrorBoundary>
+              </section>
+              <section id="section-paths" className="min-h-0 overflow-hidden scroll-mt-32">
+                <ErrorBoundary fallbackTitle="의사결정 경로 영역 오류">
+                  <ZoneDecisionPaths />
+                </ErrorBoundary>
+              </section>
+            </div>
+
+            <section id="section-record" className="mt-2 sm:mt-4 scroll-mt-32">
+              <ErrorBoundary fallbackTitle="의사결정 기록 영역 오류">
+                <DecisionRecordSection />
               </ErrorBoundary>
             </section>
+          </main>
 
-            <section id="section-graph" className="min-h-[280px] lg:min-h-0 overflow-hidden animate-stagger-2 scroll-mt-32">
-              <ErrorBoundary fallbackTitle="온톨로지 그래프 영역 오류">
-                <Suspense fallback={<LoadingZone3Graph />}>
-                  <ZoneGraph />
+          {/* HR Context Sidebar */}
+          <aside
+            className={clsx(
+              'hidden lg:block sticky top-[72px] h-[calc(100vh-72px)] border-l border-neutralGray/20 bg-panelBg/50 transition-all overflow-y-auto',
+              isContextSidebarOpen ? 'w-[340px] min-w-[340px]' : 'w-0 min-w-0 border-l-0 overflow-hidden'
+            )}
+          >
+            {isContextSidebarOpen && (
+              <ErrorBoundary fallbackTitle="HR Context 오류">
+                <Suspense fallback={<div className="p-4 text-textSub text-sm">불러오는 중...</div>}>
+                  <HRContextView variant="panel" />
                 </Suspense>
               </ErrorBoundary>
-            </section>
-          </div>
+            )}
+          </aside>
+        </div>
+      )}
 
-          <div className="mt-2 sm:mt-4 grid grid-cols-1 gap-2 sm:gap-4 lg:grid-cols-[360px_1fr]">
-            <section id="section-structuring" className="min-h-0 overflow-hidden scroll-mt-32">
-              <ErrorBoundary fallbackTitle="분석 패턴 영역 오류">
-                <ZoneStructuring />
-              </ErrorBoundary>
-            </section>
-            <section id="section-paths" className="min-h-0 overflow-hidden scroll-mt-32">
-              <ErrorBoundary fallbackTitle="의사결정 경로 영역 오류">
-                <ZoneDecisionPaths />
-              </ErrorBoundary>
-            </section>
-          </div>
-
-          <section id="section-record" className="mt-2 sm:mt-4 scroll-mt-32">
-            <ErrorBoundary fallbackTitle="의사결정 기록 영역 오류">
-              <DecisionRecordSection />
-            </ErrorBoundary>
-          </section>
+      {activePage === 'dashboard' && (
+        <main id="main-content" className="mx-auto w-full max-w-[1440px] px-2 sm:px-4 pb-10 pt-4 safe-area-bottom">
+          <Suspense fallback={<div className="p-8 text-textSub text-sm">불러오는 중...</div>}>
+            <DashboardPage />
+          </Suspense>
         </main>
+      )}
 
-        {/* HR Context Sidebar */}
-        <aside
-          className={clsx(
-            'hidden lg:block sticky top-[72px] h-[calc(100vh-72px)] border-l border-neutralGray/20 bg-panelBg/50 transition-all overflow-y-auto',
-            isContextSidebarOpen ? 'w-[340px] min-w-[340px]' : 'w-0 min-w-0 border-l-0 overflow-hidden'
-          )}
-        >
-          {isContextSidebarOpen && (
-            <ErrorBoundary fallbackTitle="HR Context 오류">
-              <Suspense fallback={<div className="p-4 text-textSub text-sm">불러오는 중...</div>}>
-                <HRContextView variant="panel" />
-              </Suspense>
-            </ErrorBoundary>
-          )}
-        </aside>
-      </div>
+      {activePage === 'docs' && (
+        <main id="main-content" className="mx-auto w-full max-w-[1440px] px-2 sm:px-4 pb-10 pt-4 safe-area-bottom">
+          <Suspense fallback={<div className="p-8 text-textSub text-sm">불러오는 중...</div>}>
+            <DocsPage />
+          </Suspense>
+        </main>
+      )}
     </div>
   );
 }

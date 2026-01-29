@@ -212,7 +212,11 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 glass-header border-b border-neutralGray/20 px-3 sm:px-6 py-3 sm:py-4">
+      {/* 페이지 네비게이션 */}
+      <PageNav />
+
       {/* ===== Desktop layout (sm+): original 3-column row ===== */}
+      {isWorkflow && (
       <div className="hidden sm:flex items-center justify-between">
         {/* 좌측: 타이틀 + 시나리오 */}
         <div className="flex items-center gap-6">
@@ -329,8 +333,10 @@ export function Header() {
           </button>
         </div>
       </div>
+      )}
 
       {/* ===== Mobile layout (< sm): multi-row ===== */}
+      {isWorkflow && (
       <div className="sm:hidden space-y-2">
         {/* Row 1: 타이틀 + 시나리오 셀렉터 + 오버플로 메뉴(⋮) */}
         <div className="flex items-center justify-between gap-2">
@@ -452,9 +458,10 @@ export function Header() {
           </button>
         </div>
       </div>
+      )}
 
       {/* 핵심 질문 */}
-      {data.meta.keyQuestion && (
+      {isWorkflow && data.meta.keyQuestion && (
         <div className="mt-2 sm:mt-3 flex items-center gap-2 rounded-lg bg-decisionBlue/10 border border-decisionBlue/20 px-3 py-2">
           <HelpCircle className="h-4 w-4 flex-shrink-0 text-decisionBlue" aria-hidden="true" />
           <span className="text-sm text-textMain">{data.meta.keyQuestion}</span>
@@ -462,6 +469,7 @@ export function Header() {
       )}
 
       {/* 데이터 라벨 범례 */}
+      {isWorkflow && (
       <div className="mt-2 hidden md:flex items-center gap-4 text-xs opacity-60 hover:opacity-100 transition-opacity" data-tour="data-labels">
         <span className="text-textSub font-mono uppercase tracking-wider text-micro">Data Labels:</span>
         <span className="rounded bg-label-real/20 px-2 py-0.5 text-label-real font-mono">REAL</span>
@@ -470,6 +478,7 @@ export function Header() {
         <span className="rounded bg-label-synth/20 px-2 py-0.5 text-label-synth font-mono">SYNTH</span>
         <span className="ml-2 text-textSub">| 이 화면은 평가/인사관리 목적이 아닙니다</span>
       </div>
+      )}
     </header>
   );
 }

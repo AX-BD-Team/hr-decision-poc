@@ -1,0 +1,58 @@
+import type { DocMeta } from '../types';
+
+export const docsMeta: DocMeta[] = [
+  {
+    id: 'doc-01',
+    filename: '01_Project_Charter_O-AOD_HR_Decision_PoC.docx',
+    title: '프로젝트 헌장',
+    description: 'O-AOD HR 의사결정 PoC 프로젝트의 목적, 범위, 이해관계자 및 주요 마일스톤을 정의한 헌장 문서.',
+    category: '기획',
+    lastUpdated: '2025-01-15',
+    fileSize: '245 KB',
+  },
+  {
+    id: 'doc-02',
+    filename: '02_WBS_Execution_Plan.docx',
+    title: 'WBS 및 실행 계획',
+    description: '작업 분해 구조(WBS)와 단계별 실행 계획, 일정 및 담당자 배정.',
+    category: '기획',
+    lastUpdated: '2025-01-15',
+    fileSize: '312 KB',
+  },
+  {
+    id: 'doc-03',
+    filename: '03_Data_Requirements_Spec.docx',
+    title: '데이터 요구사항 명세',
+    description: 'HR 데이터 소스 정의, 필드 매핑, 품질 기준 및 데이터 라벨링 체계.',
+    category: '데이터',
+    lastUpdated: '2025-01-15',
+    fileSize: '198 KB',
+  },
+  {
+    id: 'doc-04',
+    filename: '04_Evaluation_Plan.docx',
+    title: '평가 계획',
+    description: 'PoC 성과 평가 기준, 측정 지표 및 평가 프로세스 정의.',
+    category: '평가',
+    lastUpdated: '2025-01-15',
+    fileSize: '156 KB',
+  },
+  {
+    id: 'doc-05',
+    filename: '05_PRD_Integrated_v1_2.docx',
+    title: '통합 PRD v1.2',
+    description: '제품 요구사항 정의서 — 기능 명세, UI/UX 설계, 기술 아키텍처 통합본.',
+    category: '기획',
+    lastUpdated: '2025-01-15',
+    fileSize: '428 KB',
+  },
+  {
+    id: 'doc-06',
+    filename: 'Cloudflare_Pages_Deploy_KO.md',
+    title: 'Cloudflare Pages 배포 가이드',
+    description: 'Cloudflare Pages를 활용한 배포 절차, 커스텀 도메인 설정 및 CI/CD 구성 안내.',
+    category: '배포',
+    lastUpdated: '2025-01-15',
+    fileSize: '12 KB',
+  },
+];
