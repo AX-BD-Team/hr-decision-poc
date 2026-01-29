@@ -267,10 +267,18 @@ export function Header() {
               >
                 {scenarioMetas.map((m) => (
                   <option key={m.id} value={m.id}>
-                    {m.name}
+                    {m.name}{m.badge ? ` [${m.badge}]` : ''}
                   </option>
                 ))}
               </select>
+              {data.meta.badge && (
+                <span className={clsx(
+                  'rounded-full px-2 py-0.5 text-micro font-mono font-bold uppercase tracking-wider',
+                  data.meta.badge === 'Phase-2' ? 'bg-zoneStruct/20 text-zoneStruct' : 'bg-contextGreen/20 text-contextGreen'
+                )}>
+                  {data.meta.badge}
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -391,7 +399,7 @@ export function Header() {
             >
               {scenarioMetas.map((m) => (
                 <option key={m.id} value={m.id}>
-                  {m.name}
+                  {m.name}{m.badge ? ` [${m.badge}]` : ''}
                 </option>
               ))}
             </select>

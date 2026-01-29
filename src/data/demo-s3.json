@@ -1,126 +1,295 @@
 {
   "meta": {
     "id": "s3",
-    "name": "핵심 인력 병목 완화",
-    "description": "특정 인력에 집중된 의존도를 낮추는 구조 재설계",
-    "keyQuestion": "병목 인력을 완화하면서 일정 리스크를 최소화할 수 있는가?"
+    "name": "솔루션 사업화 내부 체계",
+    "description": "내부 솔루션을 외부 사업화하기 위한 조직·역할·투자 체계 설계",
+    "keyQuestion": "이 솔루션을 사업화하려면 내부적으로 어떤 조직·역할·투자가 필요한가?",
+    "badge": "Phase-2",
+    "decisionCriteria": [
+      {
+        "id": "dc3-1",
+        "text": "단계성 (Phased Approach)",
+        "description": "PoC → Pilot → Scale 단계별 진행이 현실적인지",
+        "evidenceCount": 2
+      },
+      {
+        "id": "dc3-2",
+        "text": "내부 준비도",
+        "description": "현재 조직의 역량·자원이 사업화를 지원할 수 있는 수준인지",
+        "evidenceCount": 3
+      },
+      {
+        "id": "dc3-3",
+        "text": "투자 리스크",
+        "description": "각 단계별 투자 규모와 회수 가능성",
+        "evidenceCount": 2
+      },
+      {
+        "id": "dc3-4",
+        "text": "조직 영향",
+        "description": "사업화 전담조직 구성이 기존 조직에 미치는 영향",
+        "evidenceCount": 3
+      },
+      {
+        "id": "dc3-5",
+        "text": "대안 비교",
+        "description": "내부 전담, 외부 파트너, 하이브리드 모델의 장단점 비교",
+        "evidenceCount": 2
+      }
+    ]
   },
   "dataSources": [
-    {"id": "ds-hr-master", "name": "HR Master", "type": "hr_master", "label": "REAL", "description": "HRIS 기반 인사 데이터(스킬 태깅 보강) · 갱신: 2026-01-15", "coverage": 97, "fields": ["emp_id", "org_id", "grade", "tenure_months", "skills"]},
-    {"id": "ds-project-task", "name": "Project / Task", "type": "tms", "label": "REAL", "description": "PM 툴 기반 과제/작업(실적 기반) · 갱신: 2026-01-10", "coverage": 84, "fields": ["proj_id", "task_id", "role", "effort", "deadline"]},
-    {"id": "ds-org-role-map", "name": "Org Role Map", "type": "rr", "label": "REAL", "description": "조직-역할 매핑 · 갱신: 2026-01-05", "coverage": 88, "fields": ["org_id", "role_id", "responsibility", "owner"]},
-    {"id": "ds-opex-range", "name": "OPEX Range", "type": "opex", "label": "ESTIMATE", "description": "운영비용 범위 · as of: 2026-01-01", "coverage": 66, "fields": ["org_id", "category", "min", "max"]}
+    {
+      "id": "ds3-1",
+      "name": "HR Master",
+      "type": "hr_master",
+      "label": "REAL",
+      "description": "내부 인력 현황 및 역량 프로파일",
+      "coverage": 90,
+      "fields": ["사원번호", "이름", "직급", "보유역량", "프로젝트이력"],
+      "readiness": "available"
+    },
+    {
+      "id": "ds3-2",
+      "name": "솔루션 개발 이력",
+      "type": "assignment_history",
+      "label": "REAL",
+      "description": "해당 솔루션 개발 참여 인력 및 기여도",
+      "coverage": 75,
+      "fields": ["참여자", "역할", "기간", "기여영역", "산출물"],
+      "readiness": "available",
+      "readinessNote": "개발 단계 데이터만 확보, 운영 이력 미포함"
+    },
+    {
+      "id": "ds3-3",
+      "name": "시장 분석 보고서",
+      "type": "bizforce",
+      "label": "MOCK",
+      "description": "목표 시장 규모, 경쟁사, 고객 니즈 분석",
+      "coverage": 30,
+      "fields": ["시장규모", "성장률", "경쟁사", "차별점", "목표고객"],
+      "readiness": "missing",
+      "readinessNote": "Phase-2 데이터 미확보 — 가상 데이터 사용"
+    },
+    {
+      "id": "ds3-4",
+      "name": "투자 계획서",
+      "type": "opex",
+      "label": "ESTIMATE",
+      "description": "단계별 투자 규모 및 손익 시뮬레이션",
+      "coverage": 40,
+      "fields": ["단계", "투자액", "기대매출", "BEP시점", "ROI"],
+      "readiness": "missing",
+      "readinessNote": "Phase-2: 초기 추정치만 존재"
+    },
+    {
+      "id": "ds3-5",
+      "name": "역량 모델",
+      "type": "competency_model",
+      "label": "MOCK",
+      "description": "사업화에 필요한 역량 체계 및 현재 보유 수준",
+      "coverage": 25,
+      "fields": ["역량명", "필요수준", "현재수준", "갭", "개발방안"],
+      "readiness": "missing",
+      "readinessNote": "사업화 역량 모델 미수립 — Phase-2 과제"
+    }
   ],
   "analysisPatterns": [
-    {"id": "ap-1", "name": "역할 커버리지 분석", "description": "필수 역할 대비 현재 인력 매핑 상태 분석", "type": "gap_analysis", "label": "REAL", "severity": "medium", "metric": {"name": "커버리지", "value": "72%", "label": "REAL"}, "findings": ["아키텍트 1/2명 충원 필요", "후보 인력(정E) 전환 검토"], "affectedScope": {"count": 2, "unit": "역할"}},
-    {"id": "ap-2", "name": "의존도 집중 분석", "description": "특정 인력에 업무가 집중된 병목 식별", "type": "dependency", "label": "REAL", "severity": "critical", "metric": {"name": "집중도 지수", "value": "4.1", "label": "REAL"}, "findings": ["김A 단일 실패 지점(SPOF)", "정E 부분 전환 시 분산 가능"], "affectedScope": {"count": 2, "unit": "명"}},
-    {"id": "ap-3", "name": "가동률 과밀 분석", "description": "투입률 100% 초과 인력 식별", "type": "bottleneck", "label": "ESTIMATE", "severity": "critical", "metric": {"name": "초과 가동률", "value": "135%", "label": "REAL"}, "findings": ["김A 135% 심각 과부하", "시니어 3명 평균 92%", "구조적 병목 확인"], "affectedScope": {"count": 5, "unit": "명"}},
-    {"id": "ap-4", "name": "비용 영향 시뮬레이션", "description": "대안별 OPEX 변동 추정", "type": "cost_impact", "label": "SYNTH", "severity": "medium", "metric": {"name": "OPEX 범위", "value": "50~120M", "label": "ESTIMATE"}, "findings": ["유지: 0~20M", "조정: 20~60M", "변경: 60~140M"], "affectedScope": {"count": 3, "unit": "대안"}}
+    {
+      "id": "ap3-1",
+      "name": "역량 갭 분석",
+      "description": "사업화에 필요한 역량 vs 현재 내부 보유 역량 간 차이 분석",
+      "type": "capability_gap",
+      "label": "MOCK",
+      "severity": "critical",
+      "metric": { "name": "역량 충족률", "value": "35%", "label": "MOCK" },
+      "findings": [
+        "사업개발(BD) 역량 보유자 0명 — 전원 기술 배경",
+        "고객 대응 및 영업 경험 보유자 1명 (전체의 5%)",
+        "제품 매니저(PM) 역할 수행 가능자 미확인",
+        "법무/계약 역량 완전 부재"
+      ],
+      "affectedScope": { "count": 8, "unit": "역량" }
+    },
+    {
+      "id": "ap3-2",
+      "name": "단계별 준비도 분석",
+      "description": "PoC → Pilot → Scale 각 단계 진입 요건 충족도",
+      "type": "stage_readiness",
+      "label": "ESTIMATE",
+      "severity": "high",
+      "metric": { "name": "PoC 준비도", "value": "70%", "label": "ESTIMATE" },
+      "findings": [
+        "PoC: 기술 검증 완료, 고객 확보 미착수",
+        "Pilot: 전담 인력 미확보, 운영 프로세스 미수립",
+        "Scale: 조직·투자·파트너 모두 미정"
+      ],
+      "affectedScope": { "count": 3, "unit": "단계" }
+    },
+    {
+      "id": "ap3-3",
+      "name": "투자 리스크 분석",
+      "description": "단계별 투자 규모와 실패 시 매몰 비용 분석",
+      "type": "cost_impact",
+      "label": "ESTIMATE",
+      "severity": "high",
+      "metric": { "name": "총 예상 투자", "value": "15억원", "label": "ESTIMATE" },
+      "findings": [
+        "PoC 단계: 2억원 (매몰 리스크 낮음)",
+        "Pilot 단계: 5억원 (인건비 70%, 회수 불확실)",
+        "Scale 단계: 8억원 (조직 신설 비용 포함, 고위험)"
+      ],
+      "affectedScope": { "count": 1, "unit": "사업" }
+    },
+    {
+      "id": "ap3-4",
+      "name": "조직 영향 분석",
+      "description": "사업화 전담조직 신설이 기존 조직에 미치는 영향",
+      "type": "dependency",
+      "label": "ESTIMATE",
+      "severity": "medium",
+      "metric": { "name": "이동 필요 인원", "value": "5~8명", "label": "ESTIMATE" },
+      "findings": [
+        "핵심 개발자 3명 전환 시 기존 프로젝트 지연 불가피",
+        "신규 채용 2~3명 필요 (사업개발, 제품관리)",
+        "외부 파트너 활용 시 내부 이동 2명으로 축소 가능"
+      ],
+      "affectedScope": { "count": 2, "unit": "부서" }
+    }
   ],
   "entities": [
-    {"id": "org-dev", "type": "org", "name": "개발팀", "label": "REAL", "properties": {"headcount": 12, "budget": "1.2B"}, "position": {"x": 100, "y": 200}},
-    {"id": "role-arch", "type": "role", "name": "아키텍트", "label": "REAL", "properties": {"required": 2, "current": 1}, "position": {"x": 300, "y": 100}},
-    {"id": "role-dev-sr", "type": "role", "name": "시니어 개발자", "label": "REAL", "properties": {"required": 4, "current": 3}, "position": {"x": 300, "y": 200}},
-    {"id": "role-dev-jr", "type": "role", "name": "주니어 개발자", "label": "REAL", "properties": {"required": 4, "current": 5}, "position": {"x": 300, "y": 300}},
-    {"id": "person-a", "type": "person", "name": "김A (아키텍트, 병목)", "label": "REAL", "properties": {"tenure": 84, "utilization": 1.35, "skills": ["설계", "리뷰", "멘토링"]}, "position": {"x": 500, "y": 100}},
-    {"id": "person-b", "type": "person", "name": "이B (시니어)", "label": "REAL", "properties": {"tenure": 48, "utilization": 0.95, "skills": ["백엔드", "DB"]}, "position": {"x": 500, "y": 180}},
-    {"id": "person-c", "type": "person", "name": "박C (시니어)", "label": "REAL", "properties": {"tenure": 36, "utilization": 0.88, "skills": ["프론트엔드", "UX"]}, "position": {"x": 500, "y": 260}},
-    {"id": "person-d", "type": "person", "name": "최D (시니어)", "label": "REAL", "properties": {"tenure": 24, "utilization": 0.92, "skills": ["백엔드", "인프라"]}, "position": {"x": 500, "y": 340}},
-    {"id": "proj-q2", "type": "project", "name": "Q2 신규 프로젝트", "label": "ESTIMATE", "properties": {"start": "2026-04", "duration": "6M", "probability": 0.8}, "position": {"x": 700, "y": 200}},
-    {"id": "risk-bottleneck", "type": "risk", "name": "아키텍트 병목 리스크", "label": "REAL", "properties": {"severity": "high", "probability": 0.9}, "position": {"x": 500, "y": 420}},
-    {"id": "cost-hiring", "type": "cost", "name": "신규 채용 비용", "label": "ESTIMATE", "properties": {"amount": "180M", "type": "one-time"}, "position": {"x": 700, "y": 350}},
-    {"id": "person-e", "type": "person", "name": "정E (시니어, 후보)", "label": "ESTIMATE", "properties": {"tenure": 30, "utilization": 0.78, "skills": ["설계", "리뷰"]}, "position": {"x": 520, "y": 60}}
+    { "id": "e3-stage1", "type": "stage", "name": "PoC (개념검증)", "label": "REAL", "properties": { "duration": "3개월", "readiness": "70%" }, "position": { "x": 100, "y": 100 } },
+    { "id": "e3-stage2", "type": "stage", "name": "Pilot (시범운영)", "label": "ESTIMATE", "properties": { "duration": "6개월", "readiness": "30%" }, "position": { "x": 400, "y": 100 } },
+    { "id": "e3-stage3", "type": "stage", "name": "Scale (확대)", "label": "ESTIMATE", "properties": { "duration": "12개월", "readiness": "10%" }, "position": { "x": 700, "y": 100 } },
+    { "id": "e3-cap1", "type": "capability", "name": "사업개발 (BD)", "label": "MOCK", "properties": { "currentLevel": 0, "requiredLevel": 4 }, "position": { "x": 100, "y": 300 } },
+    { "id": "e3-cap2", "type": "capability", "name": "제품관리 (PM)", "label": "MOCK", "properties": { "currentLevel": 1, "requiredLevel": 4 }, "position": { "x": 300, "y": 300 } },
+    { "id": "e3-cap3", "type": "capability", "name": "고객 대응", "label": "MOCK", "properties": { "currentLevel": 1, "requiredLevel": 3 }, "position": { "x": 500, "y": 300 } },
+    { "id": "e3-cap4", "type": "capability", "name": "법무/계약", "label": "MOCK", "properties": { "currentLevel": 0, "requiredLevel": 3 }, "position": { "x": 700, "y": 300 } },
+    { "id": "e3-org1", "type": "org", "name": "기술개발팀 (현재)", "label": "REAL", "properties": { "headcount": 15, "level": "팀" }, "position": { "x": 250, "y": 450 } },
+    { "id": "e3-role1", "type": "role", "name": "솔루션 아키텍트", "label": "REAL", "properties": { "count": 2 }, "position": { "x": 450, "y": 450 } },
+    { "id": "e3-cost1", "type": "cost", "name": "PoC 투자", "label": "ESTIMATE", "properties": { "amount": "2억원", "stage": "PoC" }, "position": { "x": 100, "y": 500 } },
+    { "id": "e3-cost2", "type": "cost", "name": "Pilot 투자", "label": "ESTIMATE", "properties": { "amount": "5억원", "stage": "Pilot" }, "position": { "x": 400, "y": 500 } },
+    { "id": "e3-risk1", "type": "risk", "name": "시장 수요 불확실", "label": "MOCK", "properties": { "probability": "높음", "impact": "치명적" }, "position": { "x": 650, "y": 450 } }
   ],
   "edges": [
-    {"id": "e1", "source": "org-dev", "target": "role-arch", "type": "covers", "label": "REAL"},
-    {"id": "e2", "source": "org-dev", "target": "role-dev-sr", "type": "covers", "label": "REAL"},
-    {"id": "e3", "source": "org-dev", "target": "role-dev-jr", "type": "covers", "label": "REAL"},
-    {"id": "e4", "source": "role-arch", "target": "person-a", "type": "assigned_to", "label": "REAL"},
-    {"id": "e5", "source": "role-dev-sr", "target": "person-b", "type": "assigned_to", "label": "REAL"},
-    {"id": "e6", "source": "role-dev-sr", "target": "person-c", "type": "assigned_to", "label": "REAL"},
-    {"id": "e7", "source": "role-dev-sr", "target": "person-d", "type": "assigned_to", "label": "REAL"},
-    {"id": "e8", "source": "proj-q2", "target": "role-arch", "type": "depends_on", "label": "ESTIMATE", "weight": 0.9},
-    {"id": "e9", "source": "proj-q2", "target": "role-dev-sr", "type": "depends_on", "label": "ESTIMATE", "weight": 0.7},
-    {"id": "e10", "source": "person-a", "target": "risk-bottleneck", "type": "risk_of", "label": "MOCK"},
-    {"id": "e11", "source": "cost-hiring", "target": "role-arch", "type": "cost_supports", "label": "ESTIMATE"},
-    {"id": "e13", "source": "role-arch", "target": "person-e", "type": "assigned_to", "label": "ESTIMATE"},
-    {"id": "e14", "source": "person-e", "target": "risk-bottleneck", "type": "bottleneck", "label": "ESTIMATE", "weight": 0.6}
+    { "id": "ed3-1", "source": "e3-stage1", "target": "e3-stage2", "type": "depends_on", "label": "ESTIMATE" },
+    { "id": "ed3-2", "source": "e3-stage2", "target": "e3-stage3", "type": "depends_on", "label": "ESTIMATE" },
+    { "id": "ed3-3", "source": "e3-stage1", "target": "e3-cap1", "type": "requires_capability", "label": "MOCK" },
+    { "id": "ed3-4", "source": "e3-stage2", "target": "e3-cap2", "type": "requires_capability", "label": "MOCK" },
+    { "id": "ed3-5", "source": "e3-stage2", "target": "e3-cap3", "type": "requires_capability", "label": "MOCK" },
+    { "id": "ed3-6", "source": "e3-stage3", "target": "e3-cap4", "type": "requires_capability", "label": "MOCK" },
+    { "id": "ed3-7", "source": "e3-role1", "target": "e3-org1", "type": "belongs_to", "label": "REAL" },
+    { "id": "ed3-8", "source": "e3-cost1", "target": "e3-stage1", "type": "cost_supports", "label": "ESTIMATE" },
+    { "id": "ed3-9", "source": "e3-cost2", "target": "e3-stage2", "type": "cost_supports", "label": "ESTIMATE" },
+    { "id": "ed3-10", "source": "e3-role1", "target": "e3-stage1", "type": "part_of_stage", "label": "REAL" },
+    { "id": "ed3-11", "source": "e3-risk1", "target": "e3-stage2", "type": "risk_of", "label": "MOCK" },
+    { "id": "ed3-12", "source": "e3-risk1", "target": "e3-stage3", "type": "risk_of", "label": "MOCK" }
   ],
   "assumptions": [
-    {"id": "asm-1", "text": "Q2 프로젝트 착수 확률 80%를 기준으로 분석", "category": "scope", "relatedPaths": ["path-a", "path-b", "path-c"]},
-    {"id": "asm-2", "text": "현재 가동률은 TMS 4주 평균 기준", "category": "data", "relatedPaths": ["path-a", "path-b", "path-c"]},
-    {"id": "asm-3", "text": "신규 채용 시 온보딩 기간 3개월 가정", "category": "logic", "relatedPaths": ["path-a"]},
-    {"id": "asm-4", "text": "후보 인력(정E) 전환 시 4주 러닝커브 가정", "category": "logic", "relatedPaths": ["path-b"]}
+    { "id": "a3-1", "text": "기술적 PoC는 이미 완료되었으며, 사업성 검증은 미착수 상태", "category": "data", "relatedPaths": ["path-a", "path-b", "path-c"] },
+    { "id": "a3-2", "text": "사업화에 필요한 역량(BD, PM, 법무)은 내부에 거의 없다고 가정", "category": "data", "relatedPaths": ["path-a", "path-c"] },
+    { "id": "a3-3", "text": "Pilot 단계 6개월 내 최소 3개 고객사 확보 가능 가정", "category": "logic", "relatedPaths": ["path-a", "path-b"] },
+    { "id": "a3-4", "text": "외부 파트너 활용 시 기술 유출 리스크를 NDA로 통제 가능 가정", "category": "scope", "relatedPaths": ["path-b", "path-c"] },
+    { "id": "a3-5", "text": "Phase-2 데이터가 부족하여 대부분의 분석이 추정치에 의존", "category": "data", "relatedPaths": ["path-a", "path-b", "path-c"] }
   ],
   "evidence": [
-    {"id": "evd-1", "text": "김A 아키텍트 가동률 135% (최근 4주 평균)", "source": "TMS", "label": "REAL", "relatedPaths": ["path-a", "path-b", "path-c"]},
-    {"id": "evd-2", "text": "아키텍트 역할 필요 인원 2명, 현재 1명", "source": "HR Master + R&R", "label": "REAL", "relatedPaths": ["path-a", "path-b"]},
-    {"id": "evd-3", "text": "Q2 프로젝트 요구 역량: 아키텍트 1명 이상", "source": "BizForce", "label": "ESTIMATE", "relatedPaths": ["path-a", "path-b", "path-c"]},
-    {"id": "evd-4", "text": "시니어 개발자 평균 가동률 92%", "source": "TMS", "label": "REAL", "relatedPaths": ["path-a", "path-b", "path-c"]},
-    {"id": "evd-5", "text": "유사 직군 채용 평균 소요기간 2.5개월", "source": "HR 채용 데이터", "label": "ESTIMATE", "relatedPaths": ["path-a"]}
+    { "id": "ev3-1", "text": "기술 PoC 완료: 핵심 기능 5개 중 4개 구현 완료 (80%)", "source": "개발팀 보고", "label": "REAL", "relatedPaths": ["path-a", "path-b", "path-c"] },
+    { "id": "ev3-2", "text": "유사 솔루션 시장 규모 약 500억원 (연 15% 성장 추정)", "source": "시장조사기관", "label": "MOCK", "relatedPaths": ["path-a", "path-b"] },
+    { "id": "ev3-3", "text": "내부 사업개발 역량 보유자 0명 — 전원 기술직", "source": "HR 역량 DB", "label": "REAL", "relatedPaths": ["path-a", "path-c"] },
+    { "id": "ev3-4", "text": "경쟁사 A사 사업화 소요기간: 18개월 (내부 전담조직 모델)", "source": "벤치마크", "label": "MOCK", "relatedPaths": ["path-a"] },
+    { "id": "ev3-5", "text": "외부 파트너 B사 협업 시 Pilot 기간 3개월 단축 가능 (제안서 기준)", "source": "파트너 제안", "label": "ESTIMATE", "relatedPaths": ["path-b", "path-c"] }
   ],
   "riskSignals": [
-    {"id": "risk-1", "text": "병목 인력 단일 실패 지점(SPOF)로 일정 리스크 증가", "severity": "high", "label": "REAL", "relatedEntityIds": ["person-a", "risk-bottleneck"], "relatedPaths": ["path-a", "path-b", "path-c"]},
-    {"id": "risk-2", "text": "Q2 착수 시점에 채용 완료 불확실", "severity": "medium", "label": "ESTIMATE", "relatedEntityIds": ["cost-hiring"], "relatedPaths": ["path-a"]},
-    {"id": "risk-3", "text": "내부 이동 시 기존 업무 공백 발생", "severity": "medium", "label": "MOCK", "relatedEntityIds": [], "relatedPaths": ["path-b"]}
+    { "id": "rs3-1", "text": "시장 수요 검증 없이 투자 시 매몰 비용 최대 7억원", "severity": "high", "label": "ESTIMATE", "relatedEntityIds": ["e3-risk1", "e3-cost2"], "relatedPaths": ["path-a"] },
+    { "id": "rs3-2", "text": "핵심 개발자 전환 시 기존 프로젝트 3건 일정 지연", "severity": "high", "label": "ESTIMATE", "relatedEntityIds": ["e3-org1"], "relatedPaths": ["path-a"] },
+    { "id": "rs3-3", "text": "외부 파트너 의존 시 기술 유출 및 종속 리스크", "severity": "medium", "label": "MOCK", "relatedEntityIds": ["e3-risk1"], "relatedPaths": ["path-b"] },
+    { "id": "rs3-4", "text": "Phase-2 데이터 부족으로 의사결정 신뢰도 제한", "severity": "medium", "label": "MOCK", "relatedEntityIds": [], "relatedPaths": ["path-a", "path-b", "path-c"] }
   ],
   "decisionPaths": [
     {
-      "id": "path-a", "name": "A. Maintain (현 구조 유지)", "summary": "최소 변경으로 현재 운영 방식 유지",
-      "description": "현재 리소스 분배를 유지하고, 단기 리스크를 낮추는 방향으로 운영합니다.",
-      "riskLevel": "low", "effectLevel": "medium",
+      "id": "path-a",
+      "name": "내부 전담조직",
+      "summary": "사업화 전담 TF 신설 (5~8명 규모)",
+      "description": "내부 인력 전환 + 신규 채용으로 사업화 전담 조직을 구성한다. PoC부터 Scale까지 자체 수행.",
+      "riskLevel": "high",
+      "effectLevel": "high",
       "keyMetrics": [
-        {"name": "Score", "value": "74/100", "label": "SYNTH"},
-        {"name": "예상 비용", "value": "0~20M", "label": "ESTIMATE"},
-        {"name": "소요 기간", "value": "1~2주", "label": "ESTIMATE"}
+        { "name": "조직 규모", "value": "5~8명", "label": "ESTIMATE" },
+        { "name": "PoC→Pilot", "value": "9개월", "label": "ESTIMATE" },
+        { "name": "총 투자", "value": "15억원", "label": "ESTIMATE" },
+        { "name": "BEP 시점", "value": "24~30개월", "label": "ESTIMATE" }
       ],
-      "highlights": ["현재 리소스 분배 유지", "변경 리스크 낮음", "빠른 적용"],
-      "relatedEntityIds": ["org-dev", "role-arch", "person-a", "proj-q2"]
+      "highlights": [
+        "기술 내재화 및 완전한 통제권 확보",
+        "초기 투자 및 인력 확보 부담 큼",
+        "기존 프로젝트 영향 불가피"
+      ],
+      "relatedEntityIds": ["e3-org1", "e3-stage1", "e3-stage2", "e3-stage3"],
+      "limitations": "BD/PM/법무 역량 신규 확보 필요 (채용 3~6개월). 기존 프로젝트 인력 전환에 따른 공백. Phase-2 데이터 부족으로 투자 규모 정확도 낮음."
     },
     {
-      "id": "path-b", "name": "B. Adjust (부분 조정)", "summary": "핵심 역할 보강 + 업무량 균형 조정",
-      "description": "PM/지원 역할을 부분 보강하고, 병목 구간의 백로그를 정리해 업무량을 균형화합니다.",
-      "riskLevel": "medium", "effectLevel": "high",
+      "id": "path-b",
+      "name": "외부 파트너 협업",
+      "summary": "전문 사업화 파트너와 JV 또는 위탁 모델",
+      "description": "기술은 내부에서, 사업화(BD, 영업, 법무)는 외부 파트너에게 위탁하여 빠르게 시장에 진입한다.",
+      "riskLevel": "medium",
+      "effectLevel": "medium",
       "keyMetrics": [
-        {"name": "Score", "value": "86/100", "label": "SYNTH"},
-        {"name": "예상 비용", "value": "20~60M", "label": "ESTIMATE"},
-        {"name": "소요 기간", "value": "2~6주", "label": "ESTIMATE"}
+        { "name": "내부 인력", "value": "2~3명", "label": "ESTIMATE" },
+        { "name": "PoC→Pilot", "value": "6개월", "label": "ESTIMATE" },
+        { "name": "총 투자", "value": "8억원", "label": "ESTIMATE" },
+        { "name": "수익 배분", "value": "6:4", "label": "ESTIMATE" }
       ],
-      "highlights": ["PM 1인 보강 제안", "백로그 정리 + 지원 강화", "업무량 균형 개선"],
-      "relatedEntityIds": ["role-arch", "role-dev-sr", "person-a", "person-b", "risk-bottleneck", "cost-hiring"]
+      "highlights": [
+        "빠른 시장 진입 가능",
+        "내부 인력 이동 최소화",
+        "기술 유출 및 파트너 종속 리스크"
+      ],
+      "relatedEntityIds": ["e3-org1", "e3-stage1", "e3-stage2"],
+      "limitations": "파트너 선정 및 계약에 2~3개월 소요. 수익 배분으로 장기 수익성 저하. 기술 유출 리스크를 NDA만으로 완전 통제 곤란."
     },
     {
-      "id": "path-c", "name": "C. Restructure (구조 변경)", "summary": "역할/직무 재정의 및 재배치",
-      "description": "역할 구조를 재정의하고, 단기/장기 계획을 분리해 단계적으로 구조를 변경합니다.",
-      "riskLevel": "high", "effectLevel": "medium",
+      "id": "path-c",
+      "name": "하이브리드 모델",
+      "summary": "PoC/Pilot은 외부 협업, Scale 시 내부 전환",
+      "description": "초기 단계는 외부 파트너와 협업으로 리스크를 낮추고, Scale 단계에서 내부 전담조직으로 전환한다.",
+      "riskLevel": "medium",
+      "effectLevel": "high",
       "keyMetrics": [
-        {"name": "Score", "value": "72/100", "label": "SYNTH"},
-        {"name": "예상 비용", "value": "60~140M", "label": "ESTIMATE"},
-        {"name": "소요 기간", "value": "6~12주", "label": "ESTIMATE"}
+        { "name": "초기 인력", "value": "2명 + 파트너", "label": "ESTIMATE" },
+        { "name": "PoC→Pilot", "value": "6개월", "label": "ESTIMATE" },
+        { "name": "총 투자", "value": "12억원", "label": "ESTIMATE" },
+        { "name": "내부 전환 시점", "value": "12개월 후", "label": "ESTIMATE" }
       ],
-      "highlights": ["역할/직무 재정의", "단계적 추진 권장", "변경 비용 큼"],
-      "relatedEntityIds": ["org-dev", "role-arch", "role-dev-sr", "role-dev-jr", "person-a", "person-b", "person-c", "person-d", "proj-q2", "cost-hiring"]
+      "highlights": [
+        "초기 리스크 최소화 + 장기 내재화",
+        "전환 시점 관리가 핵심 성공 요인",
+        "파트너 → 내부 전환 과정의 혼란 가능"
+      ],
+      "relatedEntityIds": ["e3-org1", "e3-stage1", "e3-stage2", "e3-stage3"],
+      "limitations": "파트너→내부 전환 과정에서 지식 이전 실패 리스크. 두 모델의 비용을 순차적으로 부담하므로 총비용 증가 가능."
     }
   ],
   "hrContextViews": [
     {
-      "id": "ctx-default", "scope": "개발팀 전체",
+      "id": "hrc3-1",
+      "scope": "기술개발팀 + 사업화 후보",
       "kpis": [
-        {"id": "kpi-1", "name": "Headcount", "value": 12, "unit": "명", "label": "REAL"},
-        {"id": "kpi-2", "name": "평균 가동률", "value": 94, "unit": "%", "change": "+5%", "higherIsBetter": false, "label": "REAL"},
-        {"id": "kpi-3", "name": "평균 근속", "value": 38, "unit": "개월", "label": "REAL"},
-        {"id": "kpi-4", "name": "역할 충족률", "value": 75, "unit": "%", "change": "-10%", "higherIsBetter": true, "label": "ESTIMATE"}
+        { "id": "kpi3-1", "name": "현 인원", "value": 15, "unit": "명", "label": "REAL" },
+        { "id": "kpi3-2", "name": "역량 충족률", "value": "35%", "higherIsBetter": true, "label": "MOCK" },
+        { "id": "kpi3-3", "name": "PoC 준비도", "value": "70%", "higherIsBetter": true, "label": "ESTIMATE" },
+        { "id": "kpi3-4", "name": "사업화 경험자", "value": 0, "unit": "명", "higherIsBetter": true, "label": "REAL" }
       ],
       "utilizationMap": [
-        {"id": "um-1", "name": "김A", "dependency": 0.95, "utilization": 1.35, "label": "REAL", "entityId": "person-a"},
-        {"id": "um-2", "name": "이B", "dependency": 0.5, "utilization": 0.95, "label": "REAL", "entityId": "person-b"},
-        {"id": "um-3", "name": "박C", "dependency": 0.4, "utilization": 0.88, "label": "REAL", "entityId": "person-c"},
-        {"id": "um-4", "name": "최D", "dependency": 0.6, "utilization": 0.92, "label": "REAL", "entityId": "person-d"}
+        { "id": "um3-1", "name": "솔루션 아키텍트", "dependency": 0.9, "utilization": 0.85, "label": "REAL", "entityId": "e3-role1" },
+        { "id": "um3-2", "name": "BD 역량", "dependency": 0.8, "utilization": 0, "label": "MOCK", "entityId": "e3-cap1" },
+        { "id": "um3-3", "name": "PM 역량", "dependency": 0.7, "utilization": 0.15, "label": "MOCK", "entityId": "e3-cap2" },
+        { "id": "um3-4", "name": "법무 역량", "dependency": 0.5, "utilization": 0, "label": "MOCK", "entityId": "e3-cap4" }
       ],
       "insights": [
-        {"id": "ins-1", "text": "아키텍트 역할 1명 부족 (필요 2명, 현재 1명)", "severity": "critical", "label": "REAL"},
-        {"id": "ins-2", "text": "김A 가동률 135% - 병목 심각 (SPOF)", "severity": "critical", "label": "REAL"},
-        {"id": "ins-3", "text": "Q2 프로젝트 대응 인력 검토 필요", "severity": "info", "label": "ESTIMATE"}
+        { "id": "ci3-1", "text": "사업개발(BD) 역량 완전 부재 — 채용 또는 파트너 필수", "severity": "critical", "label": "REAL" },
+        { "id": "ci3-2", "text": "PoC 기술 준비도 70%로 양호하나 사업성 검증 미착수", "severity": "warning", "label": "ESTIMATE" },
+        { "id": "ci3-3", "text": "Phase-2 데이터 대부분 미확보 — 의사결정 신뢰도 제한적", "severity": "critical", "label": "MOCK" }
       ]
     }
   ]

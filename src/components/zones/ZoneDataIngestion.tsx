@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Database, Users, FileText, Briefcase, ChevronDown } from 'lucide-react';
+import { Database, Users, FileText, Briefcase, ChevronDown, Clock, ClipboardList, GraduationCap, Layers, LayoutGrid } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { clsx } from 'clsx';
 import type { DataSource } from '../../types';
@@ -14,6 +14,18 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   bizforce: Briefcase,
   vrb: FileText,
   opex: Database,
+  assignment_history: Clock,
+  to_request: ClipboardList,
+  training_history: GraduationCap,
+  competency_model: Layers,
+  work_allocation: LayoutGrid,
+};
+
+const readinessColors: Record<string, { bg: string; text: string; label: string }> = {
+  available: { bg: 'bg-success/20', text: 'text-success', label: '확보' },
+  recommended: { bg: 'bg-warning/20', text: 'text-warning', label: '권장' },
+  missing: { bg: 'bg-severity-high/20', text: 'text-severity-high', label: '결측' },
+  undefined_rules: { bg: 'bg-severity-high/20', text: 'text-severity-high', label: '미정' },
 };
 
 export function ZoneDataIngestion() {
@@ -88,6 +100,14 @@ export function ZoneDataIngestion() {
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-medium text-textMain">{ds.name}</span>
                       <DataLabelBadge label={ds.label} />
+                      {ds.readiness && (() => {
+                        const r = readinessColors[ds.readiness];
+                        return r ? (
+                          <span className={clsx('rounded px-1.5 py-0.5 text-micro font-mono font-medium', r.bg, r.text)}>
+                            {r.label}
+                          </span>
+                        ) : null;
+                      })()}
                     </div>
                     <p className="text-xs text-textSub">{ds.description}</p>
                   </div>
@@ -139,6 +159,11 @@ export function ZoneDataIngestion() {
                   <p className="mt-2 text-micro text-textSub">
                     {ds.fields.length} {t('zones.fieldsCount')} · {t('zones.coverage')} {ds.coverage}%
                   </p>
+                  {ds.readinessNote && (
+                    <p className="mt-1 text-micro text-textSub italic">
+                      💡 {ds.readinessNote}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>

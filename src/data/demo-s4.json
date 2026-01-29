@@ -1,0 +1,140 @@
+{
+  "meta": {
+    "id": "s4",
+    "name": "역량 강화",
+    "badge": "HRD",
+    "description": "조직/인력 역량 강화를 위한 개발 수단 및 적용 전략 비교",
+    "keyQuestion": "조직/인력의 역량을 어떻게 강화할 것인가?",
+    "decisionCriteria": [
+      {"id": "dc-1", "text": "역량 갭 규모", "description": "현재 역량과 목표 역량 간 격차가 얼마나 큰지", "evidenceCount": 3},
+      {"id": "dc-2", "text": "개발 수단 적합성", "description": "교육, 순환배치, 멘토링 등 수단의 적합도", "evidenceCount": 2},
+      {"id": "dc-3", "text": "적용 시점", "description": "역량 개발 효과가 발현되는 시점과 긴급성", "evidenceCount": 2},
+      {"id": "dc-4", "text": "측정 가능성", "description": "역량 개발 효과를 객관적으로 측정할 수 있는지", "evidenceCount": 2},
+      {"id": "dc-5", "text": "비용 대비 효과", "description": "투입 자원 대비 기대되는 역량 향상 효과", "evidenceCount": 3}
+    ]
+  },
+  "dataSources": [
+    {"id": "ds-hr-master", "name": "HR Master", "type": "hr_master", "label": "REAL", "description": "HRIS 기반 인사 데이터", "coverage": 95, "fields": ["emp_id", "org_id", "grade", "skills", "certifications"], "readiness": "available"},
+    {"id": "ds-training-hist", "name": "Training History", "type": "training_history", "label": "ESTIMATE", "description": "교육 이수 이력 · 효과 측정 미비", "coverage": 55, "fields": ["emp_id", "program_id", "completion_date", "score", "feedback"], "readiness": "recommended", "readinessNote": "교육 효과 측정 데이터 부족"},
+    {"id": "ds-competency", "name": "Competency Model", "type": "competency_model", "label": "MOCK", "description": "역량 모델 · 일부 직군만 정의", "coverage": 40, "fields": ["competency_id", "name", "level", "target_level", "gap"], "readiness": "missing", "readinessNote": "전 직군 역량 모델 미구축"},
+    {"id": "ds-assignment-hist", "name": "Assignment History", "type": "assignment_history", "label": "ESTIMATE", "description": "배치 이력 · 순환배치 효과 분석용", "coverage": 70, "fields": ["emp_id", "role_id", "start_date", "end_date", "skill_gained"], "readiness": "recommended", "readinessNote": "순환배치와 역량 연결 데이터 미비"},
+    {"id": "ds-opex-range", "name": "HRD Budget", "type": "opex", "label": "ESTIMATE", "description": "인재개발 예산 범위", "coverage": 60, "fields": ["category", "program_type", "budget", "actual"], "readiness": "available"}
+  ],
+  "analysisPatterns": [
+    {"id": "ap-1", "name": "역량 갭 분석", "description": "목표 역량 대비 현재 역량 수준 격차 분석", "type": "capability_gap", "label": "MOCK", "severity": "critical", "metric": {"name": "역량 갭", "value": "45%", "label": "MOCK"}, "findings": ["디지털 전환 역량 부족", "리더십 역량 격차 존재"], "affectedScope": {"count": 3, "unit": "역량 영역"}},
+    {"id": "ap-2", "name": "교육 효과 분석", "description": "기존 교육 프로그램의 실질 효과 분석", "type": "gap_analysis", "label": "ESTIMATE", "severity": "high", "metric": {"name": "효과 달성률", "value": "32%", "label": "ESTIMATE"}, "findings": ["현장 적용률 낮음", "교육 후 역량 평가 미연계"], "affectedScope": {"count": 12, "unit": "프로그램"}},
+    {"id": "ap-3", "name": "순환배치 효과 분석", "description": "직무 순환배치를 통한 역량 개발 효과", "type": "dependency", "label": "ESTIMATE", "severity": "medium", "metric": {"name": "역량 향상률", "value": "18%", "label": "ESTIMATE"}, "findings": ["순환배치 경험자 역량 향상", "배치 기간 3~6개월 적정"], "affectedScope": {"count": 8, "unit": "명"}},
+    {"id": "ap-4", "name": "투자 효과 시뮬레이션", "description": "역량 강화 대안별 비용/효과 비교", "type": "cost_impact", "label": "SYNTH", "severity": "medium", "metric": {"name": "투자 범위", "value": "50M~300M", "label": "ESTIMATE"}, "findings": ["집중 교육: 50~100M", "순환배치: 80~150M", "멘토링: 100~300M"], "affectedScope": {"count": 3, "unit": "대안"}}
+  ],
+  "entities": [
+    {"id": "org-target", "type": "org", "name": "역량 강화 대상 조직", "label": "REAL", "properties": {"headcount": 25, "avgSkillLevel": "중급"}},
+    {"id": "cap-digital", "type": "capability", "name": "디지털 전환 역량", "label": "MOCK", "properties": {"currentLevel": "초급", "targetLevel": "중급", "gap": "45%"}},
+    {"id": "cap-leadership", "type": "capability", "name": "리더십 역량", "label": "MOCK", "properties": {"currentLevel": "중급", "targetLevel": "상급", "gap": "30%"}},
+    {"id": "cap-domain", "type": "capability", "name": "도메인 전문성", "label": "REAL", "properties": {"currentLevel": "상급", "targetLevel": "상급", "gap": "10%"}},
+    {"id": "tp-intensive", "type": "training_program", "name": "집중 교육 프로그램", "label": "SYNTH", "properties": {"duration": "3M", "format": "집합/온라인 혼합"}},
+    {"id": "tp-rotation", "type": "training_program", "name": "순환배치 육성", "label": "SYNTH", "properties": {"duration": "6M", "format": "직무 순환"}},
+    {"id": "tp-mentoring", "type": "training_program", "name": "외부 전문가 멘토링", "label": "SYNTH", "properties": {"duration": "6~12M", "format": "1:1 멘토링"}},
+    {"id": "role-trainer", "type": "role", "name": "내부 강사/코치", "label": "ESTIMATE", "properties": {"required": 3, "current": 1}},
+    {"id": "person-mentor", "type": "person", "name": "외부 전문가 풀", "label": "MOCK", "properties": {"poolSize": 5, "expertise": ["디지털 전환", "리더십", "코칭"]}},
+    {"id": "risk-ineffective", "type": "risk", "name": "교육 효과 미달 리스크", "label": "MOCK", "properties": {"severity": "high", "probability": 0.5}},
+    {"id": "cost-hrd", "type": "cost", "name": "역량 개발 투자", "label": "ESTIMATE", "properties": {"amount": "50M~300M", "type": "annual"}}
+  ],
+  "edges": [
+    {"id": "e1", "source": "org-target", "target": "cap-digital", "type": "requires_capability", "label": "MOCK"},
+    {"id": "e2", "source": "org-target", "target": "cap-leadership", "type": "requires_capability", "label": "MOCK"},
+    {"id": "e3", "source": "org-target", "target": "cap-domain", "type": "requires_capability", "label": "REAL"},
+    {"id": "e4", "source": "tp-intensive", "target": "cap-digital", "type": "trains_for", "label": "SYNTH"},
+    {"id": "e5", "source": "tp-rotation", "target": "cap-domain", "type": "trains_for", "label": "SYNTH"},
+    {"id": "e6", "source": "tp-mentoring", "target": "cap-leadership", "type": "trains_for", "label": "SYNTH"},
+    {"id": "e7", "source": "tp-intensive", "target": "role-trainer", "type": "depends_on", "label": "ESTIMATE"},
+    {"id": "e8", "source": "tp-mentoring", "target": "person-mentor", "type": "depends_on", "label": "MOCK"},
+    {"id": "e9", "source": "cost-hrd", "target": "org-target", "type": "cost_supports", "label": "ESTIMATE"},
+    {"id": "e10", "source": "org-target", "target": "risk-ineffective", "type": "risk_of", "label": "MOCK"}
+  ],
+  "assumptions": [
+    {"id": "asm-1", "text": "역량 모델은 일부 직군만 정의된 상태", "category": "data", "relatedPaths": ["path-a", "path-b", "path-c"]},
+    {"id": "asm-2", "text": "교육 효과는 6개월 후 측정 가능 가정", "category": "logic", "relatedPaths": ["path-a"]},
+    {"id": "asm-3", "text": "순환배치 시 기존 업무 백업 인력 확보 전제", "category": "logic", "relatedPaths": ["path-b"]},
+    {"id": "asm-4", "text": "외부 전문가 풀 5명 이상 확보 가능 가정", "category": "scope", "relatedPaths": ["path-c"]}
+  ],
+  "evidence": [
+    {"id": "evd-1", "text": "디지털 전환 역량 갭 45% (현재 초급 → 목표 중급)", "source": "Competency Model", "label": "MOCK", "relatedPaths": ["path-a", "path-b", "path-c"]},
+    {"id": "evd-2", "text": "기존 교육 프로그램 현장 적용률 32%", "source": "Training History", "label": "ESTIMATE", "relatedPaths": ["path-a"]},
+    {"id": "evd-3", "text": "순환배치 경험자 역량 향상률 18%", "source": "Assignment History", "label": "ESTIMATE", "relatedPaths": ["path-b"]},
+    {"id": "evd-4", "text": "내부 강사/코치 1명 — 3명 필요 대비 부족", "source": "HR Master", "label": "REAL", "relatedPaths": ["path-a"]},
+    {"id": "evd-5", "text": "리더십 역량 격차 30% 확인", "source": "Competency Model", "label": "MOCK", "relatedPaths": ["path-a", "path-c"]}
+  ],
+  "riskSignals": [
+    {"id": "risk-1", "text": "교육 투자 후 실질 역량 향상 미달 가능성", "severity": "high", "label": "MOCK", "relatedEntityIds": ["risk-ineffective", "tp-intensive"], "relatedPaths": ["path-a"]},
+    {"id": "risk-2", "text": "순환배치 시 업무 공백 발생", "severity": "medium", "label": "ESTIMATE", "relatedEntityIds": ["tp-rotation", "org-target"], "relatedPaths": ["path-b"]},
+    {"id": "risk-3", "text": "외부 전문가 확보 및 유지 불확실", "severity": "medium", "label": "MOCK", "relatedEntityIds": ["person-mentor", "tp-mentoring"], "relatedPaths": ["path-c"]}
+  ],
+  "decisionPaths": [
+    {
+      "id": "path-a",
+      "name": "A. 집중 교육 프로그램",
+      "summary": "맞춤형 집중 교육으로 핵심 역량 단기 강화",
+      "description": "디지털 전환, 리더십 등 핵심 역량에 대한 맞춤형 집중 교육 프로그램을 설계·운영합니다.",
+      "riskLevel": "medium",
+      "effectLevel": "medium",
+      "keyMetrics": [
+        {"name": "Score", "value": "72/100", "label": "SYNTH"},
+        {"name": "투자 규모", "value": "50~100M", "label": "ESTIMATE"},
+        {"name": "소요 기간", "value": "3~6개월", "label": "ESTIMATE"}
+      ],
+      "highlights": ["단기 효과 기대", "체계적 커리큘럼", "현장 적용률 개선 필요"],
+      "relatedEntityIds": ["org-target", "cap-digital", "cap-leadership", "tp-intensive", "role-trainer", "cost-hrd"],
+      "limitations": "기존 교육의 현장 적용률이 32%로 낮아 설계 개선 없이는 효과 미달 우려"
+    },
+    {
+      "id": "path-b",
+      "name": "B. 순환배치 육성",
+      "summary": "직무 순환배치를 통한 다면적 역량 개발",
+      "description": "핵심 인력을 다양한 직무에 순환 배치하여 실무 경험 기반 역량을 개발합니다.",
+      "riskLevel": "medium",
+      "effectLevel": "high",
+      "keyMetrics": [
+        {"name": "Score", "value": "76/100", "label": "SYNTH"},
+        {"name": "투자 규모", "value": "80~150M", "label": "ESTIMATE"},
+        {"name": "소요 기간", "value": "6~12개월", "label": "ESTIMATE"}
+      ],
+      "highlights": ["실무 기반 학습", "조직 이해도 향상", "업무 공백 관리 필요"],
+      "relatedEntityIds": ["org-target", "cap-domain", "tp-rotation", "risk-ineffective"],
+      "limitations": "순환배치 중 업무 공백이 발생하며, 백업 인력 확보가 전제 조건"
+    },
+    {
+      "id": "path-c",
+      "name": "C. 외부 전문가 멘토링",
+      "summary": "외부 전문가와의 1:1 멘토링으로 심화 역량 개발",
+      "description": "외부 전문가 풀을 활용한 1:1 멘토링으로 리더십, 전문 역량을 심화 개발합니다.",
+      "riskLevel": "low",
+      "effectLevel": "high",
+      "keyMetrics": [
+        {"name": "Score", "value": "80/100", "label": "SYNTH"},
+        {"name": "투자 규모", "value": "100~300M", "label": "ESTIMATE"},
+        {"name": "소요 기간", "value": "6~12개월", "label": "ESTIMATE"}
+      ],
+      "highlights": ["심화 역량 개발", "맞춤형 코칭", "외부 전문가 확보 필요"],
+      "relatedEntityIds": ["org-target", "cap-leadership", "cap-digital", "tp-mentoring", "person-mentor", "cost-hrd"],
+      "limitations": "외부 전문가 확보 및 장기 유지가 불확실하며, 비용이 가장 높음"
+    }
+  ],
+  "hrContextViews": [
+    {
+      "id": "ctx-default",
+      "scope": "역량 강화 대상 조직",
+      "kpis": [
+        {"id": "kpi-1", "name": "대상 인원", "value": 25, "unit": "명", "label": "REAL"},
+        {"id": "kpi-2", "name": "평균 역량 수준", "value": 55, "unit": "%", "label": "MOCK"},
+        {"id": "kpi-3", "name": "교육 이수율", "value": 68, "unit": "%", "label": "ESTIMATE"},
+        {"id": "kpi-4", "name": "현장 적용률", "value": 32, "unit": "%", "change": "-15%", "higherIsBetter": true, "label": "ESTIMATE"}
+      ],
+      "utilizationMap": [],
+      "insights": [
+        {"id": "ins-1", "text": "디지털 전환 역량 갭 45% — 핵심 개발 영역", "severity": "critical", "label": "MOCK"},
+        {"id": "ins-2", "text": "기존 교육 프로그램 현장 적용률 32%로 저조", "severity": "warning", "label": "ESTIMATE"},
+        {"id": "ins-3", "text": "내부 강사/코치 인력 부족 (1/3명)", "severity": "warning", "label": "REAL"}
+      ]
+    }
+  ]
+}

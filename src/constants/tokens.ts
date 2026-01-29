@@ -9,6 +9,9 @@ export const ENTITY_COLORS: Record<EntityType, string> = {
   task: '#6366F1',
   risk: '#FF4D4F',
   cost: '#EC4899',
+  capability: '#14B8A6',
+  stage: '#A78BFA',
+  training_program: '#F97316',
 };
 
 /** Edge colors for inline styles (e.g. ReactFlow edges) */
@@ -21,6 +24,10 @@ export const EDGE_COLORS: Record<string, string> = {
   bottleneck: '#FF4D4F',
   overlap: '#8B5CF6',
   belongs_to: '#6366F1',
+  requires_capability: '#14B8A6',
+  trains_for: '#F97316',
+  part_of_stage: '#A78BFA',
+  duplicates: '#EF4444',
 };
 
 /** Panel background for inline styles */
