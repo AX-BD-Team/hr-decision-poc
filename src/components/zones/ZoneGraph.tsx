@@ -24,7 +24,7 @@ const nodeTypes = { entity: EntityNode };
 
 export function ZoneGraph() {
   const t = useT();
-  const { data, activeStep, selectedEntityId, selectedPathId, selectEntity, setActiveStep, loadingPhase, isTourActive } = useStore();
+  const { data, activeStep, selectedEntityId, selectedPathId, selectEntity, setActiveStep, loadingPhase, isTourActive, isDemoRunning } = useStore();
   const isActive = activeStep === 3;
   const showSkeleton = loadingPhase >= 1 && loadingPhase < 4;
   const justRevealed = loadingPhase >= 4 && loadingPhase <= 5;
@@ -127,7 +127,7 @@ export function ZoneGraph() {
         'scan-line-overlay flex h-full min-h-0 flex-col rounded-xl border transition-all',
         justRevealed && 'animate-phase-reveal',
         isActive
-          ? clsx('border-zoneGraph/70 bg-zoneGraph/10 shadow-glow-cyan', isTourActive && 'zone-pulse-cyan')
+          ? clsx('border-zoneGraph/70 bg-zoneGraph/10 shadow-glow-cyan', (isDemoRunning || isTourActive) && 'zone-pulse-cyan')
           : 'border-neutralGray/20 bg-panelBg/50'
       )}
       data-tour="zone-3"

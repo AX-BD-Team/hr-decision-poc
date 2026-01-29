@@ -26,7 +26,7 @@ const effectBadgeStyles = {
 
 export function ZoneDecisionPaths({ variant = 'zone' }: { variant?: 'zone' | 'dock' }) {
   const t = useT();
-  const { data, activeStep, selectedPathId, selectPath, loadingPhase, isTourActive } = useStore();
+  const { data, activeStep, selectedPathId, selectPath, loadingPhase, isTourActive, isDemoRunning } = useStore();
   const showSkeleton = loadingPhase >= 1 && loadingPhase < 5;
 
   if (showSkeleton) return <LoadingZone4Paths />;
@@ -131,7 +131,7 @@ export function ZoneDecisionPaths({ variant = 'zone' }: { variant?: 'zone' | 'do
         'flex flex-1 min-h-0 flex-col rounded-xl border p-4 transition-all',
         justRevealed && 'animate-phase-reveal',
         isActive
-          ? clsx('border-zonePath/70 bg-zonePath/10 shadow-glow-amber', isTourActive && 'zone-pulse-amber')
+          ? clsx('border-zonePath/70 bg-zonePath/10 shadow-glow-amber', (isDemoRunning || isTourActive) && 'zone-pulse-amber')
           : 'border-neutralGray/20 bg-panelBg/50'
       )}
       data-tour="zone-4"
