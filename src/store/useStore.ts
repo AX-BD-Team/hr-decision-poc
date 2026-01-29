@@ -38,6 +38,9 @@ interface AppState {
   // Demo (auto-play, no TourOverlay)
   isDemoRunning: boolean;
 
+  // Decision Criteria
+  checkedCriteria: Record<string, string[]>;
+
   // Actions
   setActivePage: (page: PageId) => void;
   setScenario: (scenarioId: string) => void;
@@ -59,6 +62,7 @@ interface AppState {
   endTour: () => void;
   startDemo: () => void;
   stopDemo: () => void;
+  toggleCriterion: (criterionId: string) => void;
   reset: () => void;
 }
 
@@ -94,6 +98,7 @@ const initialState = {
   isTourActive: false,
   tourStep: 0,
   isDemoRunning: false,
+  checkedCriteria: {} as Record<string, string[]>,
 };
 
 export const useStore = create<AppState>((set) => ({
@@ -103,9 +108,10 @@ export const useStore = create<AppState>((set) => ({
 
   setScenario: (scenarioId) => {
     const abortId = Date.now();
-    set(() => ({
+    const scenarioData = scenarioDataById[scenarioId] || scenarioDataById.s1;
+    set((state) => ({
       scenarioId,
-      data: scenarioDataById[scenarioId] || scenarioDataById.s1,
+      data: scenarioData,
       loadingPhase: 1,
       _loadingAbortId: abortId,
       mode: 'OVERVIEW',
@@ -114,6 +120,10 @@ export const useStore = create<AppState>((set) => ({
       selectedPathId: null,
       recordTab: 'evidence',
       isDockExpanded: false,
+      checkedCriteria: {
+        ...state.checkedCriteria,
+        [scenarioId]: state.checkedCriteria[scenarioId] || scenarioData.meta.decisionCriteria.map((c) => c.id),
+      },
     }));
 
     const PHASE_DELAY = 600;
@@ -182,6 +192,7 @@ export const useStore = create<AppState>((set) => ({
       selectedEntityId: null,
       selectedPathId: null,
       loadingPhase: 0,
+      isContextSidebarOpen: true,
     }),
 
   nextTourStep: () =>
@@ -218,6 +229,16 @@ export const useStore = create<AppState>((set) => ({
     set({
       isDemoRunning: false,
       mode: 'OVERVIEW',
+    }),
+
+  toggleCriterion: (criterionId) =>
+    set((state) => {
+      const sid = state.scenarioId;
+      const current = state.checkedCriteria[sid] || [];
+      const next = current.includes(criterionId)
+        ? current.filter((id) => id !== criterionId)
+        : [...current, criterionId];
+      return { checkedCriteria: { ...state.checkedCriteria, [sid]: next } };
     }),
 
   reset: () =>
