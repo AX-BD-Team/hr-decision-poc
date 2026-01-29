@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Play, Square, RotateCcw, Download, HelpCircle, BookOpen, PanelRightOpen, PanelRightClose, MoreVertical } from 'lucide-react';
+import { Play, Square, RotateCcw, Download, HelpCircle, BookOpen, PanelRightOpen, PanelRightClose, MoreVertical, Moon, Sun } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { clsx } from 'clsx';
 import { scenarioMetas } from '../../data/scenarios';
@@ -61,6 +61,8 @@ export function Header() {
     setRecordTab,
     isContextSidebarOpen,
     toggleContextSidebar,
+    theme,
+    toggleTheme,
   } = useStore();
   const isWorkflow = activePage === 'workflow';
   const [demoProgress, setDemoProgress] = useState(0); // 0 = not running, 1-4 = current demo step
@@ -314,6 +316,13 @@ export function Header() {
           >
             {isContextSidebarOpen ? <PanelRightClose className="h-4 w-4" aria-hidden="true" /> : <PanelRightOpen className="h-4 w-4" aria-hidden="true" />}
             <span className="hidden md:inline">HR Context</span>
+          </button>
+          <button
+            onClick={toggleTheme}
+            aria-label={theme === 'dark' ? '라이트 모드로 전환' : '다크 모드로 전환'}
+            className="flex items-center gap-2 rounded-lg glass-panel px-3 py-2 text-sm text-textSub transition-all hover:bg-appBg/50 hover:text-textMain"
+          >
+            {theme === 'dark' ? <Sun className="h-4 w-4" aria-hidden="true" /> : <Moon className="h-4 w-4" aria-hidden="true" />}
           </button>
           <button
             onClick={reset}
