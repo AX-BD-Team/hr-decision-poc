@@ -1,40 +1,39 @@
 # Active Context
 
 ## 현재 단계
-모든 기능 구현 완료. i18n(KO/EN), 다크/라이트 테마, UI 컴포넌트 테스트 인프라 구축 완료. **프로덕션 배포 완료** (Cloudflare Pages). ErrorBoundary i18n 마이그레이션 완료.
+Zone 1 데이터 소스 카드 인라인 확장 기능 추가 완료. Demo 자동재생과 Tour 오버레이 상태를 분리하여 `isDemoRunning` 도입.
 
 ## 최근 변경 이력
 
 | 커밋 | 설명 |
 |------|------|
-| `7783cce` | feat: ErrorBoundary i18n 마이그레이션 — getT() 헬퍼 함수, fallbackTitleKey prop |
-| `7da6d21` | fix: Header 테마 토글 aria-label 하드코딩 한국어 → i18n 교체 |
-| `bd08ef2` | feat: 나머지 14개 컴포넌트 i18n 마이그레이션 완료 |
-| `0261fb6` | feat: ZoneDecisionPaths, ZoneGraph 남은 라벨 i18n 적용 |
-| `56a996f` | feat: i18n 커버리지 확장 — locale 토글, 대시보드/zone/차트 번역 |
+| `63afcdb` | feat: isDemoRunning zone pulse를 4개 Zone 전체에 적용 |
+| `02cc57f` | feat: Zone 1 데이터 소스 카드 인라인 확장 — 필드 pill badge, 요약 라인, 키보드 접근성, CSS transition |
+| `55ea264` | feat: isDemoRunning 상태 분리 — Demo 자동재생을 Tour 오버레이에서 분리, 긴 스텝 간격, Guide 비활성화 |
+| `d56909c` | feat: Start Demo zone highlighting 가시성 개선 — glow 강도↑, 펄스 애니메이션, 라이트 테마 glow, skeleton 재생 |
+| `b7a6da6` | feat: Zone 2 분석 패턴 카드 리디자인 — severity/metric/findings/affectedScope 필드 + 2x2 그리드 UI |
 
 ## 이번 세션 변경 사항
 
-### ErrorBoundary i18n 마이그레이션
-- **`getT()` 함수 추가** (`src/i18n/index.ts`) — 클래스 컴포넌트용 비-hook 번역 함수
-- **ErrorBoundary 리팩토링** — `fallbackTitle` → `fallbackTitleKey` prop (i18n 키 기반)
-- **errorBoundary 네임스페이스** ko.ts/en.ts에 추가 (defaultTitle, description, retry, 6개 zone별 에러 타이틀)
-- **App.tsx** — 모든 ErrorBoundary 사용처 `fallbackTitleKey` prop으로 교체
+### Zone 1 카드 인라인 확장
+- `ZoneDataIngestion.tsx` — `expandedId` 상태 + 카드 클릭 토글, ChevronDown 아이콘 회전, `aria-expanded` 접근성
+- `ko.ts` / `en.ts` — `zones.fieldsIncluded` i18n 키 추가 ("포함 필드" / "Included Fields")
+- 확장 영역: 필드 pill badge (`bg-surface-2`, mono 폰트) + 요약 라인 (필드 수 · 커버리지)
+- CSS transition: `max-height` + `opacity` 200ms ease-in-out
 
-### 브라우저 전체 페이지 검증 완료
-- Decision Workflow (EN + Dark) ✅
-- Dashboard > Resource Allocation (EN + Dark) ✅
-- Dashboard > Talent Info (EN + Dark) ✅
-- Dashboard > Workforce Forecast (EN + Dark) ✅
-- Documents (EN + Dark) ✅
+### isDemoRunning 상태 분리
+- `useStore.ts` — `isDemoRunning`, `startDemo()`, `stopDemo()` 추가
+- `Header.tsx` — Demo 자동재생이 `isTourActive` 대신 `isDemoRunning` 사용, 스텝 간격 확대 (2s→5s), Guide 버튼 Demo 중 비활성화
+- `PageNav.tsx` — 중복 KO/EN + 테마 토글 제거 (Header에만 유지)
+- 4개 Zone 컴포넌트 — `(isDemoRunning || isTourActive)` 조건으로 펄스 애니메이션 적용
 
 ## 현재 작업 포커스
-- 모든 기능 구현 + 배포 완료
-- 전체 페이지 브라우저 검증 완료 (Documents 페이지 포함)
+- 전체 기능 구현 + 배포 + 검증 완료
+- 157 테스트 모두 통과
 
 ## 다음 작업 목록 (우선순위순)
-1. **추가 컴포넌트 테스트** — 커버리지 확장
-2. **라이트 테마 미세 조정** — 일부 글래스 패널/그래프 노드 가시성 개선 (필요 시)
+1. **배포** — isDemoRunning + Zone 1 확장 반영 후 프로덕션 배포
+2. **추가 기능 요청 대기**
 
 ## 알려진 이슈 — 모두 해결됨
 - ~~#1~10: 이전 이슈~~ → 모두 해결
@@ -52,8 +51,8 @@
 - 대시보드 테이블: TalentTable(정렬/필터), WorkforceDetailTable(스파크라인) — 로컬 state만 사용
 - 배포: Cloudflare Pages (`/deploy` 스킬 + wrangler)
 - 레이아웃: flex (main + aside sidebar), `grid-cols-[360px_1fr]` 내부 그리드
-- Error Boundary: zone 레벨 격리
+- Error Boundary: zone 레벨 격리, i18n 키 기반 (`fallbackTitleKey`)
 - Tour: `TourOverlay` (portal, 9스텝, 키보드/다이얼로그 a11y)
-- 테스트: Vitest (105 tests — 71 데이터 검증 + 34 UI 컴포넌트), `npm run test`
+- 테스트: Vitest (157 tests — 83 데이터 검증 + 74 UI 컴포넌트), `npm run test`
 - 런타임 검증: `validateScenario.ts` (dev-only, edge/relatedPaths/relatedEntityIds/utilizationMap 역참조)
 - 모바일: sm 미만 3-row Header + overflow menu, sm+ 기존 레이아웃

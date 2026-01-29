@@ -88,11 +88,15 @@ interface AppState {
   isTourActive: boolean;
   tourStep: number;
 
+  // 데모 자동재생 (TourOverlay 없이 Zone 하이라이팅만)
+  isDemoRunning: boolean;
+
   // 액션
   setScenario, setMode, setActiveStep, selectEntity, selectPath,
   setDockSection, setRecordTab, setDockExpanded, setDockHeight,
   toggleDock, toggleContextSidebar,
-  startTour, nextTourStep, prevTourStep, endTour, reset
+  startTour, nextTourStep, prevTourStep, endTour,
+  startDemo, stopDemo, reset
 }
 ```
 
@@ -101,13 +105,15 @@ interface AppState {
 ### 활성/비활성 스타일링
 ```tsx
 const isActive = activeStep === ZONE_NUMBER;
+const { isTourActive, isDemoRunning } = useStore();
 
 className={clsx(
-  'rounded-xl border p-4 transition-all duration-300',
+  'rounded-xl border p-4 transition-all',
   isActive
-    ? 'border-zoneAccent/40 bg-panelBg shadow-glow-accent'
-    : 'border-neutralGray/20 bg-panelBg/60 opacity-70'
+    ? clsx('border-zoneAccent/70 bg-zoneAccent/10 shadow-glow-accent', (isDemoRunning || isTourActive) && 'zone-pulse-color')
+    : 'border-neutralGray/20 bg-panelBg/50'
 )}
+// zone-pulse-{blue|violet|cyan|amber}: demo/tour 활성 시 glow 펄스 애니메이션
 ```
 
 ### Named Export 패턴
@@ -434,6 +440,7 @@ Components (각 Zone, Record, Dock에서 필요한 데이터 구독)
 - 박스 그림자: `shadow-glow-{blue|violet|cyan|amber}`
 - 스캔라인: `scan-line` 4s linear infinite (Zone 3)
 - Phase reveal: `animate-phase-reveal` — `fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both`
+- Zone 활성 펄스: `zone-pulse-{blue|violet|cyan|amber}` — `isTourActive` 시 2s ease-in-out infinite glow 펄스, 라이트 테마 별도 CSS 변수
 
 ### Zone별 극적 로딩 애니메이션 (시나리오 전환 시)
 | Zone | 애니메이션 | 타이밍 |

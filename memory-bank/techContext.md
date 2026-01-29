@@ -171,4 +171,4 @@ npm run deploy:preview  # 빌드 후 preview 브랜치 배포
 - 접근성(a11y) 기본 구현 — ARIA roles/labels, 키보드 nav, screen reader 지원
 - TypeScript strict 모드 활성화
 - ESLint 코드 품질 검사 활성화
-- Vitest 105 tests (71 데이터 검증 + 34 UI 컴포넌트 — @testing-library/react, jsdom)
+- Vitest 157 tests (83 데이터 검증 + 74 UI 컴포넌트 — @testing-library/react, jsdom)

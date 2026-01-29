@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Play, Square, RotateCcw, Download, HelpCircle, BookOpen, PanelRightOpen, PanelRightClose, MoreVertical, Moon, Sun } from 'lucide-react';
+import { Play, Square, RotateCcw, Download, HelpCircle, BookOpen, PanelRightOpen, PanelRightClose, MoreVertical } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { useT } from '../../i18n';
 import { clsx } from 'clsx';
@@ -65,10 +65,6 @@ export function Header() {
     setRecordTab,
     isContextSidebarOpen,
     toggleContextSidebar,
-    theme,
-    toggleTheme,
-    locale,
-    toggleLocale,
   } = useStore();
   const t = useT();
   const isWorkflow = activePage === 'workflow';
@@ -259,7 +255,7 @@ export function Header() {
         {stepNavigator}
 
         {/* 우측: 액션 버튼 */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {isDemoRunning && (
             <span className="flex items-center gap-1.5 rounded-lg bg-decisionBlue/10 border border-decisionBlue/30 px-3 py-1.5 text-xs font-mono text-decisionBlue animate-glow-pulse">
               {t('common.demoProgress')} Step {demoProgress}/4
@@ -317,6 +313,10 @@ export function Header() {
               </>
             )}
           </button>
+
+          {/* Separator */}
+          <div className="h-6 w-px bg-neutralGray/20" />
+
           <button
             onClick={toggleContextSidebar}
             aria-label={t('a11y.hrContextToggle')}
@@ -330,21 +330,6 @@ export function Header() {
           >
             {isContextSidebarOpen ? <PanelRightClose className="h-4 w-4" aria-hidden="true" /> : <PanelRightOpen className="h-4 w-4" aria-hidden="true" />}
             <span className="hidden md:inline">HR Context</span>
-          </button>
-          <button
-            onClick={toggleLocale}
-            className="flex items-center gap-1 rounded-lg glass-panel px-3 py-2 text-sm text-textSub transition-all hover:text-textMain"
-          >
-            <span className={locale === 'ko' ? 'text-decisionBlue font-bold' : ''}>KO</span>
-            <span className="text-neutralGray/50">|</span>
-            <span className={locale === 'en' ? 'text-decisionBlue font-bold' : ''}>EN</span>
-          </button>
-          <button
-            onClick={toggleTheme}
-            aria-label={theme === 'dark' ? t('a11y.themeToLight') : t('a11y.themeToDark')}
-            className="flex items-center gap-2 rounded-lg glass-panel px-3 py-2 text-sm text-textSub transition-all hover:bg-appBg/50 hover:text-textMain"
-          >
-            {theme === 'dark' ? <Sun className="h-4 w-4" aria-hidden="true" /> : <Moon className="h-4 w-4" aria-hidden="true" />}
           </button>
           <button
             onClick={reset}
@@ -422,21 +407,6 @@ export function Header() {
                   >
                     {isContextSidebarOpen ? <PanelRightClose className="h-4 w-4" aria-hidden="true" /> : <PanelRightOpen className="h-4 w-4" aria-hidden="true" />}
                     HR Context
-                  </button>
-                  <button
-                    onClick={() => { toggleLocale(); setIsMobileMenuOpen(false); }}
-                    className="flex w-full items-center gap-2 px-3 py-2.5 text-sm text-textSub hover:text-textMain min-h-[44px]"
-                  >
-                    <span className={locale === 'ko' ? 'text-decisionBlue font-bold' : ''}>KO</span>
-                    <span className="text-neutralGray/50">|</span>
-                    <span className={locale === 'en' ? 'text-decisionBlue font-bold' : ''}>EN</span>
-                  </button>
-                  <button
-                    onClick={() => { toggleTheme(); setIsMobileMenuOpen(false); }}
-                    className="flex w-full items-center gap-2 px-3 py-2.5 text-sm text-textSub hover:text-textMain min-h-[44px]"
-                  >
-                    {theme === 'dark' ? <Sun className="h-4 w-4" aria-hidden="true" /> : <Moon className="h-4 w-4" aria-hidden="true" />}
-                    {theme === 'dark' ? t('common.lightMode') : t('common.darkMode')}
                   </button>
                 </div>
               )}

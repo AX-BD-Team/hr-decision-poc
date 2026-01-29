@@ -20,12 +20,14 @@
 - [x] 커버리지 퍼센트 바
 - [x] DataLabel 배지 (REAL/MOCK/ESTIMATE/SYNTH)
 - [x] 포함 필드 목록
+- [x] **카드 인라인 확장** — 클릭 시 필드 pill badge + 요약 라인, ChevronDown 아이콘, CSS transition, 키보드/aria 접근성
 - [x] 로딩 스켈레톤 (phase 1)
 
 #### Zone 2 — 분석 구조화
 - [x] 분석 패턴 카드 (4개: 갭분석, 의존도, 병목, 비용영향)
 - [x] 타입별 아이콘 매핑
 - [x] 로딩 스켈레톤 (phase 1~2)
+- [x] **카드 UI 리디자인** — severity/metric/findings/affectedScope 필드, 2x2 그리드, severity 색상 left border
 
 #### Zone 3 — 온톨로지 그래프
 - [x] ReactFlow 기반 노드/엣지 렌더링
@@ -122,6 +124,8 @@
 - [x] `LoadingZone4Paths.tsx` — 카드 바운스 착지 + amber flash + 카운터 + ready pulse
 - [x] `tailwind.config.js` — 9개 신규 keyframes + 10개 animation 유틸리티
 - [x] `index.css` — 5개 신규 CSS 클래스 (스캔바, 빔, 엣지 드로우, 플래시, 프로그레스)
+- [x] **Start Demo 하이라이팅 가시성 개선** — glow 강도↑, zone-active-pulse 애니메이션, 라이트 테마 glow 변수, skeleton 재생 트리거
+- [x] **isDemoRunning 상태 분리** — Demo 자동재생과 Tour 오버레이 독립 제어, 긴 스텝 간격, Guide 버튼 Demo 중 비활성화
 
 #### 페이지 라우팅 & 대시보드/문서
 - [x] PageNav 페이지 네비게이션 (workflow/dashboard/docs)
@@ -158,7 +162,7 @@
 - [x] ESLint 설정
 - [x] Cloudflare Pages 배포 설정
 - [x] GitHub Actions CI/CD
-- [x] Vitest 테스트 프레임워크 (105 tests — 71 데이터 검증 + 34 UI 컴포넌트)
+- [x] Vitest 테스트 프레임워크 (157 tests — 83 데이터 검증 + 74 UI 컴포넌트)
 - [x] vitest.config.ts + src/test/setup.ts + src/test/utils.tsx 테스트 인프라
 - [x] `/deploy` 스킬 — Cloudflare Pages 자동 배포 (lint → build → deploy)
 
@@ -173,7 +177,7 @@
 - [x] ~~국제화(i18n)~~ → 완료 (경량 자체 구현, useT() hook, KO/EN 토글, 38개 컴포넌트 마이그레이션)
 - [x] ~~다크/라이트 테마 전환~~ → 완료 (CSS 변수 테마 + Zustand toggleTheme + localStorage)
 - [x] ~~번들 크기 최적화~~ → 완료 (React.lazy + manualChunks, 565KB→277KB)
-- [x] ~~UI 컴포넌트 테스트~~ → 완료 (vitest + @testing-library/react, 34 컴포넌트 테스트, 총 105 tests)
+- [x] ~~UI 컴포넌트 테스트~~ → 완료 (vitest + @testing-library/react, 74 UI 컴포넌트 테스트, 총 157 tests)
 - [x] ~~recharts 패키지 제거~~ → 완료
 
 ---
