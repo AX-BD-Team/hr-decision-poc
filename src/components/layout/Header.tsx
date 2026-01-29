@@ -2,6 +2,13 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Play, Square, RotateCcw, Download, HelpCircle } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { clsx } from 'clsx';
+import { scenarioMetas } from '../../data/scenarios';
+
+function scrollToId(id: string) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 
 const steps = [
   { num: 1, label: 'Data Ingestion', color: 'zoneIngest' },
@@ -38,7 +45,19 @@ const stepActiveClasses: Record<string, { bg: string; text: string; badge: strin
 };
 
 export function Header() {
-  const { data, activeStep, setActiveStep, reset, isTourActive, startTour, endTour, selectPath } = useStore();
+  const {
+    data,
+    scenarioId,
+    setScenario,
+    activeStep,
+    setActiveStep,
+    reset,
+    isTourActive,
+    startTour,
+    endTour,
+    selectPath,
+    setRecordTab,
+  } = useStore();
   const [demoProgress, setDemoProgress] = useState(0); // 0 = not running, 1-4 = current demo step
   const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
@@ -64,29 +83,29 @@ export function Header() {
 
     startTour();
     setDemoProgress(1);
+    setRecordTab('evidence');
+    scrollToId('section-ingestion');
 
     // Step 2 at 2s
     const t1 = setTimeout(() => {
       setActiveStep(2);
       setDemoProgress(2);
+      scrollToId('section-structuring');
     }, 2000);
 
     // Step 3 at 4s
     const t2 = setTimeout(() => {
       setActiveStep(3);
       setDemoProgress(3);
+      scrollToId('section-graph');
     }, 4000);
 
     // Step 4 at 6s — also expand dock & select first path
     const t3 = setTimeout(() => {
       setActiveStep(4);
       setDemoProgress(4);
-      // Expand dock if collapsed
-      const state = useStore.getState();
-      if (!state.isDockExpanded) {
-        state.toggleDock();
-      }
       selectPath('path-a');
+      scrollToId('section-paths');
     }, 6000);
 
     // End demo at 9s
@@ -117,7 +136,7 @@ export function Header() {
   };
 
   return (
-    <header className="glass-panel border-b border-neutralGray/20 px-6 py-4">
+    <header className="sticky top-0 z-50 glass-header border-b border-neutralGray/20 px-6 py-4">
       <div className="flex items-center justify-between">
         {/* 좌측: 타이틀 + 시나리오 */}
         <div className="flex items-center gap-6">
@@ -126,8 +145,20 @@ export function Header() {
             <p className="text-xs text-textSub font-mono uppercase tracking-wider">Decision Workflow Canvas</p>
           </div>
           <div className="rounded-lg glass-panel px-3 py-1.5">
-            <span className="text-xs text-textSub">시나리오: </span>
-            <span className="text-sm font-medium text-decisionBlue">{data.meta.name}</span>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-textSub">시나리오</span>
+              <select
+                value={scenarioId}
+                onChange={(e) => setScenario(e.target.value)}
+                className="rounded bg-appBg/40 px-2 py-1 text-sm font-medium text-decisionBlue outline-none ring-0 focus-ring"
+              >
+                {scenarioMetas.map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {m.name}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
 
@@ -141,7 +172,22 @@ export function Header() {
             return (
               <div key={step.num} className="flex items-center">
                 <button
-                  onClick={() => setActiveStep(step.num)}
+                  onClick={() => {
+                    setActiveStep(step.num);
+                    if (step.num === 2) {
+                      scrollToId('section-structuring');
+                    }
+                    if (step.num === 4) {
+                      scrollToId('section-paths');
+                    }
+                    if (step.num === 1) {
+                      setRecordTab('evidence');
+                      scrollToId('section-ingestion');
+                    }
+                    if (step.num === 3) {
+                      scrollToId('section-graph');
+                    }
+                  }}
                   className={clsx(
                     'flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-all',
                     isStepActive

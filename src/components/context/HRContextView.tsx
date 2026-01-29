@@ -23,13 +23,16 @@ const severityColors = {
   info: 'border-decisionBlue/50 bg-decisionBlue/10 text-decisionBlue',
 };
 
-export function HRContextView() {
+export function HRContextView({ variant = 'panel' }: { variant?: 'panel' | 'dock' }) {
   const { data, selectedEntityId, selectEntity } = useStore();
   const contextView = data.hrContextViews[0]; // 현재는 기본 뷰만 사용
 
   return (
     <div
-      className="glass-panel flex h-full flex-col rounded-xl"
+      className={clsx(
+        'glass-panel flex flex-col rounded-xl',
+        variant === 'dock' ? 'h-full' : 'h-full'
+      )}
       data-tour="hr-context"
     >
       {/* 헤더 */}

@@ -1,43 +1,38 @@
 import { Header } from './components/layout/Header';
 import { ZoneDataIngestion } from './components/zones/ZoneDataIngestion';
-import { ZoneStructuring } from './components/zones/ZoneStructuring';
 import { ZoneGraph } from './components/zones/ZoneGraph';
+import { ZoneStructuring } from './components/zones/ZoneStructuring';
 import { ZoneDecisionPaths } from './components/zones/ZoneDecisionPaths';
-import { HRContextView } from './components/context/HRContextView';
-import { Dock } from './components/dock/Dock';
+import { DecisionRecordSection } from './components/record/DecisionRecordSection';
 
 function App() {
   return (
-    <div className="flex h-screen flex-col bg-appBg cmd-grid-bg text-textMain">
-      {/* Header */}
+    <div className="min-h-screen bg-appBg cmd-grid-bg text-textMain">
       <Header />
-
-      {/* Main Content */}
-      <main className="flex flex-1 gap-4 overflow-hidden p-4">
-        {/* Left: Workflow Zones */}
-        <div className="flex flex-1 flex-col gap-3 overflow-hidden">
-          <div className="flex-[0.8] min-h-0 animate-stagger-1">
+      <main className="mx-auto w-full max-w-[1440px] px-4 pb-10">
+        <div className="grid grid-cols-1 gap-4 pt-4 lg:grid-cols-[360px_1fr]">
+          <section id="section-ingestion" className="min-h-0 overflow-hidden animate-stagger-1 scroll-mt-32">
             <ZoneDataIngestion />
-          </div>
-          <div className="h-[120px] shrink-0 min-h-0 animate-stagger-2">
-            <ZoneStructuring />
-          </div>
-          <div className="flex-[3.5] min-h-0 animate-stagger-3">
+          </section>
+
+          <section id="section-graph" className="min-h-0 overflow-hidden animate-stagger-2 scroll-mt-32">
             <ZoneGraph />
-          </div>
-          <div className="flex-[1.2] min-h-0 animate-stagger-4">
-            <ZoneDecisionPaths />
-          </div>
+          </section>
         </div>
 
-        {/* Right: HR Context View */}
-        <aside className="w-[280px] lg:w-[320px] xl:w-[360px] flex-shrink-0 animate-slide-in-right">
-          <HRContextView />
-        </aside>
-      </main>
+        <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-[360px_1fr]">
+          <section id="section-structuring" className="min-h-0 overflow-hidden scroll-mt-32">
+            <ZoneStructuring />
+          </section>
+          <section id="section-paths" className="min-h-0 overflow-hidden scroll-mt-32">
+            <ZoneDecisionPaths />
+          </section>
+        </div>
 
-      {/* Bottom Dock */}
-      <Dock />
+        <section id="section-record" className="mt-4 scroll-mt-32">
+          <DecisionRecordSection />
+        </section>
+      </main>
     </div>
   );
 }

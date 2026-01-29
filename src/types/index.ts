@@ -176,5 +176,8 @@ export interface TourStep {
 // App Mode
 export type AppMode = 'OVERVIEW' | 'GUIDED_DEMO' | 'DRILLDOWN';
 
-// Dock Tab
-export type DockTab = 'assumptions' | 'evidence' | 'risks' | 'alternatives' | 'report';
+// Bottom Dock (primary)
+export type DockSection = 'paths' | 'record' | 'structuring' | 'context';
+
+// Decision Record Tabs (secondary)
+export type RecordTab = 'assumptions' | 'evidence' | 'risks' | 'alternatives' | 'report';

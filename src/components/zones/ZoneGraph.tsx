@@ -13,6 +13,7 @@ import '@xyflow/react/dist/style.css';
 import { useStore } from '../../store/useStore';
 import { clsx } from 'clsx';
 import type { Entity, Edge, EntityType } from '../../types';
+import { RotateCcw } from 'lucide-react';
 
 const nodeColors: Record<EntityType, string> = {
   org: '#4F8CFF',
@@ -36,7 +37,7 @@ const edgeColors: Record<string, string> = {
 };
 
 export function ZoneGraph() {
-  const { data, activeStep, selectedEntityId, selectEntity } = useStore();
+  const { data, activeStep, selectedEntityId, selectEntity, setActiveStep } = useStore();
   const isActive = activeStep === 3;
 
   const initialNodes: Node[] = useMemo(
@@ -111,17 +112,31 @@ export function ZoneGraph() {
       )}
       data-tour="zone-3"
     >
-      <div className="flex items-center gap-2 border-b border-neutralGray/20 px-4 py-3">
-        <span
-          className={clsx(
-            'flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold',
-            isActive ? 'bg-zoneGraph text-white' : 'bg-neutralGray/30 text-textSub'
-          )}
+      <div className="flex items-center justify-between gap-3 border-b border-neutralGray/20 px-4 py-3">
+        <div className="flex items-center gap-2">
+          <span
+            className={clsx(
+              'flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold',
+              isActive ? 'bg-zoneGraph text-white' : 'bg-neutralGray/30 text-textSub'
+            )}
+          >
+            3
+          </span>
+          <div className="min-w-0">
+            <h3 className="text-sm font-semibold text-textMain">Ontology Relationship Core</h3>
+            <p className="text-xs text-textSub">Person/Role/Task/Org/Risk 관계 기반 경로 탐색</p>
+          </div>
+        </div>
+        <button
+          onClick={() => {
+            selectEntity(null);
+            setActiveStep(1);
+          }}
+          className="flex items-center gap-2 rounded-lg border border-neutralGray/20 bg-appBg/40 px-3 py-2 text-xs text-textSub transition-all hover:bg-appBg/70 hover:text-textMain focus-ring"
         >
-          3
-        </span>
-        <h3 className="text-sm font-semibold text-textMain">Ontology Relationship Core</h3>
-        <span className="text-xs text-textSub">관계 그래프</span>
+          <RotateCcw className="h-4 w-4" />
+          Reset/Back to Overview
+        </button>
       </div>
 
       <div className="flex-1 min-h-0 relative">
