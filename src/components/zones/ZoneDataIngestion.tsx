@@ -32,7 +32,7 @@ export function ZoneDataIngestion() {
   return (
     <div
       className={clsx(
-        'flex flex-1 min-h-0 flex-col rounded-xl border p-4 transition-all',
+        'flex flex-1 min-h-0 flex-col h-full rounded-xl border p-4 transition-all',
         justRevealed && 'animate-phase-reveal',
         isActive
           ? clsx('border-zoneIngest/70 bg-zoneIngest/10 shadow-glow-blue', (isDemoRunning || isTourActive) && 'zone-pulse-blue')

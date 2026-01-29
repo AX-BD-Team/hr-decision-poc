@@ -35,7 +35,7 @@ export function LoadingZone4Paths() {
 
   return (
     <div
-      className="flex flex-1 min-h-0 flex-col rounded-xl border border-zonePath/30 bg-panelBg/50 p-4"
+      className="flex flex-1 min-h-0 flex-col h-full rounded-xl border border-zonePath/30 bg-panelBg/50 p-4"
       aria-busy="true"
       aria-label={t('loading.generatingAria')}
     >

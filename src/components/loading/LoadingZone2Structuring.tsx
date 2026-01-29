@@ -8,7 +8,7 @@ export function LoadingZone2Structuring() {
   const cardLabels = [t('loading.cardLabels.gapAnalysis'), t('loading.cardLabels.dependency'), t('loading.cardLabels.bottleneck'), t('loading.cardLabels.costImpact')];
   return (
     <div
-      className="relative flex min-h-0 flex-col rounded-xl border border-zoneStruct/30 bg-panelBg/50 p-4 overflow-hidden"
+      className="relative flex min-h-0 flex-col h-full rounded-xl border border-zoneStruct/30 bg-panelBg/50 p-4 overflow-hidden"
       aria-busy="true"
       aria-label={t('loading.analyzingAria')}
     >

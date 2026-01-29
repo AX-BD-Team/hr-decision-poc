@@ -70,6 +70,7 @@ function App() {
             style={{ flex: '1 1 0%', minWidth: 0 }}
           >
             <div className="grid grid-cols-1 gap-2 sm:gap-4 pt-4 lg:grid-cols-[360px_1fr]">
+              {/* Row 1 */}
               <section id="section-ingestion" className="min-h-0 overflow-hidden animate-stagger-1 scroll-mt-32">
                 <ErrorBoundary fallbackTitleKey="errorBoundary.dataIngestion">
                   <ZoneDataIngestion />
@@ -83,15 +84,14 @@ function App() {
                   </Suspense>
                 </ErrorBoundary>
               </section>
-            </div>
 
-            <div className="mt-2 sm:mt-4 grid grid-cols-1 gap-2 sm:gap-4 lg:grid-cols-[360px_1fr]">
-              <section id="section-structuring" className="min-h-0 overflow-hidden scroll-mt-32 h-full">
+              {/* Row 2 */}
+              <section id="section-structuring" className="min-h-0 overflow-hidden scroll-mt-32 h-full animate-stagger-3">
                 <ErrorBoundary fallbackTitleKey="errorBoundary.analysisPattern">
                   <ZoneStructuring />
                 </ErrorBoundary>
               </section>
-              <section id="section-paths" className="min-h-0 overflow-hidden scroll-mt-32">
+              <section id="section-paths" className="min-h-0 overflow-hidden scroll-mt-32 animate-stagger-4">
                 <ErrorBoundary fallbackTitleKey="errorBoundary.decisionPaths">
                   <ZoneDecisionPaths />
                 </ErrorBoundary>
