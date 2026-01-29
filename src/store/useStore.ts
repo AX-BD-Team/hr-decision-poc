@@ -37,6 +37,7 @@ interface AppState {
 
   // Demo (auto-play, no TourOverlay)
   isDemoRunning: boolean;
+  isDemoIntroOpen: boolean;
 
   // Decision Criteria
   checkedCriteria: Record<string, string[]>;
@@ -62,6 +63,8 @@ interface AppState {
   endTour: () => void;
   startDemo: () => void;
   stopDemo: () => void;
+  openDemoIntro: () => void;
+  closeDemoIntro: () => void;
   toggleCriterion: (criterionId: string) => void;
   reset: () => void;
 }
@@ -98,6 +101,7 @@ const initialState = {
   isTourActive: false,
   tourStep: 0,
   isDemoRunning: false,
+  isDemoIntroOpen: false,
   checkedCriteria: {} as Record<string, string[]>,
 };
 
@@ -228,8 +232,13 @@ export const useStore = create<AppState>((set) => ({
   stopDemo: () =>
     set({
       isDemoRunning: false,
+      isDemoIntroOpen: false,
       mode: 'OVERVIEW',
     }),
+
+  openDemoIntro: () => set({ isDemoIntroOpen: true }),
+
+  closeDemoIntro: () => set({ isDemoIntroOpen: false }),
 
   toggleCriterion: (criterionId) =>
     set((state) => {

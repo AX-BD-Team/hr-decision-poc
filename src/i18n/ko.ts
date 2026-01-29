@@ -196,6 +196,16 @@ export const ko = {
     utilizationLabel: '가동률',
     dependencyLabel: '의존도',
   },
+  demo: {
+    introTitle: '시나리오 소개',
+    keyQuestion: '핵심 질문',
+    aboutDemo: '이 데모 소개',
+    whatYouWillSee: '이런 흐름으로 진행됩니다',
+    startButton: '시작하기',
+    canStopAnytime: '언제든 Stop 버튼으로 중단할 수 있습니다',
+    nextStep: '다음 ▶',
+    finishDemo: '완료 ■',
+  },
   tour: {
     next: '다음',
     prev: '이전',

@@ -5,6 +5,36 @@
     "badge": "R&R",
     "description": "조직 구조 변경과 역할·책임 재정의 간의 최적 대안 탐색",
     "keyQuestion": "조직을 바꾸는 게 맞나, 아니면 역할과 책임을 바꾸는 게 맞나?",
+    "demoSteps": [
+      {
+        "step": 1,
+        "titleKo": "Zone 1 · 조직·역할 데이터 수집",
+        "titleEn": "Zone 1 · Collecting Organization & Role Data",
+        "descriptionKo": "조직도, 역할 코드북, 업무 할당 이력 등 조직 변경 판단에 필요한 데이터를 수집합니다.",
+        "descriptionEn": "Gathering org chart, role codebook, and work allocation data needed for organizational change decisions."
+      },
+      {
+        "step": 2,
+        "titleKo": "Zone 2 · 병목·역할 중복 분석",
+        "titleEn": "Zone 2 · Bottleneck & Role Overlap Analysis",
+        "descriptionKo": "의사결정 병목, 역할 중복·공백, 조직 구조 비효율을 분석 패턴으로 진단합니다.",
+        "descriptionEn": "Diagnosing decision bottlenecks, role overlaps/gaps, and organizational inefficiencies through analysis patterns."
+      },
+      {
+        "step": 3,
+        "titleKo": "Zone 3 · 조직-역할 의존성 그래프",
+        "titleEn": "Zone 3 · Organization-Role Dependency Graph",
+        "descriptionKo": "조직, 역할, 업무, 의존 관계를 온톨로지 그래프로 시각화합니다.",
+        "descriptionEn": "Visualizing organization, roles, tasks, and dependency relationships via ontology graph."
+      },
+      {
+        "step": 4,
+        "titleKo": "Zone 4 · 조직 변경 vs R&R 재정의",
+        "titleEn": "Zone 4 · Org Change vs R&R Redefinition",
+        "descriptionKo": "조직 구조 변경, 역할·책임 재정의, 혼합 접근 세 가지 대안을 비교합니다.",
+        "descriptionEn": "Comparing three alternatives: organizational restructuring, R&R redefinition, and hybrid approach."
+      }
+    ],
     "decisionCriteria": [
       {
         "id": "dc2-1",

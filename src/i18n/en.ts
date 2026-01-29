@@ -198,6 +198,16 @@ export const en: TranslationKeys = {
     utilizationLabel: 'Utilization',
     dependencyLabel: 'Dependency',
   },
+  demo: {
+    introTitle: 'Scenario Overview',
+    keyQuestion: 'Key Question',
+    aboutDemo: 'About This Demo',
+    whatYouWillSee: 'What you will see',
+    startButton: 'Start',
+    canStopAnytime: 'You can stop anytime with the Stop button',
+    nextStep: 'Next ▶',
+    finishDemo: 'Finish ■',
+  },
   tour: {
     next: 'Next',
     prev: 'Previous',

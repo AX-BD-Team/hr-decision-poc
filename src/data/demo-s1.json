@@ -5,6 +5,36 @@
     "badge": "TO",
     "description": "신규 인력 충원 요청에 대한 구조적 분석과 대안 탐색",
     "keyQuestion": "정말 인력이 부족한가, 아니면 현재 구조와 배치가 문제인가?",
+    "demoSteps": [
+      {
+        "step": 1,
+        "titleKo": "Zone 1 · TO 요청 근거 데이터 수집",
+        "titleEn": "Zone 1 · Collecting TO Request Evidence Data",
+        "descriptionKo": "HR 마스터, 배치 이력, TO 요청 이력, OPEX 예산 등 인력 충원 판단에 필요한 데이터를 수집합니다.",
+        "descriptionEn": "Gathering HR master, assignment history, TO request history, and OPEX budget data needed for staffing decisions."
+      },
+      {
+        "step": 2,
+        "titleKo": "Zone 2 · 구조적 문제 진단",
+        "titleEn": "Zone 2 · Structural Problem Diagnosis",
+        "descriptionKo": "업무량 과부하, 핵심인력 의존도, 비용 영향, 병목 구간을 분석 패턴으로 진단합니다.",
+        "descriptionEn": "Diagnosing workload overload, key-person dependency, cost impact, and bottleneck areas through analysis patterns."
+      },
+      {
+        "step": 3,
+        "titleKo": "Zone 3 · 조직-인력 관계 그래프",
+        "titleEn": "Zone 3 · Organization-Workforce Relationship Graph",
+        "descriptionKo": "조직, 역할, 인력, 프로젝트, 리스크 간의 관계를 온톨로지 그래프로 시각화합니다.",
+        "descriptionEn": "Visualizing relationships between organization, roles, personnel, projects, and risks via ontology graph."
+      },
+      {
+        "step": 4,
+        "titleKo": "Zone 4 · 충원/재배치/혼합 대안 비교",
+        "titleEn": "Zone 4 · Comparing Hiring / Reallocation / Hybrid Alternatives",
+        "descriptionKo": "신규 채용, 내부 재배치, 역할 재정의 등 세 가지 대안의 비용·효과·리스크를 비교합니다.",
+        "descriptionEn": "Comparing cost, effect, and risk across three alternatives: new hire, internal transfer, and role restructuring."
+      }
+    ],
     "decisionCriteria": [
       {
         "id": "dc1-1",

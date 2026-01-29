@@ -162,6 +162,15 @@ export interface DecisionCriterion {
   evidenceCount: number;
 }
 
+// 데모 스텝 설명 (시나리오별 배너 텍스트)
+export interface DemoStepDescription {
+  step: number;
+  titleKo: string;
+  titleEn: string;
+  descriptionKo: string;
+  descriptionEn: string;
+}
+
 // 데모 시나리오 메타데이터
 export interface ScenarioMeta {
   id: string;
@@ -170,6 +179,7 @@ export interface ScenarioMeta {
   keyQuestion: string;
   badge?: 'TO' | 'R&R' | 'Phase-2' | 'HRD';
   decisionCriteria?: DecisionCriterion[];
+  demoSteps?: DemoStepDescription[];
 }
 
 // 전체 데모 데이터

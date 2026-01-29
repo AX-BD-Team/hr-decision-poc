@@ -5,6 +5,36 @@
     "badge": "HRD",
     "description": "조직/인력 역량 강화를 위한 개발 수단 및 적용 전략 비교",
     "keyQuestion": "조직/인력의 역량을 어떻게 강화할 것인가?",
+    "demoSteps": [
+      {
+        "step": 1,
+        "titleKo": "Zone 1 · 역량 갭 데이터 수집",
+        "titleEn": "Zone 1 · Collecting Capability Gap Data",
+        "descriptionKo": "HR 마스터, 교육 이력, 역량 모델, 배치 이력 등 역량 분석에 필요한 데이터를 수집합니다.",
+        "descriptionEn": "Gathering HR master, training history, competency model, and assignment data for capability analysis."
+      },
+      {
+        "step": 2,
+        "titleKo": "Zone 2 · 역량 갭 분석",
+        "titleEn": "Zone 2 · Capability Gap Analysis",
+        "descriptionKo": "목표 역량 대비 현재 수준의 격차와 교육 효과를 분석 패턴으로 진단합니다.",
+        "descriptionEn": "Diagnosing capability gaps and training effectiveness through analysis patterns."
+      },
+      {
+        "step": 3,
+        "titleKo": "Zone 3 · 역량-개발수단 그래프",
+        "titleEn": "Zone 3 · Capability-Development Graph",
+        "descriptionKo": "역량, 교육 프로그램, 인력, 비용 간의 관계를 온톨로지 그래프로 시각화합니다.",
+        "descriptionEn": "Visualizing relationships between capabilities, training programs, personnel, and costs via ontology graph."
+      },
+      {
+        "step": 4,
+        "titleKo": "Zone 4 · 역량 개발 전략 비교",
+        "titleEn": "Zone 4 · Capability Development Strategy Comparison",
+        "descriptionKo": "집중 교육, 순환배치, 멘토링 세 가지 역량 개발 전략을 비교합니다.",
+        "descriptionEn": "Comparing three development strategies: intensive training, job rotation, and expert mentoring."
+      }
+    ],
     "decisionCriteria": [
       {"id": "dc-1", "text": "역량 갭 규모", "description": "현재 역량과 목표 역량 간 격차가 얼마나 큰지", "evidenceCount": 3},
       {"id": "dc-2", "text": "개발 수단 적합성", "description": "교육, 순환배치, 멘토링 등 수단의 적합도", "evidenceCount": 2},
