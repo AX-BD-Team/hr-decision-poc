@@ -1,55 +1,32 @@
 # Active Context
 
 ## 현재 단계
-DecisionCriteriaPanel, DataReadinessPanel 신규 컴포넌트 완성 + Zone 1 통합 + 검증 강화. 4개 시나리오 (S1~S4) 브라우저 검증 완료. `npm run build` 통과.
+Deploy 스크립트를 `wrangler pages deploy` → `git push` 방식으로 전환 완료. CF Git 통합 배포 파이프라인 완성. `npm run build` 통과.
 
 ## 최근 변경 이력
 
 | 커밋 | 설명 |
 |------|------|
+| `b989881` | chore: deploy 스크립트를 git push 방식으로 전환 (wrangler pages deploy 제거) |
+| `2c32f3a` | chore: CF Pages 배포 설정 마이그레이션 — hr-decision-support → hr-decision-prototype, Git 통합 방식 전환 |
 | `cb4e0f3` | feat: DecisionCriteriaPanel, DataReadinessPanel 신규 + 검증 강화 + Header badge + Zone 1 통합 |
 | `3d04a91` | feat: 데모 인트로 모달 — DemoIntroModal 컴포넌트, DemoStepDescription 타입, demo i18n 키, isDemoIntroOpen 상태 |
 | `25558ad` | feat: 대시보드 데이터 kt ds 규모(1,700명)로 업데이트 — Cloud/AI 핵심역량 반영, 58개 프로젝트, 조직명 실제 부문명 |
-| `52caf96` | docs: Memory Bank 업데이트 — 시나리오 데이터 점검 + Zone 3 Portal 수정 |
-| `8df4183` | fix: Zone 3 그래프 expand 모드 — createPortal로 transform 조상 우회 |
 
 ## 이번 세션 변경 사항
 
-### DecisionCriteriaPanel 신규 컴포넌트
-- `DecisionCriteriaPanel.tsx` — 시나리오별 5개 의사결정 기준 체크박스 UI
-- CheckSquare/Square 아이콘, evidenceCount 배지, description 표시
-- store의 `checkedCriteria` / `toggleCriterion` 연동
-
-### DataReadinessPanel 신규 컴포넌트
-- `DataReadinessPanel.tsx` — dataSources readiness 상태 요약
-- 색상 코딩 progress bar (available=green, recommended=yellow, missing=red)
-- non-available 소스의 readinessNote 표시
-
-### Zone 1 통합
-- `ZoneDataIngestion.tsx`에 DecisionCriteriaPanel + DataReadinessPanel 통합
-- Zone 1 상단에 배치 (데이터 소스 카드 위)
-
-### 검증 강화 (validateScenario.ts)
-- entity type 유효성 검증 (VALID_ENTITY_TYPES set)
-- edge type 유효성 검증 (VALID_EDGE_TYPES set)
-- decisionCriteria 개수 === 5 검증
-- badge 검증 (S3=Phase-2, S4=HRD)
-- readiness 필드 유효성 검증
-
-### Header badge 표시
-- 4개 시나리오 badge 색상 코딩 (TO=blue, R&R=purple, Phase-2=amber, HRD=green)
-
-### 4개 시나리오 브라우저 검증 완료
-- S1 (TO 추가 요청), S2 (상시 조직 변경/R&R), S3 (사업화/Phase-2), S4 (역량 강화/HRD) 모두 정상 확인
+### Deploy 스크립트 git push 전환
+- `package.json`: `deploy` → `npm run build && git push origin main`, `deploy:preview` → `npm run build && git push origin HEAD`
+- `CLAUDE.md`: 배포 명령어 설명 업데이트 (git push 기반)
+- `.claude/skills/deploy/skill.md`: 배포 플로우를 git push 기반으로 재작성 (Step 4~5 변경)
 
 ## 현재 작업 포커스
+- Deploy 스크립트 git push 전환 완료
 - 빌드 통과 (`npm run build` 성공)
-- 4개 시나리오 모두 브라우저 검증 완료
 
 ## 다음 작업 목록 (우선순위순)
-1. **배포** — 프로덕션 배포
-2. **DemoIntroModal App.tsx 연동** — 시나리오 선택 시 인트로 모달 표시
-3. **추가 기능 요청 대기**
+1. **DemoIntroModal App.tsx 연동** — 시나리오 선택 시 인트로 모달 표시
+2. **추가 기능 요청 대기**
 
 ## 알려진 이슈 — 모두 해결됨
 | # | 설명 | 심각도 | 상태 |
@@ -66,6 +43,6 @@ DecisionCriteriaPanel, DataReadinessPanel 신규 컴포넌트 완성 + Zone 1 �
 - 그래프: @xyflow/react v12, dagre 자동 레이아웃, 커스텀 `EntityNode`, expand/collapse 전체화면
 - 산점도: 순수 SVG 기반 (`UtilizationScatterChart.tsx`)
 - 대시보드 차트: 순수 SVG (stroke 도넛, squarified 트리맵, 그룹 바차트+라인) — 외부 차트 라이브러리 미사용
-- 배포: Cloudflare Pages (`/deploy` 스킬 + wrangler)
+- 배포: Cloudflare Pages Git 통합 (`main` push 시 자동 배포), deploy 스크립트 = git push
 - 테스트: Vitest (191 tests — 117 데이터 검증 + 74 UI 컴포넌트), `npm run test`
 - 런타임 검증: `validateScenario.ts` (dev-only, edge/relatedPaths/relatedEntityIds/utilizationMap 역참조)

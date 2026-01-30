@@ -149,9 +149,9 @@ npm run dev          # Vite 개발 서버 (HMR, localhost:5173)
 npm run build        # tsc -b && vite build (TypeScript 컴파일 후 번들)
 npm run lint         # ESLint 검사
 npm run preview      # 프로덕션 빌드 미리보기
-npm run deploy       # 빌드 후 Cloudflare Pages 배포
+npm run deploy       # 빌드 검증 + git push origin main → CF 자동 배포
 npm run test         # Vitest 시나리오 데이터 검증 테스트
-npm run deploy:preview  # 빌드 후 preview 브랜치 배포
+npm run deploy:preview  # 빌드 검증 + git push origin HEAD → CF 프리뷰 배포
 ```
 
 ## 빌드 출력
@@ -161,9 +161,12 @@ npm run deploy:preview  # 빌드 후 preview 브랜치 배포
 - CSS: ~52KB (gzip ~10KB)
 
 ## 배포 환경
-- Cloudflare Pages (wrangler + GitHub Actions CI/CD)
+- Cloudflare Pages Git 통합 (`main` push 시 자동 배포, PR → Preview)
+- 프로젝트명: `hr-decision-prototype` (Pages URL: `hr-decision-prototype.pages.dev`)
+- 커스텀 도메인: `hr2.minu.best`
 - SPA 라우팅: `public/_headers` 파일로 설정
-- GitHub Actions: `.github/workflows/cloudflare-pages.yml`
+- GitHub Actions CI: `.github/workflows/ci.yml` (lint + build 검증 전용, 배포는 CF 담당)
+- deploy 스크립트: `npm run deploy` (build + git push origin main) / `npm run deploy:preview` (build + git push origin HEAD)
 
 ## 제약 사항
 - 백엔드 API 없음 — 정적 JSON + scenarios.ts 데이터만 사용

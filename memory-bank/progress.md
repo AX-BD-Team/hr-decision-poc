@@ -171,11 +171,11 @@
 - [x] TypeScript strict 설정
 - [x] Tailwind CSS 커스텀 테마 + 시맨틱 토큰 확장
 - [x] ESLint 설정
-- [x] Cloudflare Pages 배포 설정
-- [x] GitHub Actions CI/CD
+- [x] Cloudflare Pages 배포 설정 (Git 통합 — `hr-decision-prototype`)
+- [x] GitHub Actions CI (`ci.yml` — lint + build 검증 전용)
 - [x] Vitest 테스트 프레임워크 (191 tests — 117 데이터 검증 + 74 UI 컴포넌트)
 - [x] vitest.config.ts + src/test/setup.ts + src/test/utils.tsx 테스트 인프라
-- [x] `/deploy` 스킬 — Cloudflare Pages 자동 배포 (lint → build → deploy)
+- [x] `/deploy` 스킬 — Cloudflare Pages 배포 (lint → build → git push → CF 자동 배포)
 
 ---
 
