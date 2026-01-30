@@ -181,7 +181,7 @@ validateAllScenarios(scenarioDataById);
 
 ```typescript
 // src/data/validateScenario.ts
-// ValidationError types: orphan_edge_source | orphan_edge_target | missing_field | orphan_related_path | orphan_related_entity
+// ValidationError types: orphan_edge_source | orphan_edge_target | missing_field | orphan_related_path | orphan_related_entity | invalid_type | criteria_count | badge_mismatch | invalid_readiness
 export function validateScenario(data: DemoData): ValidationError[] {
   // 1. edge.source/target → entity IDs
   // 2. assumption/evidence/riskSignal.relatedPaths → decisionPath IDs

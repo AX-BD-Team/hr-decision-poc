@@ -22,6 +22,8 @@
 - [x] 포함 필드 목록
 - [x] **카드 인라인 확장** — 클릭 시 필드 pill badge + 요약 라인, ChevronDown 아이콘, CSS transition, 키보드/aria 접근성
 - [x] 로딩 스켈레톤 (phase 1)
+- [x] **DecisionCriteriaPanel** — 시나리오별 5개 의사결정 기준 체크박스 + evidenceCount 배지
+- [x] **DataReadinessPanel** — dataSources readiness 요약 (색상 코딩 progress bar + readinessNote)
 
 #### Zone 2 — 분석 구조화
 - [x] 분석 패턴 카드 (4개: 갭분석, 의존도, 병목, 비용영향)
@@ -84,6 +86,7 @@
 - [x] S2/S3 hrContextViews 시나리오 분화
 - [x] Edge 참조 무결성 검증 유틸리티 (`validateScenario.ts`)
 - [x] 확장 검증: relatedPaths/relatedEntityIds/utilizationMap.entityId 역참조 + orphan error types
+- [x] **검증 강화**: entity/edge type 유효성, criteria count=5, badge 검증(S3=Phase-2, S4=HRD), readiness 유효성
 
 #### 상태 관리 & 데이터
 - [x] Zustand 스토어 (모드, 스텝, 선택, Dock 상태)
@@ -142,7 +145,7 @@
 - [x] KpiCardGrid, ProjectStatusChart (SVG 도넛), SkillTreemap (squarified)
 - [x] 인재 테이블 + 월별 인력 흐름 바 차트 (SVG)
 - [x] DocsPage + DocCard + 카테고리 필터링
-- [x] dashboard-data.json, docs-meta.ts 데이터 소스
+- [x] dashboard-data.json (kt ds 1,700명 규모 데이터), docs-meta.ts 데이터 소스
 - [x] App.tsx lazy import (`DashboardPage`, `DocsPage`)
 
 #### 대시보드 재설계 (인터랙션 + 컴포넌트 추출)

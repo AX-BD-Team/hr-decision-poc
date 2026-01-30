@@ -118,6 +118,8 @@ src/
 │   │   └── DocCard.tsx              # 문서 카드
 │   ├── zones/
 │   │   ├── ZoneDataIngestion.tsx     # Zone 1
+│   │   ├── DecisionCriteriaPanel.tsx # Zone 1: 의사결정 기준 체크박스
+│   │   ├── DataReadinessPanel.tsx    # Zone 1: 데이터 준비도 요약
 │   │   ├── ZoneStructuring.tsx       # Zone 2
 │   │   ├── ZoneGraph.tsx             # Zone 3
 │   │   └── ZoneDecisionPaths.tsx     # Zone 4 (variant: zone|dock)

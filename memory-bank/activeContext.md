@@ -1,44 +1,55 @@
 # Active Context
 
 ## 현재 단계
-4개 시나리오 완전 교체 완료. 시나리오 데이터 점검 완료 — S1~S4 전 항목 PASS. Zone 3 그래프 expand 모드 Portal 방식 수정. `npm run build` 통과.
+DecisionCriteriaPanel, DataReadinessPanel 신규 컴포넌트 완성 + Zone 1 통합 + 검증 강화. 4개 시나리오 (S1~S4) 브라우저 검증 완료. `npm run build` 통과.
 
 ## 최근 변경 이력
 
 | 커밋 | 설명 |
 |------|------|
-| `8df4183` | fix: Zone 3 그래프 expand 모드 — createPortal로 transform 조상 우회 + S4 utilizationMap 채우기 + S1/S2 badge 추가 + docs 추가 |
-| `3300696` | feat: Zone 3 그래프 expand/collapse 전체화면 모드 |
-| `aa9f60c` | feat: Zone UI 강화 — DecisionPaths Evidence/Assumptions/Limitations 블록, Structuring 새 패턴 아이콘, i18n 번역, 테스트 업데이트 |
-| `636044c` | feat: S4 시나리오 데이터 추가 + S1-S3 JSON readiness/decisionCriteria 보강 + Header badge + Zone 1 readiness UI |
-| `c330d1a` | fix: EntityNode 타입 에러 해결 — capability/stage/training_program 아이콘 + decisionCriteria optional |
+| `cb4e0f3` | feat: DecisionCriteriaPanel, DataReadinessPanel 신규 + 검증 강화 + Header badge + Zone 1 통합 |
+| `3d04a91` | feat: 데모 인트로 모달 — DemoIntroModal 컴포넌트, DemoStepDescription 타입, demo i18n 키, isDemoIntroOpen 상태 |
+| `25558ad` | feat: 대시보드 데이터 kt ds 규모(1,700명)로 업데이트 — Cloud/AI 핵심역량 반영, 58개 프로젝트, 조직명 실제 부문명 |
+| `52caf96` | docs: Memory Bank 업데이트 — 시나리오 데이터 점검 + Zone 3 Portal 수정 |
+| `8df4183` | fix: Zone 3 그래프 expand 모드 — createPortal로 transform 조상 우회 |
 
 ## 이번 세션 변경 사항
 
-### 시나리오 데이터 점검 및 수정
-- **점검 결과**: S1~S4 전 항목 PASS (meta, entities, edges, assumptions, evidence, riskSignals, decisionPaths, 참조 무결성)
-- **Fix 1**: S4 `utilizationMap` 빈 배열 → 5개 포인트 채움 (cap-digital, cap-leadership, cap-domain, role-trainer, person-mentor)
-- **Fix 2**: S1 `meta.badge` 추가 ("TO"), S2 `meta.badge` 추가 ("R&R")
-- dev 서버에서 S1/S2 badge pill 표시, S4 산점도 데이터 표시 확인 완료
+### DecisionCriteriaPanel 신규 컴포넌트
+- `DecisionCriteriaPanel.tsx` — 시나리오별 5개 의사결정 기준 체크박스 UI
+- CheckSquare/Square 아이콘, evidenceCount 배지, description 표시
+- store의 `checkedCriteria` / `toggleCriterion` 연동
 
-### Zone 3 그래프 expand 모드 수정
-- **문제**: `animate-stagger-2` CSS 클래스의 `transform` 속성이 CSS spec에 따라 `position:fixed`의 containing block이 되어, expand 모드가 viewport 대신 section 기준으로 위치
-- **해결**: `createPortal(expandedContent, document.body)`로 transform 조상 우회, placeholder div로 grid 레이아웃 보존
+### DataReadinessPanel 신규 컴포넌트
+- `DataReadinessPanel.tsx` — dataSources readiness 상태 요약
+- 색상 코딩 progress bar (available=green, recommended=yellow, missing=red)
+- non-available 소스의 readinessNote 표시
 
-### 문서 추가
-- `docs/prototype_scenarios_v1.md` — 4개 시나리오 명세 문서
-- `docs/4scenario_data_mapping_v1_20260129.xlsx` — 시나리오 데이터 매핑 엑셀
+### Zone 1 통합
+- `ZoneDataIngestion.tsx`에 DecisionCriteriaPanel + DataReadinessPanel 통합
+- Zone 1 상단에 배치 (데이터 소스 카드 위)
+
+### 검증 강화 (validateScenario.ts)
+- entity type 유효성 검증 (VALID_ENTITY_TYPES set)
+- edge type 유효성 검증 (VALID_EDGE_TYPES set)
+- decisionCriteria 개수 === 5 검증
+- badge 검증 (S3=Phase-2, S4=HRD)
+- readiness 필드 유효성 검증
+
+### Header badge 표시
+- 4개 시나리오 badge 색상 코딩 (TO=blue, R&R=purple, Phase-2=amber, HRD=green)
+
+### 4개 시나리오 브라우저 검증 완료
+- S1 (TO 추가 요청), S2 (상시 조직 변경/R&R), S3 (사업화/Phase-2), S4 (역량 강화/HRD) 모두 정상 확인
 
 ## 현재 작업 포커스
 - 빌드 통과 (`npm run build` 성공)
-- 시나리오 데이터 무결성 점검 완료 (S1~S4 전 항목 PASS)
-- 배포 준비 완료
+- 4개 시나리오 모두 브라우저 검증 완료
 
 ## 다음 작업 목록 (우선순위순)
 1. **배포** — 프로덕션 배포
-2. **DecisionCriteriaPanel 신규 컴포넌트** — 5개 기준 체크박스 UI (store의 checkedCriteria 활용)
-3. **DataReadinessPanel** — readiness 상태 요약 패널 (또는 Zone 1 확장)
-4. **추가 기능 요청 대기**
+2. **DemoIntroModal App.tsx 연동** — 시나리오 선택 시 인트로 모달 표시
+3. **추가 기능 요청 대기**
 
 ## 알려진 이슈 — 모두 해결됨
 | # | 설명 | 심각도 | 상태 |
