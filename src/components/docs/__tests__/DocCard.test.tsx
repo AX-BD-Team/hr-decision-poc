@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { screen } from '@testing-library/react';
 import { DocCard } from '../DocCard';
 import { renderWithProviders, resetStore } from '../../../test/utils';
@@ -12,7 +12,10 @@ const mockDoc: DocMeta = {
   category: '기획',
   lastUpdated: '2025-01-15',
   fileSize: '100 KB',
+  sections: [],
 };
+
+const noop = vi.fn();
 
 describe('DocCard', () => {
   beforeEach(() => {
@@ -20,19 +23,17 @@ describe('DocCard', () => {
   });
 
   it('renders document title', () => {
-    renderWithProviders(<DocCard doc={mockDoc} />);
+    renderWithProviders(<DocCard doc={mockDoc} onSelect={noop} />);
     expect(screen.getByText('테스트 문서')).toBeInTheDocument();
   });
 
   it('renders category badge', () => {
-    renderWithProviders(<DocCard doc={mockDoc} />);
+    renderWithProviders(<DocCard doc={mockDoc} onSelect={noop} />);
     expect(screen.getByText('기획')).toBeInTheDocument();
   });
 
-  it('renders download link', () => {
-    renderWithProviders(<DocCard doc={mockDoc} />);
-    const link = screen.getByRole('link');
-    expect(link).toHaveAttribute('href', '/docs/test.docx');
-    expect(link).toHaveAttribute('download');
+  it('renders view detail text instead of download link', () => {
+    renderWithProviders(<DocCard doc={mockDoc} onSelect={noop} />);
+    expect(screen.getByRole('button')).toBeInTheDocument();
   });
 });

@@ -307,6 +307,12 @@ export interface ProjectItem {
   targetDate?: string;
 }
 
+// 문서 섹션
+export interface DocSection {
+  heading: string;
+  content: string;
+}
+
 // 문서 메타데이터
 export interface DocMeta {
   id: string;
@@ -316,4 +322,5 @@ export interface DocMeta {
   category: string;
   lastUpdated: string;
   fileSize: string;
+  sections: DocSection[];
 }

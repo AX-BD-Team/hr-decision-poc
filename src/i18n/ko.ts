@@ -226,6 +226,9 @@ export const ko = {
     downloadAria: '다운로드',
     tabDocs: '프로젝트 문서',
     tabBoard: '프로젝트 보드',
+    backToList: '목록으로',
+    viewDetail: '상세보기',
+    tableOfContents: '목차',
   },
   board: {
     todo: 'Todo',

@@ -228,6 +228,9 @@ export const en: TranslationKeys = {
     downloadAria: 'Download',
     tabDocs: 'Documents',
     tabBoard: 'Project Board',
+    backToList: 'Back to list',
+    viewDetail: 'View details',
+    tableOfContents: 'Table of Contents',
   },
   board: {
     todo: 'Todo',
