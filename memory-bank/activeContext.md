@@ -1,13 +1,13 @@
 # Active Context
 
 ## 현재 단계
-모든 핵심 기능 구현 완료. 스킬 시스템 최적화 + 문서 현행화 완료 (2026-01-30). 프로덕션 배포 완료.
+모든 핵심 기능 구현 완료. Claude Code 스킬/설정 효율화 완료 (2026-01-30). 프로덕션 배포 완료.
 
 ## 최근 변경 이력
 
 | 커밋 | 설명 |
 |------|------|
-| (pending) | chore: session-end 스킬에서 배포 로직 제거 + CLAUDE.md 스킬 문서 업데이트 |
+| `902f5de` | docs: update Memory Bank — 문서 정리 및 현행화, 4파일 현행 동기화 |
 | `ce63d40` | docs: CLAUDE.md 전면 업데이트 — 프로젝트 구조, 테스트 명령어, 엔티티 타입, docs 목록 |
 | `f0e0f5d` | docs: update Memory Bank — session-end deploy 통합, DocSection 타입 준비 |
 | `6c6c460` | feat: 문서 상세보기 Master-Detail UI |
@@ -15,14 +15,32 @@
 
 ## 이번 세션 변경 사항
 
-### 스킬 시스템 최적화 (2026-01-30)
-- **`/session-end` 스킬 리팩터링** — Phase 3 (배포) 제거로 `/deploy`와 중복 해소. 142줄 → 110줄. 단일 책임 원칙 적용.
-- **CLAUDE.md 스킬 문서 업데이트** — 스킬 테이블 설명 수정, 스킬 상세 섹션 추가, 3가지 워크플로우 패턴 제공
-- **Memory Bank 업데이트** — activeContext에 세션 반영, systemPatterns에 composable skills 패턴 추가
+### Claude Code 스킬/설정 점검 및 효율화 (2026-01-30)
+
+**변경된 파일** (모두 `.gitignore` 대상, git 추적 외):
+
+1. **`.claude/skills/deploy/skill.md`** — URL/명령어 하드코딩 제거 → CLAUDE.md 참조 방식으로 전환
+   - `hr2.minu.best`, `hr-decision-prototype.pages.dev` 직접 기재 제거
+   - `npm run lint`, `npm run build` 직접 기재 → "CLAUDE.md에 정의된 명령어 사용" 지시
+   - **효과**: CLAUDE.md만 프로젝트별로 변경하면 deploy 스킬 그대로 재사용 가능
+
+2. **`.claude/settings.local.json`** — 68개 → 41개 규칙 정리 + hooks 추가
+   - 일회성 특정 경로 규칙 27개 제거 (del, ls, dir, powershell, git -C 등)
+   - 와일드카드 통합 (`npm run *`, `npx vitest *`, `ls *` 등)
+   - 비범용 WebFetch 도메인 제거 (hr2.minu.best, docs.cline.bot, awesomescreenshot.com)
+   - **hooks 추가**: `PreToolUse` — `git commit` 전 자동 `npm run lint` (non-blocking)
+
+3. **`~/.claude/settings.json`** (글로벌) — 잔존 규칙 5개 제거
+   - `ax-discovery-portal` 프로젝트의 긴 커밋 메시지 3개 (git commit:* 와일드카드로 커버)
+   - 특정 프로젝트 경로 ls 규칙 1개
+   - `Read(//d/**)` D드라이브 전체 읽기 허용 (과도한 권한)
+
+4. **CLAUDE.md** — 변경 불필요 (스킬 테이블이 이미 현재 상태와 동기화)
 
 ## 현재 작업 포커스
-- 스킬 시스템 최적화 완료
-- 각 스킬은 단일 책임 원칙: `/session-end` (커밋+MB), `/deploy` (배포)
+- 스킬/설정 효율화 완료
+- 이식 가능한 구조 달성: `.claude/skills/*`, `.claude/settings.local.json` 그대로 복사 가능
+- 프로젝트별 수정 필요: `CLAUDE.md`, `.clinerules`, `memory-bank/*.md` 내용만
 
 ## 다음 작업 목록 (우선순위순)
 1. **Todo Issue 작업** (GitHub Project #3):
@@ -50,4 +68,5 @@
 - 배포: Cloudflare Pages Git 통합 (`main` push 시 자동 배포), deploy 스크립트 = git push
 - 테스트: Vitest (191 tests — 117 데이터 검증 + 74 UI 컴포넌트), `npm run test`
 - 런타임 검증: `validateScenario.ts` (dev-only, edge/relatedPaths/relatedEntityIds/utilizationMap 역참조)
-- **스킬 시스템**: 단일 책임 + composable 패턴 — `/session-end` (커밋+MB), `/deploy` (배포), `/session-start` (컨텍스트 복원)
+- **스킬 시스템**: 단일 책임 + composable + CLAUDE.md 참조 패턴 — 이식 가능한 구조
+- **설정 관리**: 와일드카드 통합 + hooks 자동화 (git commit 전 lint)

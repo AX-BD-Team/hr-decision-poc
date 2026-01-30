@@ -2,7 +2,7 @@
 
 ## Claude Code 스킬 패턴
 
-Skills are single-purpose and composable:
+Skills are single-purpose, composable, and portable:
 ```
 /session-start  → Memory Bank 읽기 → 컨텍스트 복원 (read-only)
 /session-end    → Git 커밋 + Memory Bank 업데이트 (배포 제외)
@@ -17,6 +17,20 @@ Skills are single-purpose and composable:
 - 각 스킬은 단일 책임 (Single Responsibility)
 - 중복 로직 없이 조합으로 워크플로우 구성
 - `/session-end`는 `memory-bank/` 파일을 별도 커밋
+- **CLAUDE.md 참조 패턴**: deploy 스킬은 URL/명령어를 하드코딩하지 않고 CLAUDE.md에서 읽음 → 이식성 확보
+- **이식 가능한 구조**: `.claude/skills/*`, `.claude/settings.local.json` 그대로 복사, 프로젝트별로는 CLAUDE.md만 변경
+
+## Claude Code 설정 관리 패턴
+
+```
+.claude/settings.local.json  — 프로젝트별 permissions + hooks
+~/.claude/settings.json       — 글로벌 permissions + enabledPlugins
+```
+
+- **와일드카드 통합**: `Bash(npm run *)` 하나로 `npm run dev`, `npm run build`, `npm run lint` 등 모두 커버
+- **일회성 규칙 금지**: 특정 파일 경로(`del "D:\\...\\file.tsx"`)나 특정 PowerShell 명령은 allow에 추가하지 않음
+- **hooks 활용**: `PreToolUse` matcher로 `git commit` 전 자동 lint (non-blocking, `|| true`)
+- **글로벌 vs 로컬 분리**: git/gh/python 등 범용 명령은 글로벌, npm/npx/playwright 등 프로젝트 도구는 로컬
 
 ## 페이지 라우팅 패턴
 
