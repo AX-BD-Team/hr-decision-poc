@@ -13,8 +13,8 @@ npm run dev          # Vite 개발 서버 시작 (HMR, localhost:5173)
 npm run build        # TypeScript 컴파일 + Vite 프로덕션 빌드
 npm run lint         # ESLint 검사
 npm run preview      # 프로덕션 빌드 로컬 미리보기
-npm run deploy       # 빌드 + Cloudflare Pages 배포
-npm run deploy:preview # 프리뷰 브랜치 배포
+npm run deploy       # 빌드 검증 + git push origin main → Cloudflare 자동 배포
+npm run deploy:preview # 빌드 검증 + git push origin HEAD → Cloudflare 프리뷰 배포
 ```
 
 ## 기술 스택
@@ -132,7 +132,7 @@ Claude Code와 Cline 간 프로젝트 컨텍스트를 공유하기 위한 스킬
 |------|------|
 | `/session-start [작업내용]` | 세션 시작 시 Memory Bank에서 컨텍스트 복원 |
 | `/session-end [메모]` | 세션 종료 시 변경사항을 Memory Bank에 반영 |
-| `/deploy [--preview]` | Cloudflare Pages 배포 (lint → build → deploy) |
+| `/deploy [--preview]` | Cloudflare Pages 배포 (lint → build → git push → CF 자동 배포) |
 
 **워크플로우**:
 ```

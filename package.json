@@ -9,8 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
-    "deploy": "npm run build && wrangler pages deploy",
-    "deploy:preview": "npm run build && wrangler pages deploy --branch preview"
+    "deploy": "npm run build && git push origin main",
+    "deploy:preview": "npm run build && git push origin HEAD"
   },
   "dependencies": {
     "@xyflow/react": "^12.0.0",
