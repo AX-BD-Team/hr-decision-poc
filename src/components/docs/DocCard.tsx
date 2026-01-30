@@ -1,4 +1,4 @@
-import { Download, FileText, BookOpen, Database, ClipboardCheck, Rocket } from 'lucide-react';
+import { ChevronRight, FileText, BookOpen, Database, ClipboardCheck, Rocket } from 'lucide-react';
 import { clsx } from 'clsx';
 import type { DocMeta } from '../../types';
 import { useT } from '../../i18n';
@@ -12,15 +12,20 @@ const categoryConfig: Record<string, { color: string; icon: typeof FileText }> =
 
 interface DocCardProps {
   doc: DocMeta;
+  onSelect: (doc: DocMeta) => void;
 }
 
-export function DocCard({ doc }: DocCardProps) {
+export function DocCard({ doc, onSelect }: DocCardProps) {
   const t = useT();
   const cfg = categoryConfig[doc.category] ?? { color: 'text-textSub bg-surface-1 border-neutralGray/30', icon: FileText };
   const Icon = cfg.icon;
 
   return (
-    <div className="rounded-xl glass-panel border border-neutralGray/20 p-5 flex flex-col gap-3 hover:border-neutralGray/40 transition-all">
+    <button
+      type="button"
+      onClick={() => onSelect(doc)}
+      className="rounded-xl glass-panel border border-neutralGray/20 p-5 flex flex-col gap-3 hover:border-neutralGray/40 hover:-translate-y-0.5 hover:shadow-lg transition-all text-left w-full cursor-pointer"
+    >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2">
           <Icon className="h-5 w-5 text-textSub flex-shrink-0" aria-hidden="true" />
@@ -36,16 +41,11 @@ export function DocCard({ doc }: DocCardProps) {
 
       <div className="flex items-center justify-between pt-2 border-t border-neutralGray/10">
         <span className="text-micro text-textSub">{t('docs.lastUpdated')}: {doc.lastUpdated}</span>
-        <a
-          href={`/docs/${doc.filename}`}
-          download
-          className="flex items-center gap-1.5 rounded-lg bg-decisionBlue/10 border border-decisionBlue/20 px-3 py-1.5 text-xs font-medium text-decisionBlue hover:bg-decisionBlue/20 transition-all"
-          aria-label={`${doc.title} ${t('docs.downloadAria')}`}
-        >
-          <Download className="h-3.5 w-3.5" aria-hidden="true" />
-          {t('docs.download')}
-        </a>
+        <span className="flex items-center gap-1 text-xs font-medium text-decisionBlue">
+          {t('docs.viewDetail')}
+          <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
+        </span>
       </div>
-    </div>
+    </button>
   );
 }
