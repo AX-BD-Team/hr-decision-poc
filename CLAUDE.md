@@ -182,27 +182,30 @@ Zone 별 액센트 색상:
 - `prototype_scenarios_v1.md` — 시나리오 설계 문서
 - `Cloudflare_Pages_Deploy_KO.md` — 배포 가이드
 
-## Cline Memory Bank
+## SDD (Spec Driven Development) 워크플로우
 
-Cline VS Code 익스텐션을 위한 Memory Bank 파일이 `memory-bank/` 디렉토리에 존재한다.
-Cline 전용 규칙은 `.clinerules` 파일을 참조.
+프로젝트 사양서 `SPEC.md`에 설계/아키텍처/현재 상태를 기록하고, 세션 스킬로 관리한다.
 
-### Memory Bank 스킬 (Claude Code ↔ Cline 연동)
-
-Claude Code와 Cline 간 프로젝트 컨텍스트를 공유하기 위한 스킬:
+### 스킬
 
 | 스킬 | 용도 |
 |------|------|
-| `/session-start [작업내용]` | 세션 시작 시 Memory Bank에서 컨텍스트 복원 |
-| `/session-end [메모]` | 세션 종료 시 Git 커밋 + Memory Bank 업데이트 (배포 제외) |
+| `/session-start [작업내용]` | SPEC.md에서 프로젝트 컨텍스트 복원 |
+| `/session-end [메모]` | Git 커밋 + SPEC.md 업데이트 |
 | `/deploy [--preview]` | Cloudflare Pages 배포 (lint → build → git push → CF 자동 배포) |
 
-**스킬 상세**:
-- `/session-start` — Phase 1: Memory Bank 6개 파일 읽기 → Phase 2: 현재 상태 요약 출력
-- `/session-end` — Phase 1: Git 커밋 (memory-bank 제외) → Phase 2: Memory Bank 업데이트 + 커밋
-- `/deploy` — lint → build → git push (프로덕션: `main`, 프리뷰: `HEAD`)
+### SPEC.md 구조
 
-**워크플로우 패턴**:
+| 섹션 | 내용 | 업데이트 빈도 |
+|------|------|-------------|
+| §1 Project Overview | 미션, 시나리오, 범위, 성공 기준 | 드물게 |
+| §2 Product Design | 4-Zone, UI 요소, 페이지, 시나리오 상세 | 기능 추가 시 |
+| §3 Architecture Patterns | 라우팅, 스토어, 컴포넌트, 차트, CSS, i18n 등 | 패턴 변경 시 |
+| §4 Technical Constraints | 빌드 산출물, 제약사항 | 드물게 |
+| §5 Current Status | 현재 단계, 최근 변경, 활성 결정사항 | **매 세션** |
+| §6 Implementation Log | 완료 요약, 미래 작업 | 마일스톤 시 |
+
+### 워크플로우 패턴
 
 ```
 # 패턴 1: 빠른 프로토타이핑 (배포 없이)
@@ -217,10 +220,4 @@ Claude Code와 Cline 간 프로젝트 컨텍스트를 공유하기 위한 스킬
 # 패턴 3: 프리뷰 배포
 /session-end QA용 변경사항
 /deploy --preview
-```
-
-**Cline 연동**:
-```
-Claude Code: /session-end [메모] → Memory Bank 업데이트
-Cline: "follow your custom instructions" → 업데이트된 Memory Bank로 이어받기
 ```
