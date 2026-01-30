@@ -104,10 +104,11 @@ Zone 별 액센트 색상:
 
 ## 배포
 
-- **호스팅**: Cloudflare Pages
+- **호스팅**: Cloudflare Pages (Git 통합 — `main` push 시 자동 배포)
 - **프로덕션 URL**: https://hr2.minu.best
-- **Pages URL**: https://hr-decision-support.pages.dev
+- **Pages URL**: https://hr-decision-prototype.pages.dev
 - **설정 파일**: `wrangler.toml` (커스텀 도메인은 대시보드에서 수동 설정)
+- **CI**: `.github/workflows/ci.yml` (lint + build 검증, 배포는 CF Git 통합이 담당)
 
 ## 문서
 
