@@ -176,6 +176,21 @@
 - [x] Vitest 테스트 프레임워크 (191 tests — 117 데이터 검증 + 74 UI 컴포넌트)
 - [x] vitest.config.ts + src/test/setup.ts + src/test/utils.tsx 테스트 인프라
 - [x] `/deploy` 스킬 — Cloudflare Pages 배포 (lint → build → git push → CF 자동 배포)
+- [x] `/session-end` 스킬 배포 통합 — Phase 3 (deploy) 추가, `--no-deploy`/`--preview` 지원
+
+#### DocsPage 프로젝트 보드 (Kanban)
+- [x] `ProjectItem` 타입 + `BoardStatus`/`BoardPriority`/`BoardSize` 타입
+- [x] GitHub Project #3 실데이터 28개 (`project-board.ts`) — Done 23 + Todo 5, 라벨 9종
+- [x] i18n 키 (`docs.tabDocs`, `docs.tabBoard`, `board.*`)
+- [x] `BoardCard.tsx` — Priority/Size 배지, 라벨 pill, 이니셜 아바타, 날짜
+- [x] `BoardColumn.tsx` — 상태별 Kanban 컬럼 (헤더 + 건수 + 카드 리스트)
+- [x] `ProjectBoard.tsx` — Priority 필터 + 3컬럼 반응형 그리드
+- [x] `DocsPage.tsx` — 탭 바 (문서 / 프로젝트 보드) + 조건부 렌더링
+
+#### 프로젝트 관리
+- [x] **GitHub Project #3 보드 구성** — 28개 Issue, 9개 Label, Status/Priority/Size 필드
+- [x] **완료 Issue 23개** (#1~#23) — Done 상태, closed
+- [x] **Todo Issue 5개** (#24~#28) — Todo 상태, open
 
 ---
 

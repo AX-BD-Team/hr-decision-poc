@@ -1,32 +1,44 @@
 # Active Context
 
 ## 현재 단계
-Deploy 스크립트를 `wrangler pages deploy` → `git push` 방식으로 전환 완료. CF Git 통합 배포 파이프라인 완성. `npm run build` 통과.
+모든 핵심 기능 구현 완료. 프로덕션 배포 완료. DocsPage 문서 상세보기 타입/i18n 준비 완료 (2026-01-30). `/session-end` 스킬에 배포 Phase 통합 완료.
 
 ## 최근 변경 이력
 
 | 커밋 | 설명 |
 |------|------|
-| `b989881` | chore: deploy 스크립트를 git push 방식으로 전환 (wrangler pages deploy 제거) |
-| `2c32f3a` | chore: CF Pages 배포 설정 마이그레이션 — hr-decision-support → hr-decision-prototype, Git 통합 방식 전환 |
-| `cb4e0f3` | feat: DecisionCriteriaPanel, DataReadinessPanel 신규 + 검증 강화 + Header badge + Zone 1 통합 |
-| `3d04a91` | feat: 데모 인트로 모달 — DemoIntroModal 컴포넌트, DemoStepDescription 타입, demo i18n 키, isDemoIntroOpen 상태 |
-| `25558ad` | feat: 대시보드 데이터 kt ds 규모(1,700명)로 업데이트 — Cloud/AI 핵심역량 반영, 58개 프로젝트, 조직명 실제 부문명 |
+| `67d9d32` | feat: DocSection 타입, 문서 상세보기 i18n 키, DocCard 테스트 수정 |
+| `c7b5acf` | feat: project-board.ts를 GitHub Project #3 실데이터 28개로 교체 + BoardCard 라벨 스타일 업데이트 |
+| `125436b` | feat: Kanban 보드 뷰 — BoardColumn, ProjectBoard, DocsPage 탭 전환 |
+| `ffb41fc` | feat: 프로젝트 보드 UI — BoardCard, ProjectItem 타입, i18n 키 |
+| `95cb6c8` | docs: update Memory Bank — deploy scripts git push 전환 |
 
 ## 이번 세션 변경 사항
 
-### Deploy 스크립트 git push 전환
-- `package.json`: `deploy` → `npm run build && git push origin main`, `deploy:preview` → `npm run build && git push origin HEAD`
-- `CLAUDE.md`: 배포 명령어 설명 업데이트 (git push 기반)
-- `.claude/skills/deploy/skill.md`: 배포 플로우를 git push 기반으로 재작성 (Step 4~5 변경)
+### session-end 스킬에 deploy 통합 (2026-01-30)
+- **`/session-end` 스킬 Phase 3 추가**: 커밋 → Memory Bank → 배포 원스텝 워크플로우
+  - `--no-deploy`: 배포 단계 건너뛰기
+  - `--preview`: 프리뷰 배포 (`git push origin HEAD`)
+  - 기본: 프로덕션 배포 (`git push origin main`)
+
+### 문서 상세보기 타입/i18n 준비 (2026-01-30)
+- **`DocSection` 인터페이스** 추가 (`heading` + `content`)
+- **`DocMeta.sections`** 필드 추가
+- **i18n 키 추가**: `backToList`, `viewDetail`, `tableOfContents` (ko/en)
+- **`DocCard.test.tsx` 수정**: `sections: []` + `onSelect={noop}` 추가
 
 ## 현재 작업 포커스
-- Deploy 스크립트 git push 전환 완료
-- 빌드 통과 (`npm run build` 성공)
+- 모든 핵심 기능 구현 완료
+- 문서 상세보기(DocDetail) 컴포넌트 구현 준비됨 (타입/i18n 완료)
+- `/session-end` 스킬이 배포까지 통합 처리
 
 ## 다음 작업 목록 (우선순위순)
-1. **DemoIntroModal App.tsx 연동** — 시나리오 선택 시 인트로 모달 표시
-2. **추가 기능 요청 대기**
+1. **Todo Issue 작업** (GitHub Project #3):
+   - #26 백엔드 API 연동 (P1/XL)
+   - #28 고급 분석 기능 — What-if 시뮬레이션, 시나리오 비교 (P1/XL)
+   - #24 추가 시나리오 확장 S5+ (P2/L)
+   - #25 E2E 테스트 도입 (P2/L)
+   - #27 성능 모니터링 & 최적화 (P2/M)
 
 ## 알려진 이슈 — 모두 해결됨
 | # | 설명 | 심각도 | 상태 |
