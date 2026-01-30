@@ -9,14 +9,15 @@ const PRIORITY_STYLE: Record<string, string> = {
 };
 
 const LABEL_STYLE: Record<string, string> = {
-  Frontend: 'bg-blue-500/20 text-blue-400',
-  Backend: 'bg-emerald-500/20 text-emerald-400',
-  Data: 'bg-cyan-500/20 text-cyan-400',
-  Algorithm: 'bg-purple-500/20 text-purple-400',
-  UX: 'bg-pink-500/20 text-pink-400',
-  Security: 'bg-red-500/20 text-red-400',
-  Docs: 'bg-amber-500/20 text-amber-400',
-  DevOps: 'bg-lime-500/20 text-lime-400',
+  feature: 'bg-blue-500/20 text-blue-400',
+  infrastructure: 'bg-emerald-500/20 text-emerald-400',
+  a11y: 'bg-violet-500/20 text-violet-400',
+  'design-system': 'bg-pink-500/20 text-pink-400',
+  testing: 'bg-lime-500/20 text-lime-400',
+  i18n: 'bg-cyan-500/20 text-cyan-400',
+  performance: 'bg-amber-500/20 text-amber-400',
+  data: 'bg-teal-500/20 text-teal-400',
+  enhancement: 'bg-purple-500/20 text-purple-400',
 };
 
 function formatDate(d: string) {
