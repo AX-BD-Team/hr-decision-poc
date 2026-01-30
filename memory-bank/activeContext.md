@@ -7,11 +7,11 @@
 
 | 커밋 | 설명 |
 |------|------|
+| `1bb7ae0` | docs: update Memory Bank — 스킬/설정 효율화, 설정 관리 패턴 추가 |
 | `902f5de` | docs: update Memory Bank — 문서 정리 및 현행화, 4파일 현행 동기화 |
 | `ce63d40` | docs: CLAUDE.md 전면 업데이트 — 프로젝트 구조, 테스트 명령어, 엔티티 타입, docs 목록 |
 | `f0e0f5d` | docs: update Memory Bank — session-end deploy 통합, DocSection 타입 준비 |
 | `6c6c460` | feat: 문서 상세보기 Master-Detail UI |
-| `67d9d32` | feat: DocSection 타입, 문서 상세보기 i18n 키, DocCard 테스트 수정 |
 
 ## 이번 세션 변경 사항
 
@@ -38,7 +38,7 @@
 4. **CLAUDE.md** — 변경 불필요 (스킬 테이블이 이미 현재 상태와 동기화)
 
 ## 현재 작업 포커스
-- 스킬/설정 효율화 완료
+- 스킬/설정 효율화 + 프로덕션 배포 완료 (2026-01-30)
 - 이식 가능한 구조 달성: `.claude/skills/*`, `.claude/settings.local.json` 그대로 복사 가능
 - 프로젝트별 수정 필요: `CLAUDE.md`, `.clinerules`, `memory-bank/*.md` 내용만
 
