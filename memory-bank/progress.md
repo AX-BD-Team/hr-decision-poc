@@ -187,6 +187,14 @@
 - [x] `ProjectBoard.tsx` — Priority 필터 + 3컬럼 반응형 그리드
 - [x] `DocsPage.tsx` — 탭 바 (문서 / 프로젝트 보드) + 조건부 렌더링
 
+#### DocsPage 문서 상세보기 (Master-Detail)
+- [x] `DocSection` 타입 + `DocMeta.sections` 필드 추가
+- [x] i18n 키 (`backToList`, `viewDetail`, `tableOfContents`)
+- [x] `DocDetailView.tsx` — 뒤로가기, 헤더, sticky 목차 사이드바, 섹션 렌더링, 다운로드 보조 액션
+- [x] `DocCard.tsx` — button 전환, `onSelect` prop, hover lift, "상세보기" 텍스트
+- [x] `DocsPage.tsx` — `selectedDoc` 상태, 조건부 렌더링, 탭/카테고리 전환 시 초기화
+- [x] `docs-meta.ts` — 6개 문서 sections 콘텐츠 (3~5개씩)
+
 #### 프로젝트 관리
 - [x] **GitHub Project #3 보드 구성** — 28개 Issue, 9개 Label, Status/Priority/Size 필드
 - [x] **완료 Issue 23개** (#1~#23) — Done 상태, closed
@@ -203,7 +211,7 @@
 - [x] ~~국제화(i18n)~~ → 완료 (경량 자체 구현, useT() hook, KO/EN 토글, 38개 컴포넌트 마이그레이션)
 - [x] ~~다크/라이트 테마 전환~~ → 완료 (CSS 변수 테마 + Zustand toggleTheme + localStorage)
 - [x] ~~번들 크기 최적화~~ → 완료 (React.lazy + manualChunks, 565KB→277KB)
-- [x] ~~UI 컴포넌트 테스트~~ → 완료 (vitest + @testing-library/react, 74 UI 컴포넌트 테스트, 총 157 tests)
+- [x] ~~UI 컴포넌트 테스트~~ → 완료 (vitest + @testing-library/react, 74 UI 컴포넌트 테스트, 총 191 tests)
 - [x] ~~recharts 패키지 제거~~ → 완료
 
 ---

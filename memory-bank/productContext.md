@@ -17,8 +17,8 @@ HR 의사결정은 여러 부서의 데이터(인사 마스터, 공수 관리, R
 
 ### Zone 3 — 온톨로지 그래프 (Graph)
 - ReactFlow 기반 인터랙티브 그래프
-- 엔티티: 조직, 역할, 인원, 프로젝트, 리스크, 비용
-- 엣지: depends_on, covers, bottleneck, overlap, cost_supports, risk_of, belongs_to, assigned_to
+- 엔티티: 조직, 역할, 인원, 프로젝트, 리스크, 비용, 태스크, 역량, 단계, 교육 프로그램
+- 엣지: depends_on, covers, bottleneck, overlap, cost_supports, risk_of, belongs_to, assigned_to, requires_capability, trains_for, part_of_stage, duplicates
 - 노드 타입별 색상 구분 (person→green, role→blue, risk→red 등)
 
 ### Zone 4 — 의사결정 경로 (Decision Paths)
@@ -29,7 +29,7 @@ HR 의사결정은 여러 부서의 데이터(인사 마스터, 공수 관리, R
 
 ### Header (sticky)
 - 단계 네비게이터 (Step 1-4 진행 표시 + smooth scroll)
-- 시나리오 선택 드롭다운 (S1/S2/S3)
+- 시나리오 선택 드롭다운 (S1/S2/S3/S4)
 - Start Demo / Stop / Reset / Export 버튼
 
 ### DecisionRecordSection (메인 하단)
@@ -57,8 +57,11 @@ HR 의사결정은 여러 부서의 데이터(인사 마스터, 공수 관리, R
 - **인력 예측** 탭: 월별 유입/유출 바 차트 + 월별 상세 데이터 테이블 (12개월)
 
 ### 문서 (docs)
+- 탭 전환: **프로젝트 문서** (기존) / **프로젝트 보드** (Kanban)
 - 프로젝트 산출물 열람 (6개 문서: 헌장, WBS, 데이터 명세, 평가 계획, PRD, 배포 가이드)
 - 카테고리 필터링 (기획/데이터/평가/배포)
+- Kanban 보드: Todo / In Progress / Done 3컬럼, Priority 필터 (P0/P1/P2), GitHub Project #3 실데이터 28개 항목
+- 문서 상세보기 (DocDetailView): Master-Detail 패턴, sticky 목차 사이드바, 섹션별 렌더링
 
 ## 데모 시나리오
 

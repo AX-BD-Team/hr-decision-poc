@@ -32,7 +32,7 @@
 | `@testing-library/react` | ^16.x | React 컴포넌트 테스트 |
 | `@testing-library/user-event` | ^14.x | 사용자 이벤트 시뮬레이션 |
 | `@testing-library/jest-dom` | ^6.x | DOM 매처 확장 |
-| `jsdom` | ^26.x | 테스트용 DOM 환경 |
+| `jsdom` | ^27.4.0 | 테스트용 DOM 환경 |
 | `wrangler` | ^3.99.0 | Cloudflare Pages 배포 |
 
 ## 설정 파일 요약
@@ -84,27 +84,32 @@ src/
 │   └── layout.ts                     # 레이아웃 상수 (DOCK_COLLAPSED/MIN/MAX_HEIGHT)
 ├── data/
 │   ├── demo-s1.json                  # S1 기본 데이터
-│   ├── demo-s2.json                  # S2 OPEX 절감 시나리오 데이터
-│   ├── demo-s3.json                  # S3 병목 완화 시나리오 데이터
+│   ├── demo-s2.json                  # S2 상시 조직 변경 / R&R 시나리오
+│   ├── demo-s3.json                  # S3 솔루션 사업화 내부 체계 시나리오
+│   ├── demo-s4.json                  # S4 역량 강화 시나리오 데이터
 │   ├── scenarios.ts                  # JSON import + type cast + 무결성 검증 호출
 │   ├── validateScenario.ts           # 시나리오 참조 무결성 검증 (edge/relatedPaths/relatedEntityIds/utilizationMap)
 │   ├── tourSteps.ts                  # 9개 투어 스텝 정의
 │   ├── dashboard-data.json           # 대시보드 데이터 (KPI, 프로젝트, 스킬, 인재, 인력예측)
-│   ├── docs-meta.ts                  # 6개 문서 메타데이터
+│   ├── docs-meta.ts                  # 문서 메타데이터
+│   ├── project-board.ts              # 프로젝트 보드 Kanban 데이터
 │   └── __tests__/
-│       └── scenarios.test.ts         # Vitest 시나리오 데이터 검증 (71 tests)
+│       └── scenarios.test.ts         # Vitest 시나리오 데이터 검증
 ├── test/
 │   ├── setup.ts                      # jest-dom matchers 등록
 │   └── utils.tsx                     # 커스텀 render (resetStore + userEvent)
 ├── components/
 │   ├── common/
 │   │   ├── DataLabelBadge.tsx       # DataLabel 배지 공용 컴포넌트
-│   │   └── ErrorBoundary.tsx        # zone 레벨 에러 바운더리 (fallbackTitle prop)
+│   │   ├── ErrorBoundary.tsx        # zone 레벨 에러 바운더리 (fallbackTitle prop)
+│   │   └── SkeletonZone.tsx         # 스켈레톤 로딩 컴포넌트
 │   ├── tour/
 │   │   └── TourOverlay.tsx          # Guided Tour 오버레이 (portal, SVG mask, 키보드 nav)
 │   ├── layout/
 │   │   ├── Header.tsx               # 헤더 (sticky, 시나리오 선택, Guide 버튼)
 │   │   └── PageNav.tsx              # 페이지 네비게이션 (workflow/dashboard/docs)
+│   ├── demo/
+│   │   └── DemoIntroModal.tsx       # 데모 인트로 모달
 │   ├── dashboard/
 │   │   ├── DashboardPage.tsx        # 대시보드 메인 (3탭: 자원배분/인재/인력예측)
 │   │   ├── KpiCardGrid.tsx          # KPI 카드 그리드 (stagger 애니메이션, accent bar)
@@ -114,8 +119,12 @@ src/
 │   │   ├── WorkforceFlowChart.tsx   # 그룹 바 + 라인 차트 (호버 툴팁)
 │   │   └── WorkforceDetailTable.tsx # 인력 상세 테이블 (스파크라인)
 │   ├── docs/
-│   │   ├── DocsPage.tsx             # 문서 페이지 (카테고리 필터)
-│   │   └── DocCard.tsx              # 문서 카드
+│   │   ├── DocsPage.tsx             # 문서 페이지 (탭: 문서 + 프로젝트 보드)
+│   │   ├── DocCard.tsx              # 문서 카드
+│   │   ├── ProjectBoard.tsx         # Kanban 보드 메인 (Priority 필터 + 3컬럼)
+│   │   ├── BoardColumn.tsx          # Kanban 컬럼 (상태별)
+│   │   ├── BoardCard.tsx            # 태스크 카드
+│   │   └── DocDetailView.tsx        # 문서 상세보기 (Master-Detail)
 │   ├── zones/
 │   │   ├── ZoneDataIngestion.tsx     # Zone 1
 │   │   ├── DecisionCriteriaPanel.tsx # Zone 1: 의사결정 기준 체크박스
@@ -176,4 +185,4 @@ npm run deploy:preview  # 빌드 검증 + git push origin HEAD → CF 프리뷰 
 - 접근성(a11y) 기본 구현 — ARIA roles/labels, 키보드 nav, screen reader 지원
 - TypeScript strict 모드 활성화
 - ESLint 코드 품질 검사 활성화
-- Vitest 157 tests (83 데이터 검증 + 74 UI 컴포넌트 — @testing-library/react, jsdom)
+- Vitest 191 tests (117 데이터 검증 + 74 UI 컴포넌트 — @testing-library/react, jsdom)

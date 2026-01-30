@@ -1,5 +1,23 @@
 # System Patterns
 
+## Claude Code 스킬 패턴
+
+Skills are single-purpose and composable:
+```
+/session-start  → Memory Bank 읽기 → 컨텍스트 복원 (read-only)
+/session-end    → Git 커밋 + Memory Bank 업데이트 (배포 제외)
+/deploy         → lint → build → git push → CF 자동 배포
+
+# Composable 워크플로우:
+/session-end → /deploy          # 커밋 후 프로덕션 배포
+/session-end → /deploy --preview # 커밋 후 프리뷰 배포
+/session-end                     # 커밋만 (배포 없이)
+```
+
+- 각 스킬은 단일 책임 (Single Responsibility)
+- 중복 로직 없이 조합으로 워크플로우 구성
+- `/session-end`는 `memory-bank/` 파일을 별도 커밋
+
 ## 페이지 라우팅 패턴
 
 ```typescript
