@@ -3,6 +3,7 @@ import { X, Play } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { useT } from '../../i18n';
 import { clsx } from 'clsx';
+import { scenarioMetas } from '../../data/scenarios';
 
 const zoneColors = [
   { bg: 'bg-zoneIngest/20', text: 'text-zoneIngest', badge: 'bg-zoneIngest' },
@@ -16,7 +17,7 @@ interface DemoIntroModalProps {
 }
 
 export function DemoIntroModal({ onStart }: DemoIntroModalProps) {
-  const { data, isDemoIntroOpen, closeDemoIntro, locale } = useStore();
+  const { data, isDemoIntroOpen, closeDemoIntro, locale, scenarioId, setScenario } = useStore();
   const t = useT();
 
   if (!isDemoIntroOpen) return null;
@@ -57,6 +58,27 @@ export function DemoIntroModal({ onStart }: DemoIntroModalProps) {
                 {meta.badge}
               </span>
             )}
+          </div>
+
+          {/* Scenario selector */}
+          <div className="flex flex-wrap gap-2 mb-4">
+            {scenarioMetas.map((m) => (
+              <button
+                key={m.id}
+                onClick={() => setScenario(m.id)}
+                className={clsx(
+                  'rounded-lg px-3 py-1.5 text-sm font-medium border transition-all',
+                  m.id === scenarioId
+                    ? 'border-decisionBlue bg-decisionBlue/20 text-decisionBlue'
+                    : 'border-neutralGray/20 text-textSub hover:border-neutralGray/40 hover:text-textMain'
+                )}
+              >
+                {m.name}
+                {m.badge && (
+                  <span className="ml-1.5 text-micro opacity-70">[{m.badge}]</span>
+                )}
+              </button>
+            ))}
           </div>
 
           {/* Scenario name */}

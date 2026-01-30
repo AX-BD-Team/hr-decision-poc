@@ -1,5 +1,16 @@
 import type { DemoData } from '../types';
 
+const VALID_ENTITY_TYPES = new Set([
+  'person', 'role', 'task', 'org', 'risk', 'cost', 'project',
+  'capability', 'stage', 'training_program',
+]);
+const VALID_EDGE_TYPES = new Set([
+  'depends_on', 'covers', 'bottleneck', 'overlap', 'cost_supports',
+  'risk_of', 'belongs_to', 'assigned_to',
+  'requires_capability', 'trains_for', 'part_of_stage', 'duplicates',
+]);
+const VALID_READINESS = new Set(['available', 'recommended', 'missing', 'undefined_rules']);
+
 export interface ValidationError {
   scenarioId: string;
   type:
@@ -7,7 +18,11 @@ export interface ValidationError {
     | 'orphan_edge_target'
     | 'missing_field'
     | 'orphan_related_path'
-    | 'orphan_related_entity';
+    | 'orphan_related_entity'
+    | 'invalid_type'
+    | 'criteria_count'
+    | 'badge_mismatch'
+    | 'invalid_readiness';
   message: string;
 }
 
@@ -16,6 +31,64 @@ export function validateScenario(data: DemoData): ValidationError[] {
   const sid = data.meta.id;
   const entityIds = new Set(data.entities.map((e) => e.id));
   const pathIds = new Set(data.decisionPaths.map((p) => p.id));
+
+  // Decision criteria count
+  if (data.meta.decisionCriteria && data.meta.decisionCriteria.length !== 5) {
+    errors.push({
+      scenarioId: sid,
+      type: 'criteria_count',
+      message: `Expected 5 decisionCriteria, got ${data.meta.decisionCriteria.length}`,
+    });
+  }
+
+  // Badge validation
+  if (sid === 's3' && data.meta.badge !== 'Phase-2') {
+    errors.push({
+      scenarioId: sid,
+      type: 'badge_mismatch',
+      message: `S3 should have badge "Phase-2", got "${data.meta.badge}"`,
+    });
+  }
+  if (sid === 's4' && data.meta.badge !== 'HRD') {
+    errors.push({
+      scenarioId: sid,
+      type: 'badge_mismatch',
+      message: `S4 should have badge "HRD", got "${data.meta.badge}"`,
+    });
+  }
+
+  // Entity type validation
+  for (const entity of data.entities) {
+    if (!VALID_ENTITY_TYPES.has(entity.type)) {
+      errors.push({
+        scenarioId: sid,
+        type: 'invalid_type',
+        message: `Entity "${entity.id}" has invalid type "${entity.type}"`,
+      });
+    }
+  }
+
+  // Edge type validation
+  for (const edge of data.edges) {
+    if (!VALID_EDGE_TYPES.has(edge.type)) {
+      errors.push({
+        scenarioId: sid,
+        type: 'invalid_type',
+        message: `Edge "${edge.id}" has invalid type "${edge.type}"`,
+      });
+    }
+  }
+
+  // Readiness validation
+  for (const ds of data.dataSources) {
+    if (ds.readiness && !VALID_READINESS.has(ds.readiness)) {
+      errors.push({
+        scenarioId: sid,
+        type: 'invalid_readiness',
+        message: `DataSource "${ds.id}" has invalid readiness "${ds.readiness}"`,
+      });
+    }
+  }
 
   // Edge source/target → entity ids
   for (const edge of data.edges) {

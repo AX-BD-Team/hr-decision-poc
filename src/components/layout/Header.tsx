@@ -6,9 +6,7 @@ import { clsx } from 'clsx';
 import { scenarioMetas } from '../../data/scenarios';
 import { tourSteps } from '../../data/tourSteps';
 import { PageNav } from './PageNav';
-
-/** demoProgress (1–4) → tourSteps index (id 4–7, array index 3–6) */
-const demoTourStepIndex: Record<number, number> = { 1: 3, 2: 4, 3: 5, 4: 6 };
+import { DemoIntroModal } from '../demo/DemoIntroModal';
 
 const zoneBorderColors: Record<number, string> = {
   1: 'border-zoneIngest',
@@ -27,6 +25,16 @@ const zoneTextColors: Record<number, string> = {
   2: 'text-zoneStruct',
   3: 'text-zoneGraph',
   4: 'text-zonePath',
+};
+
+/** Fallback: demoProgress (1–4) → tourSteps index (id 4–7, array index 3–6) */
+const demoTourStepIndex: Record<number, number> = { 1: 3, 2: 4, 3: 5, 4: 6 };
+
+const scrollSectionIds: Record<number, string> = {
+  1: 'section-ingestion',
+  2: 'section-structuring',
+  3: 'section-graph',
+  4: 'section-paths',
 };
 
 function scrollToId(id: string) {
@@ -84,6 +92,8 @@ export function Header() {
     isDemoRunning,
     startDemo,
     stopDemo,
+    openDemoIntro,
+    closeDemoIntro,
     selectPath,
     setRecordTab,
     isContextSidebarOpen,
@@ -94,16 +104,7 @@ export function Header() {
   const isWorkflow = activePage === 'workflow';
   const [demoProgress, setDemoProgress] = useState(0); // 0 = not running, 1-4 = current demo step
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const menuRef = useRef<HTMLDivElement>(null);
-
-  const clearDemoTimers = useCallback(() => {
-    timersRef.current.forEach(clearTimeout);
-    timersRef.current = [];
-  }, []);
-
-  // Clean up timers on unmount
-  useEffect(() => clearDemoTimers, [clearDemoTimers]);
 
   // Close mobile menu on outside click
   useEffect(() => {
@@ -118,55 +119,45 @@ export function Header() {
   }, [isMobileMenuOpen]);
 
   const handleStopDemo = useCallback(() => {
-    clearDemoTimers();
     setDemoProgress(0);
     stopDemo();
     if (isTourActive) endTour();
-  }, [clearDemoTimers, stopDemo, isTourActive, endTour]);
+  }, [stopDemo, isTourActive, endTour]);
 
+  /** "Start Demo" button: if running → stop, else → open intro modal */
   const handleStartDemo = () => {
     if (isDemoRunning) {
       handleStopDemo();
       return;
     }
+    openDemoIntro();
+  };
 
-    // Trigger skeleton → reveal animation sequence
-    setScenario(scenarioId);
-
-    startDemo();              // isDemoRunning=true (no TourOverlay)
+  /** Called from DemoIntroModal "시작하기" button */
+  const handleDemoStart = () => {
+    closeDemoIntro();
+    setActiveStep(1);
+    startDemo();
     setDemoProgress(1);
     setRecordTab('evidence');
     scrollToId('section-ingestion');
+  };
 
-    // Step 2: skeleton 완료(3s) + 여유(2s) = 5s
-    const t1 = setTimeout(() => {
-      setActiveStep(2);
-      setDemoProgress(2);
-      scrollToId('section-structuring');
-    }, 5000);
-
-    // Step 3: +5s = 10s
-    const t2 = setTimeout(() => {
-      setActiveStep(3);
-      setDemoProgress(3);
-      scrollToId('section-graph');
-    }, 10000);
-
-    // Step 4: +5s = 15s
-    const t3 = setTimeout(() => {
-      setActiveStep(4);
-      setDemoProgress(4);
-      selectPath('path-a');
-      scrollToId('section-paths');
-    }, 15000);
-
-    // End demo: +6s = 21s
-    const t4 = setTimeout(() => {
+  /** "다음 ▶" / "완료 ■" button in the banner */
+  const handleNextStep = () => {
+    if (demoProgress < 4) {
+      const next = demoProgress + 1;
+      setDemoProgress(next);
+      setActiveStep(next);
+      scrollToId(scrollSectionIds[next]);
+      if (next === 4) {
+        selectPath('path-a');
+      }
+    } else {
+      // Step 4 → finish
       setDemoProgress(0);
       stopDemo();
-    }, 21000);
-
-    timersRef.current = [t1, t2, t3, t4];
+    }
   };
 
   const handleExport = () => {
@@ -242,6 +233,24 @@ export function Header() {
       })}
     </nav>
   );
+
+  // Resolve banner text: prefer scenario-specific demoSteps, fallback to tourSteps
+  const getBannerContent = (progress: number) => {
+    const demoStep = data.meta.demoSteps?.[progress - 1];
+    if (demoStep) {
+      return {
+        title: locale === 'ko' ? demoStep.titleKo : demoStep.titleEn,
+        content: locale === 'ko' ? demoStep.descriptionKo : demoStep.descriptionEn,
+      };
+    }
+    // Fallback to tourSteps
+    const step = tourSteps[demoTourStepIndex[progress]];
+    if (!step) return null;
+    return {
+      title: locale === 'ko' ? step.titleKo : step.titleEn,
+      content: locale === 'ko' ? step.contentKo : step.contentEn,
+    };
+  };
 
   return (
     <header className="sticky top-0 z-50 glass-header border-b border-neutralGray/20 px-3 sm:px-6 py-2 sm:py-3">
@@ -514,12 +523,11 @@ export function Header() {
       </div>
       )}
 
-      {/* Demo 가이드 배너 */}
+      {/* Demo 가이드 배너 (시나리오별 텍스트 + 수동 진행 버튼) */}
       {isWorkflow && isDemoRunning && demoProgress >= 1 && (() => {
-        const step = tourSteps[demoTourStepIndex[demoProgress]];
-        if (!step) return null;
-        const title = locale === 'ko' ? step.titleKo : step.titleEn;
-        const content = locale === 'ko' ? step.contentKo : step.contentEn;
+        const banner = getBannerContent(demoProgress);
+        if (!banner) return null;
+        const isLast = demoProgress === 4;
         return (
           <div
             key={demoProgress}
@@ -531,19 +539,32 @@ export function Header() {
           >
             <div className="flex items-center justify-between">
               <span className={clsx('text-sm font-semibold', zoneTextColors[demoProgress])}>
-                {title}
+                {banner.title}
               </span>
-              <span className="text-xs font-mono text-textSub">
-                Step {demoProgress}/4
-              </span>
+              <div className="flex items-center gap-3">
+                <span className="text-xs font-mono text-textSub">
+                  Step {demoProgress}/4
+                </span>
+                <button
+                  onClick={handleNextStep}
+                  className={clsx(
+                    'rounded-md px-3 py-1 text-xs font-medium text-white transition-all',
+                    isLast
+                      ? 'bg-alertRed/80 hover:bg-alertRed'
+                      : 'bg-decisionBlue/80 hover:bg-decisionBlue'
+                  )}
+                >
+                  {isLast ? t('demo.finishDemo') : t('demo.nextStep')}
+                </button>
+              </div>
             </div>
-            <p className="mt-1 text-xs text-textSub leading-relaxed">{content}</p>
+            <p className="mt-1 text-xs text-textSub leading-relaxed">{banner.content}</p>
           </div>
         );
       })()}
 
       {/* 핵심 질문 */}
-      {isWorkflow && data.meta.keyQuestion && (
+      {isWorkflow && !isDemoRunning && data.meta.keyQuestion && (
         <div className="mt-1.5 sm:mt-2 flex items-center gap-2 rounded-lg bg-decisionBlue/10 border border-decisionBlue/20 px-3 py-2">
           <HelpCircle className="h-4 w-4 flex-shrink-0 text-decisionBlue" aria-hidden="true" />
           <span className="text-sm text-textMain">{data.meta.keyQuestion}</span>
@@ -561,6 +582,9 @@ export function Header() {
         <span className="ml-2 text-textSub">{t('header.dataLabelDisclaimer')}</span>
       </div>
       )}
+
+      {/* Demo Intro Modal */}
+      <DemoIntroModal onStart={handleDemoStart} />
     </header>
   );
 }

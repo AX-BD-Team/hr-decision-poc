@@ -6,6 +6,8 @@ import type { DataSource } from '../../types';
 import { DataLabelBadge } from '../common/DataLabelBadge';
 import { LoadingZone1Ingestion } from '../loading/LoadingZone1Ingestion';
 import { useT } from '../../i18n';
+import { DecisionCriteriaPanel } from './DecisionCriteriaPanel';
+import { DataReadinessPanel } from './DataReadinessPanel';
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   hr_master: Users,
@@ -67,6 +69,8 @@ export function ZoneDataIngestion() {
       </div>
 
       <div className="flex-1 overflow-y-auto grid gap-2">
+        <DecisionCriteriaPanel />
+        <DataReadinessPanel />
         {data.dataSources.map((ds: DataSource) => {
           const Icon = iconMap[ds.type] || Database;
           const isExpanded = expandedId === ds.id;
