@@ -357,18 +357,18 @@ demo-s{1-4}.json → scenarios.ts (import + validate) → useStore.ts (Zustand) 
 ## 5. Current Status
 
 ### 현재 단계
-모든 핵심 기능 구현 완료. SDD 체계 전환 진행 중 (2026-01-30). 프로덕션 배포 완료.
+모든 핵심 기능 구현 완료. SDD 체계 전환 완료 (2026-01-30). 프로덕션 배포 완료.
 
 ### 최근 변경 이력
 | 커밋 | 설명 |
 |------|------|
+| `8fd80b2` | refactor: migrate to SDD — consolidate memory-bank into SPEC.md |
 | `1056682` | docs: update Memory Bank — 스킬/설정 효율화 + 배포 완료 반영 |
 | `1bb7ae0` | docs: update Memory Bank — 스킬/설정 효율화, 설정 관리 패턴 추가 |
-| `902f5de` | docs: update Memory Bank — 문서 정리 및 현행화, 4파일 현행 동기화 |
 
 ### 현재 작업 포커스
-- Cline + Claude Code 이중 체계 → Claude Code 단일 SDD 체계로 전환
-- Memory Bank 6개 파일 → SPEC.md 단일 사양서 통합
+- SDD 체계 전환 완료: memory-bank 6개 파일 → SPEC.md 단일 사양서
+- Claude Code 단일 체계 운영 중 (Cline 연동 제거)
 
 ### 활성 결정사항
 - 페이지 라우팅: Zustand `activePage` 기반
@@ -379,7 +379,7 @@ demo-s{1-4}.json → scenarios.ts (import + validate) → useStore.ts (Zustand) 
 - 차트: 순수 SVG (외부 라이브러리 미사용)
 - 배포: Cloudflare Pages Git 통합
 - 테스트: Vitest 191 tests
-- 스킬 시스템: 단일 책임 + composable + CLAUDE.md 참조 패턴
+- 프로젝트 사양: SPEC.md (SDD 워크플로우) + CLAUDE.md (Claude Code 지침)
 
 ---
 
@@ -410,6 +410,8 @@ demo-s{1-4}.json → scenarios.ts (import + validate) → useStore.ts (Zustand) 
 **Zone별 로딩 애니메이션** — Loading{Zone1~4} 컴포넌트, 9개 keyframes + 10개 animation, Demo 하이라이팅 가시성 개선.
 
 **접근성** — ARIA roles/labels, 키보드 nav, screen reader, skip link, aria-expanded, aria-live, Dock 키보드 리사이즈.
+
+**SDD 체계 전환** (2026-01-30) — Cline + Claude Code 이중 체계 → Claude Code 단일 SDD 체계. memory-bank 6개 파일 → SPEC.md 단일 사양서 통합. session-start/session-end 스킬 SPEC.md 기반으로 전환. .clinerules 제거.
 
 ### 미래 작업 (GitHub Issues)
 - **#26** 백엔드 API 연동 (P1/XL)
