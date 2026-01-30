@@ -290,6 +290,23 @@ export interface DashboardData {
   };
 }
 
+// 프로젝트 보드 타입
+export type BoardStatus = 'todo' | 'in_progress' | 'done';
+export type BoardPriority = 'P0' | 'P1' | 'P2';
+export type BoardSize = 'XS' | 'S' | 'M' | 'L' | 'XL';
+
+export interface ProjectItem {
+  id: string;
+  title: string;
+  status: BoardStatus;
+  priority: BoardPriority;
+  size: BoardSize;
+  assignees: string[];
+  labels: string[];
+  startDate?: string;
+  targetDate?: string;
+}
+
 // 문서 메타데이터
 export interface DocMeta {
   id: string;
